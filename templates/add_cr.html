@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BD University CR Reviews</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">CR Reviews</a>
+            <ul class="nav-links">
+                <li><a href="home.html" class="nav-link active">🏠 Home</a></li>
+                <li><a href="All_CRS.html" class="nav-link" >👥 All CRs</a></li>
+                <li><a href="Latest_Reviews.html" class="nav-link" >📝 Latest Reviews</a></li>
+                <li><a href="Login.html" class="nav-link" >🔐 Login</a></li>
+                <li><a href="Registration.html" class="nav-link">📋 Registration</a></li>
+            </ul>
+            <button class="mobile-menu">☰</button>
+        </div>
+    </nav>
+
+    
+    <!-- Add CR Page -->
+    <div id="add-cr" class="page">
+        <div class="container">
+            <h1 class="title">➕ নতুন সিআর যোগ করুন</h1>
+            
+            <div style="max-width: 700px; margin: 0 auto;">
+                <div class="search-section">
+                    <form id="add-cr-form">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                            <div class="form-group">
+                                <label class="form-label">👤 প্রথম নাম</label>
+                                <input type="text" class="form-input" placeholder="প্রথম নাম লিখুন" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">👤 শেষ নাম</label>
+                                <input type="text" class="form-input" placeholder="শেষ নাম লিখুন" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">🆔 স্টুডেন্ট আইডি</label>
+                            <input type="text" class="form-input" placeholder="স্টুডেন্ট আইডি লিখুন" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">📧 ইমেইল ঠিকানা</label>
+                            <input type="email" class="form-input" placeholder="ইমেইল ঠিকানা" required>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                            <div class="form-group">
+                                <label class="form-label">🏛️ বিশ্ববিদ্যালয়</label>
+                                <select class="form-input" required>
+                                    <option value="">বিশ্ববিদ্যালয় নির্বাচন করুন</option>
+                                    <option>ঢাকা বিশ্ববিদ্যালয়</option>
+                                    <option>বাংলাদেশ প্রকৌশল বিশ্ববিদ্যালয় (বুয়েট)</option>
+                                    <option>জাহাঙ্গীরনগর বিশ্ববিদ্যালয়</option>
+                                    <option>চট্টগ্রাম বিশ্ববিদ্যালয়</option>
+                                    <option>রাজশাহী বিশ্ববিদ্যালয়</option>
+                                    <option>খুলনা বিশ্ববিদ্যালয়</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">📚 বিভাগ</label>
+                                <select class="form-input" required>
+                                    <option value="">বিভাগ নির্বাচন করুন</option>
+                                    <option>কম্পিউটার সায়েন্স অ্যান্ড ইঞ্জিনিয়ারিং</option>
+                                    <option>ইলেকট্রিক্যাল অ্যান্ড ইলেকট্রনিক্স ইঞ্জিনিয়ারিং</option>
+                                    <option>পদার্থবিজ্ঞান</option>
+                                    <option>রসায়ন</option>
+                                    <option>গণিত</option>
+                                    <option>অর্থনীতি</option>
+                                    <option>ব্যবসায় প্রশাসন</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                            <div class="form-group">
+                                <label class="form-label">📑 সেকশন</label>
+                                <select class="form-input" required>
+                                    <option value="">সেকশন নির্বাচন করুন</option>
+                                    <option>এ (A)</option>
+                                    <option>বি (B)</option>
+                                    <option>সি (C)</option>
+                                    <option>ডি (D)</option>
+                                    <option>ই (E)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">📅 ব্যাচ/বর্ষ</label>
+                                <select class="form-input" required>
+                                    <option value="">ব্যাচ নির্বাচন করুন</option>
+                                    <option>২০২৪-২৫</option>
+                                    <option>২০২৩-২৪</option>
+                                    <option>২০২২-২৩</option>
+                                    <option>২০২১-২২</option>
+                                    <option>২০২০-২১</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">📱 ফোন নম্বর (ঐচ্ছিক)</label>
+                            <input type="tel" class="form-input" placeholder="ফোন নম্বর">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">📝 সিআর সম্পর্কে বিবরণ</label>
+                            <textarea class="form-input" placeholder="সিআর এর দায়িত্ব, অভিজ্ঞতা এবং অন্যান্য তথ্য লিখুন..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-success" style="width: 100%; font-size: 1.3rem; padding: 1.5rem;">
+                            🎉 সিআর প্রোফাইল তৈরি করুন
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>🚀 Quick Links</h3>
+                <a href="home.html">🏠 Home</a>
+                <a href="All_CRS.html">👥 All CRs</a>
+                <a href="Latest_Reviews.html" >📝 Latest Reviews</a>
+                <a href="Login.html">🔐 Login</a>
+                <a href="Registration.html" >📋 Registration</a>
+            </div>
+            <div class="footer-section">
+                <h3>📞 Contact</h3>
+                <a href="mailto:info@crreviews.com">📧 Email: info@crreviews.com</a>
+                <a href="tel:+8801700000000">📱 Phone: +8801700000000</a>
+                <a href="#">📍 Address: Dhaka, Bangladesh</a>
+                <a href="#">🕒 Time: 9 AM - 9 PM</a>
+            </div>
+            <div class="footer-section">
+                <h3>🌐 Social Media</h3>
+                <a href="#">📘 Facebook</a>
+                <a href="#">🦤 Twitter</a>
+                <a href="#">📸 Instagram</a>
+                <a href="#">💼 LinkedIn</a>
+                <a href="#">📺 YouTube</a>
+            </div>
+            <div class="footer-section">
+                <h3>ℹ️ About</h3>
+                <a href="#">👥 About Us</a>
+                <a href="#">🔒 Privacy Policy</a>
+                <a href="#">📋 Terms & Conditions</a>
+                <a href="#">❓ Help</a>
+                <a href="#">📞 Support</a>
+            </div>
+        </div>
+        <div style="text-align: center; padding: 2rem; border-top: 2px solid rgba(255,255,255,0.2); margin-top: 2rem; color: rgba(255,255,255,0.8); background: linear-gradient(90deg, rgba(255,255,255,0.05), rgba(255,255,255,0.1), rgba(255,255,255,0.05));">
+            <p style="font-size: 1.1rem; font-weight: 600;">
+                ✨ © 2024 BD University CR Reviews. All Rights Reserved. ✨
+            </p>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+                💙 Made with love for Bangladeshi students
+            </p>
+        </div>
+    </footer>
+
+     <script src="script.js"></script>
+
+</body>
+</html>
