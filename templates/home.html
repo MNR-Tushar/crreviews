@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} BD University CR Reviews {% endblock title %}
+
+{% block content %}
+    <div id="home" class="page active">
+        <div class="container">
+            <h1 class="title">BD University CR Reviews</h1>
+            
+            <div class="search-section">
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="🔍 Search by Name...">
+                    <input type="text" class="search-input" placeholder="🆔 Search by ID...">
+                    <input type="text" class="search-input" placeholder="🏛️ University">
+                    <input type="text" class="search-input" placeholder="📚 Department">
+                    <button class="search-btn">✨ Search</button>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number">2,545</div>
+                    <div class="stat-label">Total CRs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">125</div>
+                    <div class="stat-label">Total Universities</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">895</div>
+                    <div class="stat-label">Total Departments</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15,789</div>
+                    <div class="stat-label">Total Reviews</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">🌟 Top Rated CRs</h2>
+                <div class="grid">
+                    <div class="card">
+                        <div class="profile-photo">A</div>
+                        <div class="cr-name">Ahmed Hasan</div>
+                        <div class="cr-details">
+                            🆔 ID: 202101001<br>
+                            🏛️ Dhaka University<br>
+                            💻 Computer Science<br>
+                            🔢 Section: A
+                        </div>
+                        <div class="rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                        <button class="btn" onclick="event.stopPropagation(); openRatingModal('Ahmed Hasan')">⭐ Give Rating</button>
+                        <button class="btn btn-secondary" onclick="window.location.href={% url 'profile' %}">👤 View Profile</button>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="profile-photo">F</div>
+                        <div class="cr-name">Fatima Khatun</div>
+                        <div class="cr-details">
+                            🆔 ID: 202101002<br>
+                            🏛️ BUET<br>
+                            ⚡ Electrical<br>
+                            🔢 Section: B
+                        </div>
+                        <div class="rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">☆</span>
+                        </div>
+                        <button class="btn">⭐ Give Rating</button>
+                        <button class="btn btn-secondary">👤 View Profile</button>
+                    </div>
+
+                    <div class="card">
+                        <div class="profile-photo">R</div>
+                        <div class="cr-name">Rahim Uddin</div>
+                        <div class="cr-details">
+                            🆔 ID: 202101003<br>
+                            🏛️ Jahangirnagar University<br>
+                            🔬 Physics<br>
+                            🔢 Section: C
+                        </div>
+                        <div class="rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">☆</span>
+                        </div>
+                        <button class="btn">⭐ Give Rating</button>
+                        <button class="btn btn-secondary">👤 View Profile</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">🆕 Recently Added CRs</h2>
+                <div class="grid">
+                    <div class="card">
+                        <div class="profile-photo">S</div>
+                        <div class="cr-name">Sara Begum</div>
+                        <div class="cr-details">
+                            🆔 ID: 202401001<br>
+                            🏛️ Chittagong University<br>
+                            🧪 Chemistry<br>
+                            🔢 Section: A
+                        </div>
+                        <div class="rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                        </div>
+                        <button class="btn">⭐ Give Rating</button>
+                        <button class="btn btn-secondary">👤 View Profile</button>
+                    </div>
+
+                    <div class="card">
+                        <div class="profile-photo">T</div>
+                        <div class="cr-name">Taniya Akhtar</div>
+                        <div class="cr-details">
+                            🆔 ID: 202401002<br>
+                            🏛️ Rajshahi University<br>
+                            📐 Mathematics<br>
+                            🔢 Section: B
+                        </div>
+                        <div class="rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">☆</span>
+                        </div>
+                        <button class="btn">⭐ Give Rating</button>
+                        <button class="btn btn-secondary">👤 View Profile</button>
+                    </div>
+
+                    <div class="card">
+                        <div class="profile-photo">K</div>
+                        <div class="cr-name">Karim Miya</div>
+                        <div class="cr-details">
+                            🆔 ID: 202401003<br>
+                            🏛️ Islamic University<br>
+                            💰 Economics<br>
+                            🔢 Section: A
+                        </div>
+                        <div class="rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                        </div>
+                        <button class="btn">⭐ Give Rating</button>
+                        <button class="btn btn-secondary">👤 View Profile</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">📊 Rating Distribution</h2>
+                <div class="rating-chart">
+                    <div class="chart-bar">
+                        <div class="chart-label">5️⃣ 5 Stars</div>
+                        <div class="chart-progress">
+                            <div class="chart-fill" style="width: 45%;"></div>
+                        </div>
+                        <div>45%</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="chart-label">4️⃣ 4 Stars</div>
+                        <div class="chart-progress">
+                            <div class="chart-fill" style="width: 30%;"></div>
+                        </div>
+                        <div>30%</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="chart-label">3️⃣ 3 Stars</div>
+                        <div class="chart-progress">
+                            <div class="chart-fill" style="width: 15%;"></div>
+                        </div>
+                        <div>15%</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="chart-label">2️⃣ 2 Stars</div>
+                        <div class="chart-progress">
+                            <div class="chart-fill" style="width: 7%;"></div>
+                        </div>
+                        <div>7%</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="chart-label">1️⃣ 1 Star</div>
+                        <div class="chart-progress">
+                            <div class="chart-fill" style="width: 3%;"></div>
+                        </div>
+                        <div>3%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
