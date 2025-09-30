@@ -76,13 +76,13 @@
 
 
         // Add click event listeners to navigation links
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const pageId = link.getAttribute('data-page');
-                showPage(pageId);
-            });
-        });
+        // navLinks.forEach(link => {
+        //     link.addEventListener('click', (e) => {
+        //         e.preventDefault();
+        //         const pageId = link.getAttribute('data-page');
+        //         showPage(pageId);
+        //     });
+        // });
 
          // View Profile Function
         // function viewProfile(name, id, university, department, photo) {

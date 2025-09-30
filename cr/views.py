@@ -12,3 +12,5 @@ def latest_reviews(request):
 
 def profile(request):
     return render(request,'profile.html')
+def add_cr(request):
+    return render(request,'add_cr.html')
