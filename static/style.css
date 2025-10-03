@@ -284,15 +284,15 @@
         .stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2.5rem;
-            margin: 4rem 0;
+            gap: 1.5rem;
+            margin: 2rem 0;
         }
 
         .stat-card {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
             backdrop-filter: blur(30px);
             border-radius: 25px;
-            padding: 3rem 2rem;
+            padding: 2rem 1.5rem;
             text-align: center;
             color: white;
             transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -331,8 +331,8 @@
         }
 
         .stat-number {
-            font-size: 3.5rem;
-            font-weight: 800;
+            font-size: 2.5rem;
+            font-weight: 700;
             margin-bottom: 1rem;
             background: linear-gradient(135deg, #ffeb3b, #ff9800, #ffeb3b);
             -webkit-background-clip: text;
@@ -392,14 +392,11 @@
             gap: 2.5rem;
         }
 
-        
-
-
         .card {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
             backdrop-filter: blur(30px);
             border-radius: 25px;
-            padding: 2.5rem;
+            padding: 1.5rem;
             transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 1px solid rgba(255, 255, 255, 0.2);
             position: relative;
@@ -429,8 +426,8 @@
         }
 
         .profile-photo {
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             background: linear-gradient(135deg, #ff9a9e, #fecfef, #fecfef);
             margin: 0 auto 1.5rem;
@@ -545,11 +542,11 @@
             background: linear-gradient(135deg, #4facfe, #00f2fe, #4facfe);
             color: white;
             border: none;
-            padding: 1rem 2rem;
+            padding: 1rem 1rem;
             border-radius: 50px;
             cursor: pointer;
-            font-weight: 700;
-            font-size: 1rem;
+            font-weight: 600;
+            font-size: 0.8rem;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             margin: 0.5rem;
             position: relative;
