@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Login{% endblock title %}
+{% block content %}
+    <div id="login" class="page">
+        <div class="container">
+            <div style="max-width: 450px; margin: 5rem auto;">
+                <div class="search-section">
+                    <h2 style="color: white; text-align: center; margin-bottom: 2rem; font-size: 2.5rem; font-weight: 800;">🔐 Login</h2>
+                    <form>
+                        <input type="email" class="search-input" placeholder="📧 Email" style="width: 100%; margin-bottom: 1.5rem;">
+                        <input type="password" class="search-input" placeholder="🔑 Password" style="width: 100%; margin-bottom: 1.5rem;">
+                        <button type="submit" class="btn" style="width: 100%; margin-bottom: 1.5rem; font-size: 1.2rem;">✨ Login</button>
+                        <p style="color: white; text-align: center; font-size: 1.1rem;">
+                            🆕 New Account? <a href="#" style="color: #ffeb3b; font-weight: 700; text-decoration: none;" data-page="registration">Register</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
