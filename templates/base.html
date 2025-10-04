@@ -19,8 +19,47 @@
                 <li><a href="{% url 'home' %}" class="nav-link">🏠 Home</a></li>
                 <li><a href="{% url 'all_cr' %}" class="nav-link" >👥 All CRS</a></li>
                 <li><a href="{% url 'latest_reviews' %}" class="nav-link" >📝 Latest Reviews</a></li>
+                {% if user.is_authenticated %}
+                <!-- User Profile Dropdown -->
+                <li class="user-dropdown">
+                <a href="#" class="nav-link user-profile-btn">
+                    <span class="user-avatar">T</span>
+                    <span class="user-name">Tushar</span>
+                    <span class="dropdown-arrow">▼</span>
+                </a>
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">
+                        <div class="user-avatar-large">T</div>
+                        <div class="user-info">
+                            <strong>Tushar</strong>
+                            <small>Admin</small>
+                        </div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <a href="" class="dropdown-item">
+                        <span class="dropdown-icon">👤</span>
+                        My Profile
+                    </a>
+                    <a href="" class="dropdown-item">
+                        <span class="dropdown-icon">⭐</span>
+                        My Reviews
+                    </a>
+                    <a href="" class="dropdown-item">
+                        <span class="dropdown-icon">⚙️</span>
+                        Settings
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="" class="dropdown-item logout-btn">
+                        <span class="dropdown-icon">🚪</span>
+                        Logout
+                    </a>
+                </div>
+                </li>
+                {% else %}
                 <li><a href="{% url 'login'%}" class="nav-link" >🔐 Login</a></li>
                 <li><a href="{%url 'registration'%}" class="nav-link">📋 Registration</a></li>
+                {% endif %}
+                
             </ul>
             <button class="mobile-menu">☰</button>
         </div>
