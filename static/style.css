@@ -143,10 +143,10 @@
 .user-profile-btn {
     display: flex;
     align-items: center;
-    gap: 0.8rem;
-    padding: 0.7rem 1.8rem !important;
+    gap: 1rem;
+    padding: 0rem 0rem !important;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06)) !important;
-    border: 1.5px solid rgba(255, 255, 255, 0.18);
+    /* border: 10px solid rgba(255, 255, 255, 0.18); */
     position: relative;
     overflow: hidden;
 }
@@ -167,8 +167,8 @@
 }
 
 .user-avatar {
-    width: 38px;
-    height: 38px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
     display: flex;
@@ -186,8 +186,8 @@
 .user-avatar::after {
     content: '';
     position: absolute;
-    width: 10px;
-    height: 10px;
+    width: 5px;
+    height: 5px;
     background: #4ade80;
     border-radius: 50%;
     bottom: 0;
