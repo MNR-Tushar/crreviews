@@ -559,18 +559,18 @@
         }
 
         .search-input {
-            padding: 1.2rem 2rem;
+            padding: 0.8rem 0rem;
             border: none;
             border-radius: 50px;
             background: rgba(255, 255, 255, 0.9);
-            font-size: 1.1rem;
-            font-weight: 500;
+            font-size: 1rem;
+            font-weight: 300;
             transition: all 0.3s ease;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
         }
 
-        .search-input, .form-input {
+        /* .search-input, .form-input {
             padding: 1.2rem 2rem;
             border: none;
             border-radius: 50px;
@@ -580,7 +580,7 @@
             transition: all 0.3s ease;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
-        }
+        } */
 
         .search-input:focus {
             outline: none;

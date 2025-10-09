@@ -4,39 +4,37 @@
 {% block content %}
     <div id="registration" class="page">
         <div class="container">
-            <div style="max-width: 550px; margin: 3rem auto;">
+            <div style="max-width: 500px; margin: 3rem auto;">
                 <div class="search-section">
-                    <h2 style="color: white; text-align: center; margin-bottom: 2rem; font-size: 2.5rem; font-weight: 800;">📋 Registration</h2>
+                    <h2 style="color: white; text-align: center; margin-bottom: 2rem; font-size: 2.3rem; font-weight: 600;">Registration</h2>
                     <form>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
                             <input type="text" class="search-input" placeholder="👤 First Name">
                             <input type="text" class="search-input" placeholder="👤 Last Name">
                         </div>
-                        <input type="email" class="search-input" placeholder="📧 Email" style="width: 100%; margin-bottom: 1.5rem;">
-                        <input type="text" class="search-input" placeholder="🆔 Student ID" style="width: 100%; margin-bottom: 1.5rem;">
+                        <input type="email" class="search-input" placeholder=" Email" style="width: 100%; margin-bottom: 1.5rem;">
+                        <input type="text" class="search-input" placeholder=" Student ID" style="width: 100%; margin-bottom: 1.5rem;">
                         <select class="search-input" style="width: 100%; margin-bottom: 1.5rem;">
-                            <option>🏛️ Select University</option>
-                            <option>Dhaka University</option>
-                            <option>BUET</option>
-                            <option>Jahangirnagar University</option>
-                            <option>Chittagong University</option>
-                            <option>Rajshahi University</option>
-                            <option>Khulna University</option>
-                            <option>Bangladesh Agricultural University</option>
+                            <option selected disabled>🏛️ Select University</option>
+                            {% for uni in universitys %}
+                                <option value="{{uni.id}}">{{ uni.title }}</option>
+                            {% empty %}
+                                <option disabled>No University Found</option>
+                            {% endfor %}
+                           
                         </select>
                         <select class="search-input" style="width: 100%; margin-bottom: 1.5rem;">
-                            <option>📚 Select Department</option>
-                            <option>Computer Science</option>
-                            <option>Electrical Engineering</option>
-                            <option>Physics</option>
-                            <option>Chemistry</option>
-                            <option>Mathematics</option>
-                            <option>Economics</option>
-                            <option>Business Administration</option>
+                            <option selected disabled>🏛️ Select University</option>
+                            {% for dept in departments %}
+                            <option>{{dept.title}}</option>
+                            {% empty %}
+                            <option disabled>No Department Found</option>
+                            {% endfor %}
+                            
                         </select>
-                        <input type="password" class="search-input" placeholder="🔑 Password" style="width: 100%; margin-bottom: 1.5rem;">
-                        <input type="password" class="search-input" placeholder="🔑 Confirm Password" style="width: 100%; margin-bottom: 1.5rem;">
-                        <button type="submit" class="btn" style="width: 100%; margin-bottom: 1.5rem; font-size: 1.2rem;">🎉 Register</button>
+                        <input type="password" class="search-input" placeholder=" Password" style="width: 100%; margin-bottom: 1.5rem;">
+                        <input type="password1" class="search-input" placeholder=" Confirm Password" style="width: 100%; margin-bottom: 1.5rem;">
+                        <button type="submit" class="btn" style="width: 100%; margin-bottom: 1.5rem; font-size: 1.2rem;">Register</button>
                         <p style="color: white; text-align: center; font-size: 1.1rem;">
                             ✅ Already have an account? <a href="#" style="color: #ffeb3b; font-weight: 700; text-decoration: none;" data-page="login">Login</a>
                         </p>
