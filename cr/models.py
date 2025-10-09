@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+import os
 # Create your models here.
 
 class University(models.Model):
@@ -18,9 +19,9 @@ class University(models.Model):
     address=models.CharField(max_length=150, blank=True, null=True)
     slug=models.SlugField(null=True,blank=True,unique=True)
 
-    create_at=models.DateTimeField(auto_now_add=True)
-    update_at=models.DateTimeField(auto_now=True)
-    dalete_at=models.DateTimeField(auto_now=True,blank=True,null=True)
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
+    daleted_at=models.DateTimeField(auto_now=True,blank=True,null=True)
 
     def __str__(self):
         return self.title
@@ -36,13 +37,80 @@ class Department(models.Model):
     code=models.CharField(max_length=50,unique=True,blank=True,null=True)
     slug=models.SlugField(null=True,blank=True,unique=True)
 
-    create_at=models.DateTimeField(auto_now_add=True)
-    update_at=models.DateTimeField(auto_now=True)
-    dalete_at=models.DateTimeField(auto_now=True,blank=True,null=True)
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
+    daleted_at=models.DateTimeField(auto_now=True,blank=True,null=True)
 
     def __str__(self):
         return self.title
     
     def save(self, *args, **kwargs):
         self.slug=slugify(self.title)
+        super().save(*args, **kwargs)
+
+def cr_profile_picture_path(instance, filename):
+    """CR profile picture upload path"""
+    ext = filename.split('.')[-1]
+    filename = f"cr_profile_{instance.id}.{ext}"
+    return os.path.join('cr_profiles', f'cr_{instance.id}', 'profile_pictures', filename)
+
+
+
+class CrProfile(models.Model):
+    user=models.OneToOneField('userprofile.User', on_delete=models.CASCADE,related_name='cr_profile')
+    university=models.ForeignKey(University, on_delete=models.CASCADE,related_name='cr_profile')
+    department=models.ForeignKey(Department, on_delete=models.CASCADE,related_name='cr_profile')
+
+    profile_picture = models.ImageField(upload_to='cr_profile_pictures/', blank=True, null=True)
+    name = models.CharField(max_length=100)
+    email = models.EmailField(blank=True, null=True)
+    phone = models.CharField(max_length=30, blank=True, null=True)
+    st_id = models.CharField(max_length=50, unique=True)
+    batch = models.CharField(max_length=20)
+    section = models.CharField(max_length=10)
+    bio = models.TextField(blank=True, null=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
+
+
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
+    daleted_at=models.DateTimeField(auto_now=True,blank=True,null=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.user.email})"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    
+    def save(self, *args, **kwargs):
+        if not self.id:
+            saved_image = self.profile_picture
+            self.profile_picture = None
+            super().save(*args, **kwargs)
+            self.profile_picture = saved_image
+        
+        super().save(*args, **kwargs)
+
+class Review(models.Model):
+    user=models.OneToOneField('userprofile.User', on_delete=models.CASCADE,related_name='reviews')
+    cr_profile=models.ForeignKey(CrProfile, on_delete=models.CASCADE,related_name='reviews')
+
+    rating = models.PositiveSmallIntegerField()  # rating 1–5 ধরা যায়
+    description = models.TextField(blank=True, null=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(blank=True, null=True)
+
+
+    def __str__(self):
+        return f"Review by {self.user.first_name} on {self.cr_profile.name}"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(f"{self.user.id}-{self.cr_profile.id}-{self.rating}")
         super().save(*args, **kwargs)
