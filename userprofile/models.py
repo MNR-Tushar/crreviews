@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin
 from cr.models import *
 from .manager import CustomUserManager
+import os
 # Create your models here.
 
 def user_profile_picture_path(instance, filename):
