@@ -23,8 +23,8 @@ class User(AbstractBaseUser,PermissionsMixin):
     phone=models.CharField(max_length=20,null=True,blank=True)
     date_of_birth=models.DateField(null=True,blank=True)
     student_id=models.CharField(max_length=50,unique=True)
-    batch=models.CharField(max_length=20,null=True,blank=True)
-    section=models.CharField(max_length=20,null=True,blank=True)
+    batch=models.CharField(max_length=20,null=True,)
+    section=models.CharField(max_length=20,null=True,)
     bio=models.TextField(null=True,blank=True)
     facebook_url=models.URLField(null=True,blank=True)
     instqgram_url=models.URLField(null=True,blank=True)
@@ -64,6 +64,10 @@ class User(AbstractBaseUser,PermissionsMixin):
         if self.profile_picture and hasattr(self.profile_picture, 'url'):
             return self.profile_picture.url
         return '/media/users/default_profile.png'
+    
+    
+        
+    
 
 
     

@@ -15,3 +15,17 @@ class DepartmentAdmin(admin.ModelAdmin):
     search_fields = ('university', 'title', 'code')
     list_filter = ('university',)
     ordering = ('university',)
+
+@admin.register(CrProfile)
+class CrProfileAdmin(admin.ModelAdmin):
+    list_display = ('name', 'st_id', 'user', 'university', 'department', 'batch', 'section')
+    search_fields = ('name', 'st_id', 'user__email')
+    list_filter = ('university', 'department', 'batch')
+    ordering = ('-created_at',)
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('user', 'cr_profile', 'rating', 'created_at')
+    search_fields = ('user__email', 'cr_profile__name')
+    list_filter = ('rating', 'created_at')
+    ordering = ('-created_at',)
