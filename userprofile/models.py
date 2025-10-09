@@ -5,11 +5,17 @@ from cr.models import *
 from .manager import CustomUserManager
 # Create your models here.
 
+def user_profile_picture_path(instance, filename):
+    """User profile picture upload path"""
+    ext = filename.split('.')[-1]
+    filename = f"profile_{instance.id}.{ext}"
+    return os.path.join('users', f'user_{instance.id}', 'profile_pictures', filename)
+
 class User(AbstractBaseUser,PermissionsMixin):
 
     university=models.ForeignKey(University, on_delete=models.SET_NULL,related_name='user_profile',null=True,blank=True)
     department=models.ForeignKey(Department, on_delete=models.SET_NULL,related_name='user_profile',null=True,blank=True)
-    profile_picture=models.ImageField(upload_to='profile_pictures/',null=True,blank=True)
+    profile_picture=models.ImageField(upload_to='user_profile_picture_path',null=True,blank=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(unique=True)
@@ -40,13 +46,23 @@ class User(AbstractBaseUser,PermissionsMixin):
     def __str__(self):
         return self.email
     
-    def get_profile_picture(self):
-        url=""
-        try:
-            url=self.profile_pictures.url
-        except:
-            url=""
-        return url
+    def save(self, *args, **kwargs):
+        # Save first to get ID
+        if not self.id:
+            saved_image = self.profile_picture
+            self.profile_picture = None
+            super().save(*args, **kwargs)
+            self.profile_picture = saved_image
+        
+        super().save(*args, **kwargs)
+    
+    def get_full_name(self):
+        return f"{self.first_name} {self.last_name}"
+    
+    def get_profile_picture_url(self):
+        if self.profile_picture and hasattr(self.profile_picture, 'url'):
+            return self.profile_picture.url
+        return '/media/users/default_profile.png'
 
 
     
