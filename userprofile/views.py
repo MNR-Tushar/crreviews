@@ -1,11 +1,22 @@
 from django.shortcuts import render
 
+from cr.models import *
+
 
 def login(request):
     return render(request,'user_profile/login.html')
 
 def registration(request):
-    return render(request,'user_profile/registration.html')
+
+    universitys = University.objects.all()
+    departments = Department.objects.all()
+
+    context={
+        'universitys':universitys,
+        'departments':departments,
+    }
+
+    return render(request,'user_profile/registration.html',context)
 
 def logout(request):
     pass
