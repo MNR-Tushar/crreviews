@@ -300,22 +300,22 @@
         });
 
         // Enhanced form submission
-        document.querySelectorAll('form').forEach(form => {
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const submitBtn = form.querySelector('button[type="submit"]');
-                const originalText = submitBtn.textContent;
+        // document.querySelectorAll('form').forEach(form => {
+        //     form.addEventListener('submit', (e) => {
+        //         e.preventDefault();
+        //         const submitBtn = form.querySelector('button[type="submit"]');
+        //         const originalText = submitBtn.textContent;
                 
-                submitBtn.textContent = '⏳ প্রক্রিয়াকরণ...';
-                submitBtn.disabled = true;
+        //         submitBtn.textContent = '⏳ প্রক্রিয়াকরণ...';
+        //         submitBtn.disabled = true;
                 
-                setTimeout(() => {
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-                    showNotification('🎉 ফর্ম সাবমিশন ফিচার শীঘ্রই আসছে!', 'success');
-                }, 2000);
-            });
-        });
+        //         setTimeout(() => {
+        //             submitBtn.textContent = originalText;
+        //             submitBtn.disabled = false;
+        //             showNotification('🎉 ফর্ম সাবমিশন ফিচার শীঘ্রই আসছে!', 'success');
+        //         }, 2000);
+        //     });
+        // });
 
        
 
