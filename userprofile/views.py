@@ -1,15 +1,30 @@
 from django.contrib import messages
 from django.shortcuts import render,redirect
-from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate,login as auth_login,logout as auth_logout
 from cr.models import *
 from .models import *
 
 
 def login(request):
-    return render(request,'user_profile/login.html')
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        
+        user = authenticate(request, email=email, password=password)
+        
+        if user is not None:
+            auth_login(request, user)
+            messages.success(request, 'Successfully logged in!')
+            return redirect('home')  #
+        else:
+            messages.error(request, 'Invalid email or password!')
+            return redirect('login')
+    
+    return render(request, 'user_profile/login.html')
 
 
 def registration(request):
+
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -18,10 +33,10 @@ def registration(request):
         university_id = request.POST.get('university')
         department_id = request.POST.get('department')
         password = request.POST.get('password')
-        password2 = request.POST.get('password2')
+        confirm_password = request.POST.get('confirm_password')
         
-        # Validation
-        if password != password2:
+        
+        if password != confirm_password:
             messages.error(request, 'Passwords do not match!')
             return redirect('registration')
         
@@ -34,11 +49,11 @@ def registration(request):
             return redirect('registration')
         
         try:
-            # Get university and department objects
+            
             university = University.objects.get(id=university_id) if university_id else None
             department = Department.objects.get(id=department_id) if department_id else None
             
-            # Create user
+            
             user = User.objects.create_user(
                 first_name=first_name,
                 last_name=last_name,
@@ -56,7 +71,7 @@ def registration(request):
             messages.error(request, f'Registration failed: {str(e)}')
             return redirect('registration')
     
-    # GET request
+    
     universitys = University.objects.all()
     departments = Department.objects.all()
     
@@ -69,7 +84,8 @@ def registration(request):
 
 
 def logout(request):
-    pass
+    auth_logout(request)
+    return redirect('login')
 
 def user_dasboard(request):
     return render(request,'user_profile/user_dashboard.html')
