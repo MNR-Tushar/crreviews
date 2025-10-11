@@ -8,19 +8,22 @@
             <div style="max-width: 900px; margin: 0 auto;">
                 <!-- Profile Header -->
                 <div class="search-section" style="text-align: center; margin-bottom: 3rem;">
-                    <div class="profile-photo" style="width: 150px; height: 150px; font-size: 4rem; margin: 0 auto 2rem;" id="profile-photo">আ</div>
-                    <h1 style="color: white; font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem;" id="profile-name">আহমেদ হাসান</h1>
+                    <div class="profile-photo" style="width: 150px; height: 150px; font-size: 4rem; margin: 0 auto 2rem; position: relative;" id="profile-photo">
+                        AH
+                        <button onclick="document.getElementById('photo-upload-modal').style.display='block'" style="position: absolute; bottom: 5px; right: 5px; background: linear-gradient(135deg, #4facfe, #00f2fe); border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.3); color: white; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;">📷</button>
+                    </div>
+                    <h1 style="color: white; font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem;" id="profile-name">Ahmed Hasan</h1>
                     <p style="color: rgba(255,255,255,0.9); font-size: 1.3rem; margin-bottom: 1.5rem;" id="profile-info">
-                        🆔 আইডি: ২০২১০১০০১ | 🏛️ ঢাকা বিশ্ববিদ্যালয় | 💻 কম্পিউটার সায়েন্স
+                        🆔 ID: 2021010001 | 🏛️ Dhaka University | 💻 Computer Science
                     </p>
                     
                     <!-- Rating Display -->
                     <div style="margin: 2rem 0;">
                         <div style="font-size: 3rem; color: #ffeb3b; text-shadow: 0 0 20px rgba(255,235,59,0.5);">
-                            ⭐ ৪.৮
+                            ⭐ 4.8
                         </div>
                         <div style="color: rgba(255,255,255,0.8); margin-top: 0.5rem;" id="review-count">
-                            (২৪৭টি রিভিউ এর উপর ভিত্তি করে)
+                            (Based on 247 reviews)
                         </div>
                         <div class="rating" style="justify-content: center; margin: 1rem 0;">
                             <span class="star">★</span>
@@ -32,50 +35,63 @@
                     </div>
                     
                     <button class="btn" onclick="openRatingModal(document.getElementById('profile-name').textContent)" style="font-size: 1.2rem; padding: 1rem 2rem;">
-                        ⭐ রেটিং দিন
+                        ⭐ Give Rating
                     </button>
                 </div>
 
                 <!-- Profile Details -->
                 <div class="search-section">
-                    <h2 style="color: white; font-size: 1.8rem; font-weight: 700; margin-bottom: 2rem;">📋 বিস্তারিত তথ্য</h2>
+                    <h2 style="color: white; font-size: 1.8rem; font-weight: 700; margin-bottom: 2rem;">📋 Detailed Information</h2>
                     
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;" id="profile-details">
                         <div>
-                            <strong style="color: rgba(255,255,255,0.8);">🏛️ বিশ্ববিদ্যালয়:</strong>
-                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem;">ঢাকা বিশ্ববিদ্যালয়</p>
+                            <strong style="color: rgba(255,255,255,0.8);">🏛️ University:</strong>
+                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem;">Dhaka University</p>
                         </div>
                         <div>
-                            <strong style="color: rgba(255,255,255,0.8);">📚 বিভাগ:</strong>
-                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem;">কম্পিউটার সায়েন্স</p>
+                            <strong style="color: rgba(255,255,255,0.8);">📚 Department:</strong>
+                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem;">Computer Science</p>
                         </div>
                         <div>
-                            <strong style="color: rgba(255,255,255,0.8);">📑 সেকশন:</strong>
-                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem;">এ (A)</p>
+                            <strong style="color: rgba(255,255,255,0.8);">📑 Section:</strong>
+                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem;">A</p>
                         </div>
                         <div>
-                            <strong style="color: rgba(255,255,255,0.8);">📅 ব্যাচ:</strong>
-                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem;">২০২১-২২</p>
+                            <strong style="color: rgba(255,255,255,0.8);">📅 Batch:</strong>
+                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem;">2021-22</p>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                        <div>
+                            <strong style="color: rgba(255,255,255,0.8);">📧 Email:</strong>
+                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem; word-break: break-all;">ahmed.hasan@du.ac.bd</p>
+                            <a href="mailto:ahmed.hasan@du.ac.bd" class="btn" style="margin-top: 0.5rem; padding: 0.6rem 1.2rem; font-size: 0.9rem; display: inline-block;">✉️ Send Email</a>
+                        </div>
+                        <div>
+                            <strong style="color: rgba(255,255,255,0.8);">📱 Phone:</strong>
+                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem;">+880 1712-345678</p>
+                            <a href="tel:+8801712345678" class="btn" style="margin-top: 0.5rem; padding: 0.6rem 1.2rem; font-size: 0.9rem; display: inline-block;">📞 Call Now</a>
                         </div>
                     </div>
 
                     <div style="margin: 2rem 0;">
-                        <strong style="color: rgba(255,255,255,0.8);">📝 সম্পর্কে:</strong>
+                        <strong style="color: rgba(255,255,255,0.8);">📝 About:</strong>
                         <p style="color: white; font-size: 1.1rem; line-height: 1.7; margin-top: 1rem;" id="profile-about">
-                            আহমেদ হাসান একজন অভিজ্ঞ এবং দায়িত্বশীল ক্লাস রিপ্রেজেন্টেটিভ। তিনি গত ২ বছর ধরে এই দায়িত্ব পালন করছেন এবং ক্লাসের সবার সাথে ভালো সম্পর্ক বজায় রেখেছেন।
+                            Ahmed Hasan is an experienced and responsible Class Representative. He has been serving in this role for the past 2 years and has maintained excellent relationships with all classmates. Known for his dedication, prompt communication, and problem-solving skills.
                         </p>
                     </div>
                 </div>
 
                 <!-- Recent Reviews -->
                 <div class="section">
-                    <h2 style="color: white; font-size: 1.8rem; font-weight: 700; margin-bottom: 2rem;">💬 সাম্প্রতিক রিভিউ</h2>
+                    <h2 style="color: white; font-size: 1.8rem; font-weight: 700; margin-bottom: 2rem;">💬 Recent Reviews</h2>
                     
                     <div id="reviews-container">
                         <div class="review-card">
                             <div class="review-header">
                                 <div>
-                                    <strong>রাহুল আহমেদ</strong> - ২১তম ব্যাচ
+                                    <strong>Rahul Ahmed</strong> - Batch 21
                                     <div class="rating">
                                         <span class="star">★</span>
                                         <span class="star">★</span>
@@ -84,17 +100,17 @@
                                         <span class="star">★</span>
                                     </div>
                                 </div>
-                                <div style="color: rgba(255,255,255,0.7);">🕒 ১ দিন আগে</div>
+                                <div style="color: rgba(255,255,255,0.7);">🕒 1 day ago</div>
                             </div>
                             <div class="review-text">
-                                "আহমেদ ভাই সত্যিই অসাধারণ! সব সময় সবার সমস্যা শুনে এবং সমাধানের চেষ্টা করে। 👏"
+                                "Ahmed is truly amazing! Always listens to everyone's problems and tries to find solutions. 👏"
                             </div>
                         </div>
 
                         <div class="review-card">
                             <div class="review-header">
                                 <div>
-                                    <strong>সাদিয়া খান</strong> - ২১তম ব্যাচ
+                                    <strong>Sadia Khan</strong> - Batch 21
                                     <div class="rating">
                                         <span class="star">★</span>
                                         <span class="star">★</span>
@@ -103,15 +119,52 @@
                                         <span class="star">☆</span>
                                     </div>
                                 </div>
-                                <div style="color: rgba(255,255,255,0.7);">🕒 ৩ দিন আগে</div>
+                                <div style="color: rgba(255,255,255,0.7);">🕒 3 days ago</div>
                             </div>
                             <div class="review-text">
-                                "খুবই সহায়ক এবং বন্ধুত্বপূর্ণ আচরণ। তবে মাঝে মাঝে একটু তাড়াহুড়োয় থাকে। 😊"
+                                "Very helpful and friendly behavior. Sometimes a bit rushed though. 😊"
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Profile Photo Upload Modal -->
+    <div id="photo-upload-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h2 style="color: white; font-size: 1.8rem; font-weight: 700;">📷 Upload Profile Photo</h2>
+                <button onclick="document.getElementById('photo-upload-modal').style.display='none'" style="background: rgba(255,255,255,0.2); border: none; color: white; font-size: 1.5rem; cursor: pointer; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">✕</button>
+            </div>
+
+            <form id="photo-upload-form" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <div style="text-align: center; margin: 2rem 0;">
+                    <div id="preview-photo" style="width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); margin: 0 auto; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: white; border: 3px solid rgba(255,255,255,0.3); box-shadow: 0 15px 35px rgba(0,0,0,0.3); overflow: hidden;">
+                        <span id="preview-text">AH</span>
+                        <img id="preview-image" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                    </div>
+                </div>
+
+                <div style="position: relative;">
+                    <label for="photo-file" style="display: block; width: 100%; padding: 1.5rem; background: rgba(255,255,255,0.1); border: 2px dashed rgba(255,255,255,0.3); border-radius: 20px; text-align: center; color: white; cursor: pointer; transition: all 0.3s ease;">
+                        <span style="font-size: 2rem; display: block; margin-bottom: 0.5rem;">📁</span>
+                        <span style="font-weight: 600;">Click to select photo</span>
+                        <span style="display: block; font-size: 0.9rem; opacity: 0.7; margin-top: 0.5rem;">JPG, PNG or GIF (Max 5MB)</span>
+                    </label>
+                    <input type="file" id="photo-file" accept="image/*" style="display: none;" onchange="previewPhotoUpload(event)">
+                </div>
+
+                <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem;">
+                    <button type="submit" class="btn" style="padding: 1rem 2rem; font-size: 1.1rem;">
+                        ✓ Upload Photo
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="document.getElementById('photo-upload-modal').style.display='none'" style="padding: 1rem 2rem; font-size: 1.1rem;">
+                        ✕ Cancel
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 {% endblock content %}
