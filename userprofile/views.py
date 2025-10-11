@@ -15,7 +15,7 @@ def login(request):
         if user is not None:
             auth_login(request, user)
             messages.success(request, 'Successfully logged in!')
-            return redirect('home')  #
+            return redirect('home')
         else:
             messages.error(request, 'Invalid email or password!')
             return redirect('login')
