@@ -4,24 +4,24 @@
 {% block content %}
     <div id="all-cr" class="page">
         <div class="container">
-            <h1 class="title">👥 All CRs</h1>
+            <h1 class="title">All CRS</h1>
             
             <div class="search-section">
-                <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 700;">🔍 Find Your CR</h3>
+                <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 700;">Find Your CR</h3>
                 <div class="search-bar">
-                    <input type="text" class="search-input" placeholder="👤 Enter Name or ID...">
-                    <button class="search-btn">✨ Search</button>
+                    <input type="text" class="search-input" placeholder="Enter Name or ID...">
+                    <button class="search-btn">Search</button>
                 </div>
             </div>
 
-            <div class="search-section">
+            {% comment %} <div class="search-section">
                 <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 700;">➕ Add Your CR</h3>
                 
                 <button class="btn" style="width: 100%; font-size: 1.2rem;" onclick="window.location.href={% url 'add_cr' %}">🆕 Add New CR</button>
-            </div>
+            </div> {% endcomment %}
             
             <div class="filter-section">
-                <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 700;">🎯 Filters</h3>
+                <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 700;">Filters</h3>
                 <div class="filter-row">
                     <select class="filter-select">
                         <option>🏛️ All Universities</option>

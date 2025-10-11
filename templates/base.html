@@ -16,9 +16,9 @@
         <div class="nav-container">
             <a href="home.html" class="logo">CR Reviews</a>
             <ul class="nav-links">
-                <li><a href="{% url 'home' %}" class="nav-link">🏠 Home</a></li>
-                <li><a href="{% url 'all_cr' %}" class="nav-link" >👥 All CRS</a></li>
-                <li><a href="{% url 'latest_reviews' %}" class="nav-link" >📝 Latest Reviews</a></li>
+                <li><a href="{% url 'home' %}" class="nav-link">Home</a></li>
+                <li><a href="{% url 'all_cr' %}" class="nav-link" >All CRS</a></li>
+                <li><a href="{% url 'latest_reviews' %}" class="nav-link" >Latest Reviews</a></li>
                 {% if user.is_authenticated %}
                 <!-- User Profile Dropdown -->
                 <li class="user-dropdown">
@@ -36,6 +36,7 @@
                         </div>
                     </div>
                     <div class="dropdown-divider"></div>
+                    
                     <a href="" class="dropdown-item">
                         <span class="dropdown-icon">👤</span>
                         My Profile
@@ -56,8 +57,8 @@
                 </div>
                 </li>
                 {% else %}
-                <li><a href="{% url 'login'%}" class="nav-link" >🔐 Login</a></li>
-                <li><a href="{%url 'registration'%}" class="nav-link">📋 Registration</a></li>
+                <li><a href="{% url 'login'%}" class="nav-link" >Login</a></li>
+                <li><a href="{%url 'registration'%}" class="nav-link">Registration</a></li>
                 {% endif %}
                 
             </ul>
@@ -109,40 +110,40 @@
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-section">
-                <h3>🚀 Quick Links</h3>
-                <a href="{% url 'home' %}">🏠 Home</a>
-                <a href="{% url 'all_cr' %}">👥 All CRs</a>
-                <a href="{% url 'latest_reviews' %}" >📝 Latest Reviews</a>
-                <a href="Login.html">🔐 Login</a>
-                <a href="Registration.html" >📋 Registration</a>
+                <h3>Quick Links</h3>
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'all_cr' %}">All CRs</a>
+                <a href="{% url 'latest_reviews' %}"> Latest Reviews</a>
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'registration' %}"> Registration</a>
             </div>
             <div class="footer-section">
-                <h3>📞 Contact</h3>
-                <a href="mailto:info@crreviews.com">📧 Email: info@crreviews.com</a>
-                <a href="tel:+8801700000000">📱 Phone: +8801700000000</a>
-                <a href="#">📍 Address: Dhaka, Bangladesh</a>
-                <a href="#">🕒 Time: 9 AM - 9 PM</a>
+                <h3>Contact</h3>
+                <a href="mailto:info@crreviews.com"> Email: info@crreviews.com</a>
+                <a href="tel:+8801700000000"> Phone: +8801700000000</a>
+                <a href="#"> Address: Dhaka, Bangladesh</a>
+                <a href="#"> Time: 9 AM - 9 PM</a>
             </div>
             <div class="footer-section">
-                <h3>🌐 Social Media</h3>
-                <a href="#">📘 Facebook</a>
-                <a href="#">🦤 Twitter</a>
-                <a href="#">📸 Instagram</a>
-                <a href="#">💼 LinkedIn</a>
-                <a href="#">📺 YouTube</a>
+                <h3>Social Media</h3>
+                <a href="#"> Facebook</a>
+                <a href="#"> Twitter</a>
+                <a href="#"> Instagram</a>
+                <a href="#"> LinkedIn</a>
+                <a href="#"> YouTube</a>
             </div>
             <div class="footer-section">
-                <h3>ℹ️ About</h3>
-                <a href="#">👥 About Us</a>
-                <a href="#">🔒 Privacy Policy</a>
-                <a href="#">📋 Terms & Conditions</a>
-                <a href="#">❓ Help</a>
-                <a href="#">📞 Support</a>
+                <h3>About</h3>
+                <a href="#"> About Us</a>
+                <a href="#"> Privacy Policy</a>
+                <a href="#"> Terms & Conditions</a>
+                <a href="#"> Help</a>
+                <a href="#"> Support</a>
             </div>
         </div>
         <div style="text-align: center; padding: 2rem; border-top: 2px solid rgba(255,255,255,0.2); margin-top: 2rem; color: rgba(255,255,255,0.8); background: linear-gradient(90deg, rgba(255,255,255,0.05), rgba(255,255,255,0.1), rgba(255,255,255,0.05));">
             <p style="font-size: 1.1rem; font-weight: 600;">
-                ✨ © 2025 BD University CR Reviews. All Rights Reserved. ✨
+                ✨ © 2025 BD University CR Reviews. All Rights Reserved.
             </p>
             <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
                 💙 Made with love for Bangladeshi students
