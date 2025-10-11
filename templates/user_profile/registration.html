@@ -17,15 +17,15 @@
 
                     <!-- Name Fields -->
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                        <input type="text" name="first_name" class="search-input" placeholder="First Name" required>
-                        <input type="text" name="last_name" class="search-input" placeholder="Last Name" required>
+                        <input type="text" name="first_name" class="form-input" placeholder="First Name" required>
+                        <input type="text" name="last_name" class="form-input" placeholder="Last Name" required>
                     </div>
 
-                    <input type="email" name="email" class="search-input" placeholder="Email" style="width: 100%; margin-bottom: 1.5rem;" required>
-                    <input type="text" name="student_id" class="search-input" placeholder="Student ID" style="width: 100%; margin-bottom: 1.5rem;" required>
+                    <input type="email" name="email" class="form-input" placeholder="Email" style="width: 100%; margin-bottom: 1.5rem;" required>
+                    <input type="text" name="student_id" class="form-input" placeholder="Student ID" style="width: 100%; margin-bottom: 1.5rem;" required>
 
                     <!-- University -->
-                    <select name="university" class="search-input" style="width: 100%; margin-bottom: 1.5rem;" required>
+                    <select name="university" class="form-input" style="width: 100%; margin-bottom: 1.5rem;" required>
                         <option selected disabled>Select University</option>
                         {% for uni in universitys %}
                             <option value="{{ uni.id }}">{{ uni.title }}</option>
@@ -35,7 +35,7 @@
                     </select>
 
                     <!-- Department -->
-                    <select name="department" class="search-input" style="width: 100%; margin-bottom: 1.5rem;" required>
+                    <select name="department" class="form-input" style="width: 100%; margin-bottom: 1.5rem;" required>
                         <option selected disabled>Select Department</option>
                         {% for dept in departments %}
                             <option value="{{ dept.id }}">{{ dept.title }}</option>
@@ -45,10 +45,10 @@
                     </select>
 
                     <!-- Password -->
-                    <input type="password" name="password" class="search-input" placeholder="Password" style="width: 100%; margin-bottom: 1.5rem;" required>
+                    <input type="password" name="password" class="form-input" placeholder="Password" style="width: 100%; margin-bottom: 1.5rem;" required>
 
                     <!-- Confirm Password -->
-                    <input type="password" name="confirm_password" class="search-input" placeholder="Confirm Password" style="width: 100%; margin-bottom: 1.5rem;" required>
+                    <input type="password" name="confirm_password" class="form-input" placeholder="Confirm Password" style="width: 100%; margin-bottom: 1.5rem;" required>
 
                     <!-- Submit Button -->
                     <button type="submit" class="btn" style="width: 100%; margin-bottom: 1.5rem; font-size: 1.2rem;">
