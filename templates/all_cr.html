@@ -46,14 +46,22 @@
 
             <div class="section">
                 <div class="grid">
+                    {% for cr in cr|slice:9 %}
                     <div class="card">
-                        <div class="profile-photo">A</div>
-                        <div class="cr-name">Ahmed Hasan</div>
+                        <div class="profile-photo">
+                            {% if cr.profile_picture %}
+                             <img src="{{ cr.profile_picture.url }}" alt="{{ cr.name }}">
+                            {% else %}
+                             <span>{{ cr.name|first|upper }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="cr-name">{{cr.name}}</div>
                         <div class="cr-details">
-                            🆔 ID: 202101001<br>
-                            🏛️ Dhaka University<br>
-                            💻 Computer Science<br>
-                            🔢 Section: A
+                            ID: {{cr.st_id}}<br>
+                            {{cr.university}}<br>
+                            {{cr.department}}<br>
+                            Batch: {{cr.batch}}<br>
+                            Section: {{cr.section}}<br>
                         </div>
                         <div class="rating">
                             <span class="star">★</span>
@@ -65,106 +73,8 @@
                         <button class="btn">⭐ Give Rating</button>
                         <button class="btn btn-secondary">👤 View Profile</button>
                     </div>
-
-                    <div class="card">
-                        <div class="profile-photo">F</div>
-                        <div class="cr-name">Fatima Khatun</div>
-                        <div class="cr-details">
-                            🆔 ID: 202101002<br>
-                            🏛️ BUET<br>
-                            ⚡ Electrical<br>
-                            🔢 Section: B
-                        </div>
-                        <div class="rating">
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">☆</span>
-                        </div>
-                        <button class="btn">⭐ Give Rating</button>
-                        <button class="btn btn-secondary">👤 View Profile</button>
-                    </div>
-
-                    <div class="card">
-                        <div class="profile-photo">R</div>
-                        <div class="cr-name">Rahim Uddin</div>
-                        <div class="cr-details">
-                            🆔 ID: 202101003<br>
-                            🏛️ Jahangirnagar University<br>
-                            🔬 Physics<br>
-                            🔢 Section: C
-                        </div>
-                        <div class="rating">
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">☆</span>
-                        </div>
-                        <button class="btn">⭐ Give Rating</button>
-                        <button class="btn btn-secondary">👤 View Profile</button>
-                    </div>
-
-                    <div class="card">
-                        <div class="profile-photo">S</div>
-                        <div class="cr-name">Sara Begum</div>
-                        <div class="cr-details">
-                            🆔 ID: 202401001<br>
-                            🏛️ Chittagong University<br>
-                            🧪 Chemistry<br>
-                            🔢 Section: A
-                        </div>
-                        <div class="rating">
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                        </div>
-                        <button class="btn">⭐ Give Rating</button>
-                        <button class="btn btn-secondary">👤 View Profile</button>
-                    </div>
-
-                    <div class="card">
-                        <div class="profile-photo">T</div>
-                        <div class="cr-name">Taniya Akhtar</div>
-                        <div class="cr-details">
-                            🆔 ID: 202401002<br>
-                            🏛️ Rajshahi University<br>
-                            📐 Mathematics<br>
-                            🔢 Section: B
-                        </div>
-                        <div class="rating">
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">☆</span>
-                        </div>
-                        <button class="btn">⭐ Give Rating</button>
-                        <button class="btn btn-secondary">👤 View Profile</button>
-                    </div>
-
-                    <div class="card">
-                        <div class="profile-photo">K</div>
-                        <div class="cr-name">Karim Miya</div>
-                        <div class="cr-details">
-                            🆔 ID: 202401003<br>
-                            🏛️ Islamic University<br>
-                            💰 Economics<br>
-                            🔢 Section: A
-                        </div>
-                        <div class="rating">
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                        </div>
-                        <button class="btn">⭐ Give Rating</button>
-                        <button class="btn btn-secondary">👤 View Profile</button>
-                    </div>
+                    {% endfor %}
+                    
                 </div>
             </div>
         </div>

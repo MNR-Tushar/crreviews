@@ -19,19 +19,19 @@
 
             <div class="stats">
                 <div class="stat-card">
-                    <div class="stat-number">2,545</div>
+                    <div class="stat-number">{{cr.count}}</div>
                     <div class="stat-label">Total CRS</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">125</div>
+                    <div class="stat-number">{{total_university}}</div>
                     <div class="stat-label">Total Universities</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">895</div>
+                    <div class="stat-number">{{total_department}}</div>
                     <div class="stat-label">Total Departments</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">15,789</div>
+                    <div class="stat-number">{{total_review}}</div>
                     <div class="stat-label">Total Reviews</div>
                 </div>
             </div>
@@ -105,65 +105,36 @@
             <div class="section">
                 <h2 class="section-title">Recently Added CRS</h2>
                 <div class="grid">
+                {% for cr in cr|slice:6 %}
                     <div class="card">
-                        <div class="profile-photo">S</div>
-                        <div class="cr-name">Sara Begum</div>
+                        <div class="profile-photo">
+                            {% if cr.profile_picture %}
+                             <img src="{{ cr.profile_picture.url }}" alt="{{ cr.name }}">
+                            {% else %}
+                             <span>{{ cr.name|first|upper }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="cr-name">{{cr.name}}</div>
                         <div class="cr-details">
-                            🆔 ID: 202401001<br>
-                            🏛️ Chittagong University<br>
-                            🧪 Chemistry<br>
-                            🔢 Section: A
+                            ID: {{cr.st_id}}<br>
+                            {{cr.university}}<br>
+                            {{cr.department}}<br>
+                            Batch: {{cr.batch}}<br>
+                            Section: {{cr.section}}<br>
                         </div>
                         <div class="rating">
                             <span class="star">★</span>
                             <span class="star">★</span>
                             <span class="star">★</span>
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
                         </div>
-                        <button class="btn">⭐ Give Rating</button>
-                        <button class="btn btn-secondary">👤 View Profile</button>
+                        <button class="btn" onclick="event.stopPropagation(); openRatingModal('Ahmed Hasan')">⭐ Give Rating</button>
+                        <button class="btn btn-secondary" onclick="window.location.href={% url 'profile' %}">👤 View Profile</button>
                     </div>
+                {% endfor %}
 
-                    <div class="card">
-                        <div class="profile-photo">T</div>
-                        <div class="cr-name">Taniya Akhtar</div>
-                        <div class="cr-details">
-                            🆔 ID: 202401002<br>
-                            🏛️ Rajshahi University<br>
-                            📐 Mathematics<br>
-                            🔢 Section: B
-                        </div>
-                        <div class="rating">
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">☆</span>
-                        </div>
-                        <button class="btn">⭐ Give Rating</button>
-                        <button class="btn btn-secondary">👤 View Profile</button>
-                    </div>
-
-                    <div class="card">
-                        <div class="profile-photo">K</div>
-                        <div class="cr-name">Karim Miya</div>
-                        <div class="cr-details">
-                            🆔 ID: 202401003<br>
-                            🏛️ Islamic University<br>
-                            💰 Economics<br>
-                            🔢 Section: A
-                        </div>
-                        <div class="rating">
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                        </div>
-                        <button class="btn">⭐ Give Rating</button>
-                        <button class="btn btn-secondary">👤 View Profile</button>
-                    </div>
+                    
                 </div>
             </div>
 
