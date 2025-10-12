@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from .models import *
 # Create your views here.
 def home(request):
@@ -6,21 +6,29 @@ def home(request):
     total_university=University.objects.count()
     total_department=Department.objects.count()
     total_review=Review.objects.count()
-   
+    crs = sorted(
+    CrProfile.objects.all(),
+    key=lambda x: x.average_rating,
+    reverse=True
+    )
 
     context={
         'cr':cr,
         'total_university':total_university,
         'total_department':total_department,
         'total_review':total_review,
+        'crs':crs,
+        
     }
     return render(request,'home.html',context)
 
 def all_cr(request):
-    cr=CrProfile.objects.all()
+    cr = CrProfile.objects.all()
 
     context={
-        'cr':cr
+        'cr':cr,
+       
+        
     }
     return render(request,'all_cr.html',context)
 

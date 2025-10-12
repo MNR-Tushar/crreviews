@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 import os
+from django.db.models import Avg
 # Create your models here.
 
 class University(models.Model):
@@ -94,11 +95,17 @@ class CrProfile(models.Model):
         
         super().save(*args, **kwargs)
 
-class Review(models.Model):
-    user=models.OneToOneField('userprofile.User', on_delete=models.CASCADE,related_name='reviews')
-    cr_profile=models.ForeignKey(CrProfile, on_delete=models.CASCADE,related_name='reviews')
+    @property
+    def average_rating(self):
+        avg=self.cr_reviews.aggregate(Avg('rating'))['rating__avg']
+        return round(avg,1) if avg else 0
+ 
 
-    rating = models.PositiveSmallIntegerField()  # rating 1–5 ধরা যায়
+class Review(models.Model):
+    user=models.OneToOneField('userprofile.User', on_delete=models.CASCADE,related_name='userreviews')
+    cr_profile=models.ForeignKey(CrProfile, on_delete=models.CASCADE,related_name='cr_reviews')
+
+    rating = models.PositiveSmallIntegerField() 
     description = models.TextField(blank=True, null=True)
     slug = models.SlugField(unique=True, blank=True, null=True)
 
