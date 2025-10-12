@@ -47,32 +47,7 @@
             <div class="section">
                 <div class="grid">
                     {% for cr in cr|slice:9 %}
-                    <div class="card">
-                        <div class="profile-photo">
-                            {% if cr.profile_picture %}
-                             <img src="{{ cr.profile_picture.url }}" alt="{{ cr.name }}">
-                            {% else %}
-                             <span>{{ cr.name|first|upper }}</span>
-                            {% endif %}
-                        </div>
-                        <div class="cr-name">{{cr.name}}</div>
-                        <div class="cr-details">
-                            ID: {{cr.st_id}}<br>
-                            {{cr.university}}<br>
-                            {{cr.department}}<br>
-                            Batch: {{cr.batch}}<br>
-                            Section: {{cr.section}}<br>
-                        </div>
-                        <div class="rating">
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                            <span class="star">★</span>
-                        </div>
-                        <button class="btn">⭐ Give Rating</button>
-                        <button class="btn btn-secondary">👤 View Profile</button>
-                    </div>
+                        {% include "cr_card.html" %}
                     {% endfor %}
                     
                 </div>

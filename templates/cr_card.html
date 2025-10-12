@@ -1,0 +1,37 @@
+<div class="card">
+  <div class="profile-photo">
+    {% if cr.profile_picture %}
+    <img src="{{ cr.profile_picture.url }}" alt="{{ cr.name }}" />
+    {% else %}
+    <span>{{ cr.name|first|upper }}</span>
+    {% endif %}
+  </div>
+  <div class="cr-name">{{cr.name}}</div>
+  <div class="cr-details">
+    ID: {{cr.st_id}}<br />
+    {{cr.university}}<br />
+    {{cr.department}}<br />
+    Batch: {{cr.batch}}<br />
+    Section: {{cr.section}}<br />
+  </div>
+  <div class="rating">
+    {% for i in "12345" %} {% if forloop.counter <= cr.average_rating %}
+    <span class="star filled">★</span>
+    {% else %}
+    <span class="star">☆</span>
+    {% endif %} {% endfor %}
+    <span class="star_avg">({{ cr.average_rating }}/5)</span>
+  </div>
+  <button
+    class="btn"
+    onclick="event.stopPropagation(); openRatingModal('Ahmed Hasan')"
+  >
+    ⭐ Give Rating
+  </button>
+  <button
+    class="btn btn-secondary"
+    onclick="window.location.href={% url 'profile' %}"
+  >
+    👤 View Profile
+  </button>
+</div>
