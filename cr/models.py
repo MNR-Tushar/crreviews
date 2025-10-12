@@ -18,7 +18,7 @@ class University(models.Model):
     title =models.CharField(max_length=100,unique=True,blank=False,null=False)
     type =models.CharField(max_length=100,choices=university_type)
     address=models.CharField(max_length=150, blank=True, null=True)
-    slug=models.SlugField(null=True,blank=True,unique=True)
+    slug=models.SlugField(blank=True,unique=True)
 
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
@@ -36,7 +36,7 @@ class Department(models.Model):
     university=models.ForeignKey(University, on_delete=models.CASCADE,related_name='departments')
     title=models.CharField(max_length=50,unique=True,blank=False,null=False)
     code=models.CharField(max_length=50,unique=True,blank=True,null=True)
-    slug=models.SlugField(null=True,blank=True,unique=True)
+    slug=models.SlugField(blank=True,unique=True)
 
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
@@ -70,7 +70,7 @@ class CrProfile(models.Model):
     batch = models.CharField(max_length=20)
     section = models.CharField(max_length=10)
     bio = models.TextField(blank=True, null=True)
-    slug = models.SlugField(unique=True, blank=True, null=True)
+    slug = models.SlugField(unique=True, blank=True)
 
 
     created_at=models.DateTimeField(auto_now_add=True)
@@ -83,17 +83,15 @@ class CrProfile(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
 
-    
-    def save(self, *args, **kwargs):
         if not self.id:
             saved_image = self.profile_picture
             self.profile_picture = None
             super().save(*args, **kwargs)
             self.profile_picture = saved_image
-        
+
         super().save(*args, **kwargs)
+
 
     @property
     def average_rating(self):
@@ -107,7 +105,7 @@ class Review(models.Model):
 
     rating = models.PositiveSmallIntegerField() 
     description = models.TextField(blank=True, null=True)
-    slug = models.SlugField(unique=True, blank=True, null=True)
+    slug = models.SlugField(unique=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
