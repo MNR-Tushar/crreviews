@@ -33,7 +33,12 @@ def all_cr(request):
     return render(request,'all_cr.html',context)
 
 def latest_reviews(request):
-    return render(request,'latest_reviews.html')
+    review=Review.objects.all().order_by('-created_at')[:10]
+
+    context={
+        'review':review,
+    }
+    return render(request,'latest_reviews.html',context)
 
 def profile(request):
     return render(request,'profile.html')
