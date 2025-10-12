@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from .models import *
 # Create your views here.
 def home(request):
@@ -40,7 +40,17 @@ def latest_reviews(request):
     }
     return render(request,'latest_reviews.html',context)
 
-def profile(request):
-    return render(request,'profile.html')
+def cr_profile(request,slug):
+  
+    cr_profile=get_object_or_404(CrProfile,slug=slug)
+    review=Review.objects.filter(cr_profile=cr_profile).order_by('-created_at')[:5]
+
+    context={
+        'cr_profile':cr_profile,
+        'review':review
+
+    }
+    
+    return render(request,'profile.html',context)
 def add_cr(request):
     return render(request,'add_cr.html')

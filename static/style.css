@@ -879,6 +879,16 @@
             margin-bottom: 1.5rem;
         }
 
+        .review_cr{
+            
+            padding: 10px 10px 10px 10px;
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
         .rating {
             display: flex;
             justify-content: center;
