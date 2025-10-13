@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} {% endblock title %}</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'add_cr.css' %}">
+    <link rel="stylesheet" href="{% static 'user_dashboard.css' %}">
 </head>
 <body>
     <div class="loading" id="loading">
@@ -29,21 +31,27 @@
                 </a>
                 <div class="dropdown-menu">
                     <div class="dropdown-header">
-                        <div class="user-avatar-large">T</div>
+                        <div class="user-avatar-large">
+                            {% if user.profile_picture %}
+                            <img src="{{ user.profile_picture.url }}" alt="{{ user.name }}" />
+                            {% else %}
+                            <span>{{ user.name|first|upper }}</span>
+                            {% endif %}
+                        </div>
                         <div class="user-info">
-                            <strong>Tushar</strong>
-                            <small>Admin</small>
+                            <strong>{{user.first_name}} {{user.last_name}}</strong>
+                            <small>{{user.role|capfirst}}</small>
                         </div>
                     </div>
                     <div class="dropdown-divider"></div>
                     
-                    <a href="" class="dropdown-item">
+                    <a href="{% url 'user_dashboard' %}" class="dropdown-item">
                         <span class="dropdown-icon">👤</span>
                         My Profile
                     </a>
-                    <a href="" class="dropdown-item">
-                        <span class="dropdown-icon">⭐</span>
-                        My Reviews
+                    <a href="{% url 'add_cr' %}" class="dropdown-item">
+                        <span class="dropdown-icon">➕</span>
+                        Add New CR
                     </a>
                     <a href="" class="dropdown-item">
                         <span class="dropdown-icon">⚙️</span>
@@ -110,6 +118,9 @@
     {% include 'footer.html' %}
 
      <script src="{% static 'script.js' %}"></script>
+     <script src="{% static 'add_cr.js' %}"></script>
+     <script src="{% static 'user_dashboard.js' %}"></script>
+
 
 </body>
 </html>
