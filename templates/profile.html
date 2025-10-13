@@ -114,7 +114,61 @@
                     </div>
                     {% endfor %}
                     </div>
+                </div>
+
+                 <!-- Pagination Section -->
+                {% if review.has_other_pages %}
+                <div class="pagination-section">
+                <div class="pagination">
+                    {% if review.has_previous %}
+                        <a href="?page=1" class="pagination-btn pagination-first">
+                            <span>⏮️</span>
+                        </a>
+                        <a href="?page={{ review.previous_page_number }}" class="pagination-btn pagination-prev">
+                            <span>◀️</span>
+                        </a>
+                    {% else %}
+                        <span class="pagination-btn pagination-disabled">
+                            <span>⏮️</span>
+                        </span>
+                        <span class="pagination-btn pagination-disabled">
+                            <span>◀️</span>
+                        </span>
+                    {% endif %}
+
+                    <div class="pagination-numbers">
+                        {% for num in review.paginator.page_range %}
+                            {% if review.number == num %}
+                                <span class="pagination-btn pagination-active">{{ num }}</span>
+                            {% elif num > review.number|add:'-3' and num < review.number|add:'3' %}
+                                <a href="?page={{ num }}" class="pagination-btn">{{ num }}</a>
+                            {% endif %}
+                        {% endfor %}
                     </div>
+
+                    {% if review.has_next %}
+                        <a href="?page={{ review.next_page_number }}" class="pagination-btn pagination-next">
+                            <span>▶️</span>
+                        </a>
+                        <a href="?page={{ review.paginator.num_pages }}" class="pagination-btn pagination-last">
+                            <span>⏭️</span>
+                        </a>
+                    {% else %}
+                        <span class="pagination-btn pagination-disabled">
+                            <span>▶️</span>
+                        </span>
+                        <span class="pagination-btn pagination-disabled">
+                            <span>⏭️</span>
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div class="pagination-info">
+                    <p>Page {{ review.number }} of {{ review.paginator.num_pages }} • Showing {{ review.start_index }} to {{ review.end_index }} of {{ review.paginator.count }} results</p>
+                </div>
+                </div>
+                {% endif %}
+
             </div>
         </div>
     </div>

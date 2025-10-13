@@ -46,12 +46,13 @@
 
             <div class="section">
                 <div class="grid">
-                    {% for cr in cr|slice:9 %}
+                    {% for cr in cr%}
                         {% include "cr_card.html" %}
                     {% endfor %}
                     
                 </div>
             </div>
+            {% include 'pagination.html' %}
         </div>
     </div>
 {% endblock content %}
