@@ -1,8 +1,10 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import *
+from userprofile.models import *
 # Create your views here.
 def home(request):
+    user = User.objects.get(id=request.user.id)
     cr=CrProfile.objects.all().order_by('-created_at')
     total_university=University.objects.count()
     total_department=Department.objects.count()
@@ -19,6 +21,7 @@ def home(request):
         'total_department':total_department,
         'total_review':total_review,
         'crs':crs,
+        'user':user,
         
     }
     return render(request,'home.html',context)

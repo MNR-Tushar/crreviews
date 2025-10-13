@@ -3,7 +3,7 @@
 {% block title %}Add New CR{% endblock title %}
 {% block content %}
 <!-- Add CR Page -->
-<div id="add-cr" class="page">
+{% comment %} <div id="add-cr" class="page">
     <div class="container">
         <h1 class="title">➕ Add New CR</h1>
 
@@ -92,5 +92,172 @@
             </div>
         </div>
     </div>
-</div>
+</div> {% endcomment %}
+  <!-- Hero Section -->
+    <section class="add-cr-hero">
+        <div class="hero-badge">✨ New CR Profile</div>
+        <h1 class="hero-title">Add Class Representative</h1>
+        <p class="hero-subtitle">Help your university community by adding CR profiles and making it easier for students to connect</p>
+    </section>
+
+    <!-- Form Section -->
+    <div class="form-wrapper">
+        <form id="addCrForm" method="POST" enctype="multipart/form-data" class="form-main">
+            {% csrf_token %}
+
+            <!-- Basic Information -->
+            <div class="form-section">
+                <div class="section-header">
+                    <div class="section-icon">🎓</div>
+                    <h2 class="section-title">Basic Information</h2>
+                </div>
+
+                <div class="form-row">
+                    <div class="input-group">
+                        <label class="input-label">
+                            <span>University</span>
+                            <span class="required-star">*</span>
+                        </label>
+                        <select name="university" class="select-field" required>
+                            <option value="">Select University</option>
+                            {% for university in universities %}
+                            <option value="{{ university.id }}">{{ university.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">
+                            <span>Department</span>
+                            <span class="required-star">*</span>
+                        </label>
+                        <select name="department" class="select-field" required>
+                            <option value="">Select Department</option>
+                            {% for department in departments %}
+                            <option value="{{ department.id }}">{{ department.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Personal Details -->
+            <div class="form-section">
+                <div class="section-header">
+                    <div class="section-icon">👤</div>
+                    <h2 class="section-title">Personal Details</h2>
+                </div>
+
+                <div class="form-row">
+                    <div class="input-group">
+                        <label class="input-label">
+                            <span>Full Name</span>
+                            <span class="required-star">*</span>
+                        </label>
+                        <input type="text" name="name" class="input-field" placeholder="Enter full name" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">
+                            <span>Student ID</span>
+                            <span class="required-star">*</span>
+                        </label>
+                        <input type="text" name="st_id" class="input-field" placeholder="e.g., 2021-1-60-001" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="input-group">
+                        <label class="input-label">
+                            <span>Batch</span>
+                            <span class="required-star">*</span>
+                        </label>
+                        <input type="text" name="batch" class="input-field" placeholder="e.g., 60" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">
+                            <span>Section</span>
+                            <span class="required-star">*</span>
+                        </label>
+                        <input type="text" name="section" class="input-field" placeholder="e.g., A" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="form-section">
+                <div class="section-header">
+                    <div class="section-icon">📧</div>
+                    <h2 class="section-title">Contact Information</h2>
+                </div>
+
+                <div class="form-row">
+                    <div class="input-group">
+                        <label class="input-label">Email</label>
+                        <input type="email" name="email" class="input-field" placeholder="example@email.com">
+                        <div class="input-hint">💡 Optional but recommended</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Phone</label>
+                        <input type="tel" name="phone" class="input-field" placeholder="+880 1XXX-XXXXXX">
+                        <div class="input-hint">💡 Optional but recommended</div>
+                    </div>
+                </div>
+
+                <div class="form-row single">
+                    <div class="input-group">
+                        <label class="input-label">Bio / About</label>
+                        <textarea name="bio" class="input-field" placeholder="Write a short bio about the CR (achievements, responsibilities, etc.)"></textarea>
+                        <div class="input-hint">💡 Optional: Add achievements, responsibilities, or any other relevant information</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Picture -->
+            <div class="form-section">
+                <div class="section-header">
+                    <div class="section-icon">📷</div>
+                    <h2 class="section-title">Profile Picture</h2>
+                </div>
+
+                <div class="form-row single">
+                    <div class="input-group">
+                        <label for="profilePicture" class="upload-zone" id="uploadZone">
+                            <input type="file" name="profile_picture" id="profilePicture" class="file-input" accept="image/*">
+                            <div class="upload-icon">📸</div>
+                            <div class="upload-text">Click to upload or drag & drop</div>
+                            <div class="upload-subtext">PNG, JPG, GIF up to 5MB</div>
+                        </label>
+                        
+                        <div class="preview-section" id="previewSection">
+                            <div class="preview-card">
+                                <img id="previewImage" class="preview-img" alt="Preview">
+                                <div class="preview-info">
+                                    <div class="preview-name" id="fileName"></div>
+                                    <div class="preview-size" id="fileSize"></div>
+                                </div>
+                                <button type="button" class="remove-btn" id="removeBtn">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button type="submit" class="submit-button">✨ Add CR Profile</button>
+                <a href="index.html" class="cancel-button">Cancel</a>
+            </div>
+
+            <!-- Progress Indicator -->
+            <div class="progress-indicator" id="progressIndicator">
+                <div class="spinner-large"></div>
+                <div class="progress-text">Creating profile...</div>
+            </div>
+        </form>
+    </div>
+
+
 {% endblock content %}

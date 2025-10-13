@@ -6,5 +6,5 @@ urlpatterns = [
     path('all_cr/',all_cr,name='all_cr'),
     path('latest_reviews/',latest_reviews,name='latest_reviews'),
     path('cr_profile/<str:slug>/',cr_profile,name='cr_profile'),
-    path('newcr/',add_cr,name='add_cr'),
+    path('addcr/',add_cr,name='add_cr'),
 ]
