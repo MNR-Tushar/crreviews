@@ -27,7 +27,8 @@
                             ⭐ {{cr_profile.average_rating}}
                         </div>
                         <div style="color: rgba(255,255,255,0.8); margin-top: 0.5rem;" id="review-count">
-                            (Based on {{review.count}} reviews)
+                            (Based on {{review.paginator.count}} reviews)
+                            
                         </div>
                         <div class="rating">
                             {% for i in "12345" %} {% if forloop.counter <= cr_profile.average_rating %}
