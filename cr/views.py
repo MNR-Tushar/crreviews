@@ -25,7 +25,7 @@ def home(request):
 
 def all_cr(request):
     crs = CrProfile.objects.all().order_by('-created_at')
-    paginator = Paginator(crs, 6)
+    paginator = Paginator(crs, 12)
     page_number =  request.GET.get('page',1)
 
     try:
@@ -64,7 +64,7 @@ def latest_reviews(request):
 def cr_profile(request,slug):
   
     cr_profile=get_object_or_404(CrProfile,slug=slug)
-    review=Review.objects.filter(cr_profile=cr_profile).order_by('-created_at')[:5]
+    review=Review.objects.filter(cr_profile=cr_profile).order_by('-created_at')
 
     paginator = Paginator(review,5)
     page_number = request.GET.get('page',1)
@@ -78,7 +78,8 @@ def cr_profile(request,slug):
 
     context={
         'cr_profile':cr_profile,
-        'review':review
+        'review':review,
+        'paginator':paginator,
 
     }
     
