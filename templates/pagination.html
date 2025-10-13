@@ -1,0 +1,52 @@
+        <!-- Pagination Section -->
+            {% if cr.has_other_pages %}
+            <div class="pagination-section">
+                <div class="pagination">
+                    {% if cr.has_previous %}
+                        <a href="?page=1" class="pagination-btn pagination-first">
+                            <span>⏮️</span>
+                        </a>
+                        <a href="?page={{ cr.previous_page_number }}" class="pagination-btn pagination-prev">
+                            <span>◀️</span>
+                        </a>
+                    {% else %}
+                        <span class="pagination-btn pagination-disabled">
+                            <span>⏮️</span>
+                        </span>
+                        <span class="pagination-btn pagination-disabled">
+                            <span>◀️</span>
+                        </span>
+                    {% endif %}
+
+                    <div class="pagination-numbers">
+                        {% for num in cr.paginator.page_range %}
+                            {% if cr.number == num %}
+                                <span class="pagination-btn pagination-active">{{ num }}</span>
+                            {% elif num > cr.number|add:'-3' and num < cr.number|add:'3' %}
+                                <a href="?page={{ num }}" class="pagination-btn">{{ num }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    {% if cr.has_next %}
+                        <a href="?page={{ cr.next_page_number }}" class="pagination-btn pagination-next">
+                            <span>▶️</span>
+                        </a>
+                        <a href="?page={{ cr.paginator.num_pages }}" class="pagination-btn pagination-last">
+                            <span>⏭️</span>
+                        </a>
+                    {% else %}
+                        <span class="pagination-btn pagination-disabled">
+                            <span>▶️</span>
+                        </span>
+                        <span class="pagination-btn pagination-disabled">
+                            <span>⏭️</span>
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div class="pagination-info">
+                    <p>Page {{ cr.number }} of {{ cr.paginator.num_pages }} • Showing {{ cr.start_index }} to {{ cr.end_index }} of {{ cr.paginator.count }} results</p>
+                </div>
+            </div>
+            {% endif %}

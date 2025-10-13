@@ -1,105 +1,96 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Add New CR {% endblock title %}
+{% block title %}Add New CR{% endblock title %}
 {% block content %}
 <!-- Add CR Page -->
-    <div id="add-cr" class="page">
-        <div class="container">
-            <h1 class="title">➕ নতুন সিআর যোগ করুন</h1>
-            
-            <div style="max-width: 700px; margin: 0 auto;">
-                <div class="search-section">
-                    <form id="add-cr-form">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
-                            <div class="form-group">
-                                <label class="form-label">👤 প্রথম নাম</label>
-                                <input type="text" class="form-input" placeholder="প্রথম নাম লিখুন" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">👤 শেষ নাম</label>
-                                <input type="text" class="form-input" placeholder="শেষ নাম লিখুন" required>
-                            </div>
-                        </div>
+<div id="add-cr" class="page">
+    <div class="container">
+        <h1 class="title">➕ Add New CR</h1>
 
+        <div style="max-width: 700px; margin: 0 auto;">
+            <div class="search-section">
+                <form id="add-cr-form">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
                         <div class="form-group">
-                            <label class="form-label">🆔 স্টুডেন্ট আইডি</label>
-                            <input type="text" class="form-input" placeholder="স্টুডেন্ট আইডি লিখুন" required>
+                            <label class="form-label">👤 First Name</label>
+                            <input type="text" class="form-input" placeholder="Enter first name" required>
                         </div>
-
                         <div class="form-group">
-                            <label class="form-label">📧 ইমেইল ঠিকানা</label>
-                            <input type="email" class="form-input" placeholder="ইমেইল ঠিকানা" required>
+                            <label class="form-label">👤 Last Name</label>
+                            <input type="text" class="form-input" placeholder="Enter last name" required>
                         </div>
+                    </div>
 
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-                            <div class="form-group">
-                                <label class="form-label">🏛️ বিশ্ববিদ্যালয়</label>
-                                <select class="form-input" required>
-                                    <option value="">বিশ্ববিদ্যালয় নির্বাচন করুন</option>
-                                    <option>ঢাকা বিশ্ববিদ্যালয়</option>
-                                    <option>বাংলাদেশ প্রকৌশল বিশ্ববিদ্যালয় (বুয়েট)</option>
-                                    <option>জাহাঙ্গীরনগর বিশ্ববিদ্যালয়</option>
-                                    <option>চট্টগ্রাম বিশ্ববিদ্যালয়</option>
-                                    <option>রাজশাহী বিশ্ববিদ্যালয়</option>
-                                    <option>খুলনা বিশ্ববিদ্যালয়</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">📚 বিভাগ</label>
-                                <select class="form-input" required>
-                                    <option value="">বিভাগ নির্বাচন করুন</option>
-                                    <option>কম্পিউটার সায়েন্স অ্যান্ড ইঞ্জিনিয়ারিং</option>
-                                    <option>ইলেকট্রিক্যাল অ্যান্ড ইলেকট্রনিক্স ইঞ্জিনিয়ারিং</option>
-                                    <option>পদার্থবিজ্ঞান</option>
-                                    <option>রসায়ন</option>
-                                    <option>গণিত</option>
-                                    <option>অর্থনীতি</option>
-                                    <option>ব্যবসায় প্রশাসন</option>
-                                </select>
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label class="form-label">🆔 Student ID</label>
+                        <input type="text" class="form-input" placeholder="Enter student ID" required>
+                    </div>
 
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-                            <div class="form-group">
-                                <label class="form-label">📑 সেকশন</label>
-                                <select class="form-input" required>
-                                    <option value="">সেকশন নির্বাচন করুন</option>
-                                    <option>এ (A)</option>
-                                    <option>বি (B)</option>
-                                    <option>সি (C)</option>
-                                    <option>ডি (D)</option>
-                                    <option>ই (E)</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">📅 ব্যাচ/বর্ষ</label>
-                                <select class="form-input" required>
-                                    <option value="">ব্যাচ নির্বাচন করুন</option>
-                                    <option>২০২৪-২৫</option>
-                                    <option>২০২৩-২৪</option>
-                                    <option>২০২২-২৩</option>
-                                    <option>২০২১-২২</option>
-                                    <option>২০২০-২১</option>
-                                </select>
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label class="form-label">📧 Email Address</label>
+                        <input type="email" class="form-input" placeholder="Enter email address" required>
+                    </div>
 
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
                         <div class="form-group">
-                            <label class="form-label">📱 ফোন নম্বর (ঐচ্ছিক)</label>
-                            <input type="tel" class="form-input" placeholder="ফোন নম্বর">
+                            <label class="form-label">🏛️ University</label>
+                            <select class="form-input" required>
+                                <option value="">Select University</option>
+                                <option>University of Dhaka</option>
+                               
+                            </select>
                         </div>
-
                         <div class="form-group">
-                            <label class="form-label">📝 সিআর সম্পর্কে বিবরণ</label>
-                            <textarea class="form-input" placeholder="সিআর এর দায়িত্ব, অভিজ্ঞতা এবং অন্যান্য তথ্য লিখুন..."></textarea>
+                            <label class="form-label">📚 Department</label>
+                            <select class="form-input" required>
+                                <option value="">Select Department</option>
+                                <option>Computer Science and Engineering</option>
+                              
+                            </select>
                         </div>
+                    </div>
 
-                        <button type="submit" class="btn btn-success" style="width: 100%; font-size: 1.3rem; padding: 1.5rem;">
-                            🎉 সিআর প্রোফাইল তৈরি করুন
-                        </button>
-                    </form>
-                </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div class="form-group">
+                            <label class="form-label">📑 Section</label>
+                            <select class="form-input" required>
+                                <option value="">Select Section</option>
+                                <option>A</option>
+                                <option>B</option>
+                                <option>C</option>
+                                <option>D</option>
+                                <option>E</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">📅 Batch/Year</label>
+                            <select class="form-input" required>
+                                <option value="">Select Batch</option>
+                                <option>2024-25</option>
+                                <option>2023-24</option>
+                                <option>2022-23</option>
+                                <option>2021-22</option>
+                                <option>2020-21</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">📱 Phone Number (Optional)</label>
+                        <input type="tel" class="form-input" placeholder="Enter phone number">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">📝 CR Bio / Description</label>
+                        <textarea class="form-input" placeholder="Write about CR responsibilities, experience, and other details..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-success" style="width: 100%; font-size: 1.3rem; padding: 1.5rem;">
+                        🎉 Create CR Profile
+                    </button>
+                </form>
             </div>
         </div>
     </div>
+</div>
 {% endblock content %}
