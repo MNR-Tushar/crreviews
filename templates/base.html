@@ -78,42 +78,7 @@
 
     {% endblock content %}
 
-       <!-- Rating Modal -->
-    <div id="rating-modal" class="modal">
-        <div class="modal-content">
-            <div style="text-align: center;">
-                <h2 style="color: white; font-size: 2rem; font-weight: 700; margin-bottom: 2rem;">⭐ Give Rating</h2>
-                <p style="color: rgba(255,255,255,0.8); margin-bottom: 2rem;" id="rating-cr-name">CR Name</p>
-                
-                <!-- Star Rating Input -->
-                <div style="margin: 2rem 0;">
-                    <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 1rem;">
-                        <span class="rating-star" data-value="1">⭐</span>
-                        <span class="rating-star" data-value="2">⭐</span>
-                        <span class="rating-star" data-value="3">⭐</span>
-                        <span class="rating-star" data-value="4">⭐</span>
-                        <span class="rating-star" data-value="5">⭐</span>
-                    </div>
-                    <div style="color: rgba(255,255,255,0.8); font-size: 1.1rem; margin-bottom: 2rem;" id="rating-text">Select a rating</div>
-                </div>
-
-                <!-- Comment Section -->
-                <div style="margin: 2rem 0;">
-                    <label style="color: white; font-weight: 600; display: block; margin-bottom: 1rem;">💬 Your opinion (optional)</label>
-                    <textarea id="review-comment" class="form-input" placeholder="Share your experience about this CR..." style="height: 100px;"></textarea>
-                </div>
-
-                <div style="display: flex; gap: 1rem; justify-content: center;">
-                    <button id="submit-rating" class="btn btn-success" style="flex: 1; opacity: 0.5;">
-                        🎉 Submit Rating
-                    </button>
-                    <button id="cancel-rating" class="btn btn-secondary" style="flex: 1;">
-                        ❌ Cancel
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 
     {% include 'footer.html' %}
 
