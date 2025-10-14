@@ -435,8 +435,16 @@ document.querySelectorAll('.card, .section, .stat-card').forEach(el => {
 });
 
 // Welcome message - only show on home page
+// setTimeout(() => {
+//     if (window.location.pathname === '/' || document.getElementById('home')) {
+//         showNotification('🎉 Welcome to BD University CR Review!', 'success');
+//     }
+// }, 2000);
 setTimeout(() => {
-    if (window.location.pathname === '/' || document.getElementById('home')) {
+    if ((window.location.pathname === '/' || document.getElementById('home')) 
+        && !localStorage.getItem('welcomeShown')) {
+        
         showNotification('🎉 Welcome to BD University CR Review!', 'success');
+        sessionStorage.setItem('welcomeShown', 'true');
     }
 }, 2000);
