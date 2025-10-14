@@ -74,16 +74,19 @@ function showPage(pageId) {
 function openRatingModal(crName) {
     currentCRName = crName;
     const modal = document.getElementById('rating-modal');
-    const modalTitle = document.getElementById('rating-cr-name');
     
+    if (!modal) {
+        console.warn('Rating modal not found');
+        return;
+    }
+    
+    const modalTitle = document.getElementById('rating-cr-name');
     if (modalTitle) {
         modalTitle.textContent = `Rating for ${crName}`;
     }
     
-    if (modal) {
-        modal.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-    }
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
     
     selectedRating = 0;
     updateRatingDisplay();
@@ -102,41 +105,33 @@ function closeRatingModal() {
     }
 }
 
-function updateRatingDisplay() {
-    const stars = document.querySelectorAll('.rating-star');
-    const ratingText = document.getElementById('rating-text');
+// Close modal when clicking outside
+window.addEventListener('click', (e) => {
+    const modal = document.getElementById('rating-modal');
+    if (modal && e.target === modal) {
+        closeRatingModal();
+    }
+});
+
+// Add event listeners for modal buttons
+document.addEventListener('DOMContentLoaded', () => {
+    const cancelBtn = document.getElementById('cancel-rating');
     const submitBtn = document.getElementById('submit-rating');
     
-    stars.forEach((star, index) => {
-        if (index < selectedRating) {
-            star.classList.add('active');
-        } else {
-            star.classList.remove('active');
-        }
-    });
-    
-    if (ratingText) {
-        ratingText.textContent = ratingTexts[selectedRating];
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeRatingModal);
     }
     
     if (submitBtn) {
-        if (selectedRating > 0) {
-            submitBtn.disabled = false;
-            submitBtn.style.opacity = '1';
-        } else {
-            submitBtn.disabled = true;
-            submitBtn.style.opacity = '0.5';
-        }
+        submitBtn.addEventListener('click', () => {
+            if (selectedRating > 0) {
+                const comment = document.getElementById('review-comment')?.value || '';
+                addNewReview(selectedRating, comment);
+                showNotification(`⭐ ${selectedRating} star rating submitted!`, 'success');
+                closeRatingModal();
+            }
+        });
     }
-}
-
-// Add click event listeners to navigation links
-document.querySelectorAll('a[data-page]').forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const pageId = link.getAttribute('data-page');
-        showPage(pageId);
-    });
 });
 
 // Enhanced search functionality
