@@ -25,8 +25,14 @@
                 <!-- User Profile Dropdown -->
                 <li class="user-dropdown">
                 <a href="#" class="nav-link user-profile-btn">
-                    <span class="user-avatar">T</span>
-                    <span class="user-name">Tushar</span>
+                    <span class="user-avatar">
+                    {% if user.profile_picture %}
+                        <img src="{{ user.profile_picture.url }}" alt="{{ user.name }}" />
+                    {% else %}
+                        {{ user.first_name|first|upper }}
+                    {% endif %}
+                    </span>
+                    <span class="user-name">{{user.first_name}}</span>
                     <span class="dropdown-arrow">▼</span>
                 </a>
                 <div class="dropdown-menu">
@@ -35,7 +41,7 @@
                             {% if user.profile_picture %}
                             <img src="{{ user.profile_picture.url }}" alt="{{ user.name }}" />
                             {% else %}
-                            <span>{{ user.name|first|upper }}</span>
+                            <span>{{ user.first_name|first|upper }}</span>
                             {% endif %}
                         </div>
                         <div class="user-info">
@@ -53,7 +59,7 @@
                         <span class="dropdown-icon">➕</span>
                         Add New CR
                     </a>
-                    <a href="" class="dropdown-item">
+                    <a href="#" class="dropdown-item">
                         <span class="dropdown-icon">⚙️</span>
                         Settings
                     </a>
