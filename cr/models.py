@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.utils.text import slugify
 import os
@@ -83,13 +84,13 @@ class CrProfile(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.name)
+            self.slug = slugify(f"{self.name}-{uuid.uuid4().hex[:6]}")
 
-        if not self.id:
-            saved_image = self.profile_picture
-            self.profile_picture = None
-            super().save(*args, **kwargs)
-            self.profile_picture = saved_image
+        # if not self.id and self.profile_picture:
+        #     saved_image = self.profile_picture
+        #     self.profile_picture = None
+        #     super().save(*args, **kwargs)
+        #     self.profile_picture = saved_image
 
         super().save(*args, **kwargs)
 

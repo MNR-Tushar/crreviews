@@ -1,36 +1,135 @@
-   <!-- Rating Modal -->
-    <div id="rating-modal" class="modal">
-        <div class="modal-content">
-            <div style="text-align: center;">
-                <h2 style="color: white; font-size: 2rem; font-weight: 700; margin-bottom: 2rem;">⭐ Give Rating</h2>
-                <p style="color: rgba(255,255,255,0.8); margin-bottom: 2rem;" id="rating-cr-name">CR Name</p>
+<!-- Rating Modal -->
+<div id="rating-modal" class="modal">
+    <div class="modal-content">
+        <div style="text-align: center;">
+            <h2 style="color: white; font-size: 2rem; font-weight: 700; margin-bottom: 2rem;">⭐ Give Rating</h2>
+            <p style="color: rgba(255,255,255,0.8); margin-bottom: 2rem;" id="rating-cr-name">{{ cr_profile.name }}</p>
+            
+            {% comment %} <form id="rating-form" method="POST" action="{% url 'submit_review' cr_profile.slug %}">
+                {% csrf_token %} {% endcomment %}
                 
                 <!-- Star Rating Input -->
                 <div style="margin: 2rem 0;">
                     <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 1rem;">
-                        <span class="rating-star" data-value="1">⭐</span>
-                        <span class="rating-star" data-value="2">⭐</span>
-                        <span class="rating-star" data-value="3">⭐</span>
-                        <span class="rating-star" data-value="4">⭐</span>
-                        <span class="rating-star" data-value="5">⭐</span>
+                        <span class="rating-star" data-value="1" style="cursor: pointer; font-size: 2.5rem; opacity: 0.3; transition: all 0.2s;">⭐</span>
+                        <span class="rating-star" data-value="2" style="cursor: pointer; font-size: 2.5rem; opacity: 0.3; transition: all 0.2s;">⭐</span>
+                        <span class="rating-star" data-value="3" style="cursor: pointer; font-size: 2.5rem; opacity: 0.3; transition: all 0.2s;">⭐</span>
+                        <span class="rating-star" data-value="4" style="cursor: pointer; font-size: 2.5rem; opacity: 0.3; transition: all 0.2s;">⭐</span>
+                        <span class="rating-star" data-value="5" style="cursor: pointer; font-size: 2.5rem; opacity: 0.3; transition: all 0.2s;">⭐</span>
                     </div>
                     <div style="color: rgba(255,255,255,0.8); font-size: 1.1rem; margin-bottom: 2rem;" id="rating-text">Select a rating</div>
                 </div>
 
+                <!-- Hidden input for rating value -->
+                <input type="hidden" name="rating" id="rating-value" required>
+
                 <!-- Comment Section -->
                 <div style="margin: 2rem 0;">
                     <label style="color: white; font-weight: 600; display: block; margin-bottom: 1rem;">💬 Your opinion (optional)</label>
-                    <textarea id="review-comment" class="form-input" placeholder="Share your experience about this CR..." style="height: 100px;"></textarea>
+                    <textarea name="description" id="review-comment" class="form-input" placeholder="Share your experience about this CR..." style="height: 100px;"></textarea>
                 </div>
 
                 <div style="display: flex; gap: 1rem; justify-content: center;">
-                    <button id="submit-rating" class="btn btn-success" style="flex: 1; opacity: 0.5;">
+                    <button type="submit" id="submit-rating" class="btn btn-success" style="flex: 1; opacity: 0.5; pointer-events: none;" disabled>
                         🎉 Submit Rating
                     </button>
-                    <button id="cancel-rating" class="btn btn-secondary" style="flex: 1;">
+                    <button type="button" id="cancel-rating" class="btn btn-secondary" style="flex: 1;">
                         ❌ Cancel
                     </button>
                 </div>
-            </div>
+            {% comment %} </form> {% endcomment %}
         </div>
     </div>
+</div>
+
+{% comment %} <script>
+let selectedRating = 0;
+
+// Star rating functionality
+document.querySelectorAll('.rating-star').forEach(star => {
+    star.addEventListener('click', function() {
+        selectedRating = parseInt(this.dataset.value);
+        updateStarDisplay(selectedRating);
+        
+        // Enable submit button
+        const submitBtn = document.getElementById('submit-rating');
+        submitBtn.style.opacity = '1';
+        submitBtn.style.pointerEvents = 'auto';
+        submitBtn.disabled = false;
+        
+        // Set hidden input value
+        document.getElementById('rating-value').value = selectedRating;
+    });
+    
+    // Hover effect
+    star.addEventListener('mouseenter', function() {
+        const hoverValue = parseInt(this.dataset.value);
+        updateStarDisplay(hoverValue);
+    });
+});
+
+// Reset to selected rating on mouse leave
+document.querySelector('.rating-star').parentElement.addEventListener('mouseleave', function() {
+    if (selectedRating > 0) {
+        updateStarDisplay(selectedRating);
+    } else {
+        resetStars();
+    }
+});
+
+function updateStarDisplay(rating) {
+    const stars = document.querySelectorAll('.rating-star');
+    const ratingTexts = ['Select a rating', '⭐ Poor', '⭐⭐ Fair', '⭐⭐⭐ Good', '⭐⭐⭐⭐ Very Good', '⭐⭐⭐⭐⭐ Excellent'];
+    
+    stars.forEach((star, index) => {
+        if (index < rating) {
+            star.style.opacity = '1';
+            star.style.transform = 'scale(1.2)';
+        } else {
+            star.style.opacity = '0.3';
+            star.style.transform = 'scale(1)';
+        }
+    });
+    
+    document.getElementById('rating-text').textContent = ratingTexts[rating];
+}
+
+function resetStars() {
+    document.querySelectorAll('.rating-star').forEach(star => {
+        star.style.opacity = '0.3';
+        star.style.transform = 'scale(1)';
+    });
+    document.getElementById('rating-text').textContent = 'Select a rating';
+}
+
+// Cancel button
+document.getElementById('cancel-rating').addEventListener('click', function() {
+    closeRatingModal();
+});
+
+function closeRatingModal() {
+    document.getElementById('rating-modal').style.display = 'none';
+    selectedRating = 0;
+    document.getElementById('review-comment').value = '';
+    document.getElementById('rating-value').value = '';
+    resetStars();
+    
+    const submitBtn = document.getElementById('submit-rating');
+    submitBtn.style.opacity = '0.5';
+    submitBtn.style.pointerEvents = 'none';
+    submitBtn.disabled = true;
+}
+
+// Open modal function (call this from your "Give Rating" button)
+function openRatingModal() {
+    document.getElementById('rating-modal').style.display = 'flex';
+}
+
+// Close modal when clicking outside
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('rating-modal');
+    if (event.target === modal) {
+        closeRatingModal();
+    }
+});
+</script> {% endcomment %}

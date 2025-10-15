@@ -3,96 +3,7 @@
 {% block title %}Add New CR{% endblock title %}
 {% block content %}
 <!-- Add CR Page -->
-{% comment %} <div id="add-cr" class="page">
-    <div class="container">
-        <h1 class="title">➕ Add New CR</h1>
 
-        <div style="max-width: 700px; margin: 0 auto;">
-            <div class="search-section">
-                <form id="add-cr-form">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
-                        <div class="form-group">
-                            <label class="form-label">👤 First Name</label>
-                            <input type="text" class="form-input" placeholder="Enter first name" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">👤 Last Name</label>
-                            <input type="text" class="form-input" placeholder="Enter last name" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">🆔 Student ID</label>
-                        <input type="text" class="form-input" placeholder="Enter student ID" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">📧 Email Address</label>
-                        <input type="email" class="form-input" placeholder="Enter email address" required>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-                        <div class="form-group">
-                            <label class="form-label">🏛️ University</label>
-                            <select class="form-input" required>
-                                <option value="">Select University</option>
-                                <option>University of Dhaka</option>
-                               
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">📚 Department</label>
-                            <select class="form-input" required>
-                                <option value="">Select Department</option>
-                                <option>Computer Science and Engineering</option>
-                              
-                            </select>
-                        </div>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-                        <div class="form-group">
-                            <label class="form-label">📑 Section</label>
-                            <select class="form-input" required>
-                                <option value="">Select Section</option>
-                                <option>A</option>
-                                <option>B</option>
-                                <option>C</option>
-                                <option>D</option>
-                                <option>E</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">📅 Batch/Year</label>
-                            <select class="form-input" required>
-                                <option value="">Select Batch</option>
-                                <option>2024-25</option>
-                                <option>2023-24</option>
-                                <option>2022-23</option>
-                                <option>2021-22</option>
-                                <option>2020-21</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">📱 Phone Number (Optional)</label>
-                        <input type="tel" class="form-input" placeholder="Enter phone number">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">📝 CR Bio / Description</label>
-                        <textarea class="form-input" placeholder="Write about CR responsibilities, experience, and other details..."></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-success" style="width: 100%; font-size: 1.3rem; padding: 1.5rem;">
-                        🎉 Create CR Profile
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div> {% endcomment %}
   <!-- Hero Section -->
     <section class="add-cr-hero">
         <div class="hero-badge">✨ New CR Profile</div>
@@ -100,13 +11,25 @@
         <p class="hero-subtitle">Help your university community by adding CR profiles and making it easier for students to connect</p>
     </section>
 
+    
     <!-- Form Section -->
     <div class="form-wrapper">
-        <form id="addCrForm" method="POST" enctype="multipart/form-data" class="form-main">
+        <form id="addCrForm" method='POST' action="{% url 'add_cr' %}" enctype="multipart/form-data" class="form-main">
             {% csrf_token %}
 
             <!-- Basic Information -->
             <div class="form-section">
+                <!-- Messages -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <p style="text-align:center;
+                                  color:{% if message.tags == 'error' %}red{% else %}#00ff00{% endif %};
+                                  font-weight:500;
+                                  margin-top:10px;">
+                            {{ message }}
+                        </p>
+                    {% endfor %}
+                {% endif %}
                 <div class="section-header">
                     <div class="section-icon">🎓</div>
                     <h2 class="section-title">Basic Information</h2>
@@ -120,7 +43,7 @@
                         </label>
                         <select name="university" class="select-field" required>
                             <option value="">Select University</option>
-                            {% for university in universities %}
+                            {% for university in university %}
                             <option value="{{ university.id }}">{{ university.title }}</option>
                             {% endfor %}
                         </select>
@@ -133,7 +56,7 @@
                         </label>
                         <select name="department" class="select-field" required>
                             <option value="">Select Department</option>
-                            {% for department in departments %}
+                            {% for department in department %}
                             <option value="{{ department.id }}">{{ department.title }}</option>
                             {% endfor %}
                         </select>
@@ -250,6 +173,7 @@
                 <button type="submit" class="submit-button">✨ Add CR Profile</button>
                 <a href="index.html" class="cancel-button">Cancel</a>
             </div>
+            
 
             <!-- Progress Indicator -->
             <div class="progress-indicator" id="progressIndicator">
