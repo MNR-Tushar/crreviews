@@ -70,69 +70,94 @@ function showPage(pageId) {
     }, 300);
 }
 
-// Rating Modal Functions
-function openRatingModal(crName) {
-    currentCRName = crName;
-    const modal = document.getElementById('rating-modal');
+
+// Star rating functionality
+document.querySelectorAll('.rating-star').forEach(star => {
+    star.addEventListener('click', function() {
+        selectedRating = parseInt(this.dataset.value);
+        updateStarDisplay(selectedRating);
+        
+        // Enable submit button
+        const submitBtn = document.getElementById('submit-rating');
+        submitBtn.style.opacity = '1';
+        submitBtn.style.pointerEvents = 'auto';
+        submitBtn.disabled = false;
+        
+        // Set hidden input value
+        document.getElementById('rating-value').value = selectedRating;
+    });
     
-    if (!modal) {
-        console.warn('Rating modal not found');
-        return;
+    // Hover effect
+    star.addEventListener('mouseenter', function() {
+        const hoverValue = parseInt(this.dataset.value);
+        updateStarDisplay(hoverValue);
+    });
+});
+
+// Reset to selected rating on mouse leave
+document.querySelector('.rating-star').parentElement.addEventListener('mouseleave', function() {
+    if (selectedRating > 0) {
+        updateStarDisplay(selectedRating);
+    } else {
+        resetStars();
     }
+});
+
+function updateStarDisplay(rating) {
+    const stars = document.querySelectorAll('.rating-star');
+    const ratingTexts = ['Select a rating', '⭐ Poor', '⭐⭐ Fair', '⭐⭐⭐ Good', '⭐⭐⭐⭐ Very Good', '⭐⭐⭐⭐⭐ Excellent'];
     
-    const modalTitle = document.getElementById('rating-cr-name');
-    if (modalTitle) {
-        modalTitle.textContent = `Rating for ${crName}`;
-    }
+    stars.forEach((star, index) => {
+        if (index < rating) {
+            star.style.opacity = '1';
+            star.style.transform = 'scale(1.2)';
+        } else {
+            star.style.opacity = '0.3';
+            star.style.transform = 'scale(1)';
+        }
+    });
     
-    modal.style.display = 'block';
-    document.body.style.overflow = 'hidden';
-    
-    selectedRating = 0;
-    updateRatingDisplay();
-    
-    const commentField = document.getElementById('review-comment');
-    if (commentField) {
-        commentField.value = '';
-    }
+    document.getElementById('rating-text').textContent = ratingTexts[rating];
 }
 
+function resetStars() {
+    document.querySelectorAll('.rating-star').forEach(star => {
+        star.style.opacity = '0.3';
+        star.style.transform = 'scale(1)';
+    });
+    document.getElementById('rating-text').textContent = 'Select a rating';
+}
+
+// Cancel button
+document.getElementById('cancel-rating').addEventListener('click', function() {
+    closeRatingModal();
+});
+
 function closeRatingModal() {
-    const modal = document.getElementById('rating-modal');
-    if (modal) {
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
+    document.getElementById('rating-modal').style.display = 'none';
+    selectedRating = 0;
+    document.getElementById('review-comment').value = '';
+    document.getElementById('rating-value').value = '';
+    resetStars();
+    
+    const submitBtn = document.getElementById('submit-rating');
+    submitBtn.style.opacity = '0.5';
+    submitBtn.style.pointerEvents = 'none';
+    submitBtn.disabled = true;
+}
+
+// Open modal function (call this from your "Give Rating" button)
+function openRatingModal() {
+    document.getElementById('rating-modal').style.display = 'flex';
 }
 
 // Close modal when clicking outside
-window.addEventListener('click', (e) => {
+window.addEventListener('click', function(event) {
     const modal = document.getElementById('rating-modal');
-    if (modal && e.target === modal) {
+    if (event.target === modal) {
         closeRatingModal();
     }
-});
-
-// Add event listeners for modal buttons
-document.addEventListener('DOMContentLoaded', () => {
-    const cancelBtn = document.getElementById('cancel-rating');
-    const submitBtn = document.getElementById('submit-rating');
-    
-    if (cancelBtn) {
-        cancelBtn.addEventListener('click', closeRatingModal);
-    }
-    
-    if (submitBtn) {
-        submitBtn.addEventListener('click', () => {
-            if (selectedRating > 0) {
-                const comment = document.getElementById('review-comment')?.value || '';
-                addNewReview(selectedRating, comment);
-                showNotification(`⭐ ${selectedRating} star rating submitted!`, 'success');
-                closeRatingModal();
-            }
-        });
-    }
-});
+})
 
 // Enhanced search functionality
 document.querySelectorAll('.search-btn').forEach(btn => {

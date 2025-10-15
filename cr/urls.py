@@ -7,4 +7,5 @@ urlpatterns = [
     path('latest_reviews/',latest_reviews,name='latest_reviews'),
     path('cr_profile/<str:slug>/',cr_profile,name='cr_profile'),
     path('addcr/',add_cr,name='add_cr'),
+    #path('submit_review/<str:slug>/',submit_review,name='submit_review'),
 ]

@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate,login as auth_login,logout as auth_
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from cr.models import *
 from .models import *
-
+from django.contrib.auth.decorators import login_required
 
 
 def login(request):
@@ -89,6 +89,7 @@ def logout(request):
     auth_logout(request)
     return redirect('login')
 
+@login_required
 def user_dasboard(request):
     user = User.objects.get(email=request.user.email)
     review = Review.objects.filter(user=user).order_by('-created_at')
@@ -102,7 +103,7 @@ def user_dasboard(request):
     }
 
     return render(request,'user_profile/user_dashboard.html',context)
-
+@login_required
 def view_profile(request):
     user = User.objects.get(email=request.user.email)
     review = Review.objects.filter(user=user).order_by('-created_at')
@@ -124,5 +125,6 @@ def view_profile(request):
     
     return render(request,'user_profile/view_profile.html',context)
 
+@login_required
 def admin_dashboard(request):
     return render(request,'user_profile/admin_dashboard.html')
