@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin
 from cr.models import *
 from .manager import CustomUserManager
+from django.utils.text import slugify
 import os
 # Create your models here.
 
@@ -19,6 +20,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     profile_picture=models.ImageField(upload_to=user_profile_picture_path,null=True,blank=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+    gender = models.CharField(choices=[('M', 'Male'), ('F', 'Female')], max_length=1)
     email = models.EmailField(unique=True)
     phone=models.CharField(max_length=20,null=True,blank=True)
     date_of_birth=models.DateField(null=True,blank=True)
@@ -30,6 +32,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     instagram_url=models.URLField(null=True,blank=True)
     linkedin_url=models.URLField(null=True,blank=True)
     role=models.CharField(max_length=20, default='student')
+    slug=models.SlugField(blank=True,unique=True)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -48,13 +51,15 @@ class User(AbstractBaseUser,PermissionsMixin):
         return self.email
     
     def save(self, *args, **kwargs):
-        # Save first to get ID
-        if not self.id:
-            saved_image = self.profile_picture
-            self.profile_picture = None
-            super().save(*args, **kwargs)
-            self.profile_picture = saved_image
-        
+        if not self.slug:
+            base_slug = slugify(f"{self.first_name} {self.last_name}")
+            slug = base_slug
+            counter = 1
+            # uniqueness check
+            while User.objects.filter(slug=slug).exclude(id=self.id).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
         super().save(*args, **kwargs)
     
     def get_full_name(self):

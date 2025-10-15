@@ -396,24 +396,24 @@ document.querySelectorAll('.card, .stat-card, .review-card').forEach(card => {
 });
 
 // Enhanced star rating interactions
-document.querySelectorAll('.star').forEach(star => {
-    star.addEventListener('click', () => {
-        const stars = star.parentElement.querySelectorAll('.star');
-        const rating = Array.from(stars).indexOf(star) + 1;
+// document.querySelectorAll('.star').forEach(star => {
+//     star.addEventListener('click', () => {
+//         const stars = star.parentElement.querySelectorAll('.star');
+//         const rating = Array.from(stars).indexOf(star) + 1;
         
-        stars.forEach((s, index) => {
-            if (index < rating) {
-                s.textContent = '★';
-                s.style.color = '#ffeb3b';
-            } else {
-                s.textContent = '☆';
-                s.style.color = 'rgba(255,255,255,0.3)';
-            }
-        });
+//         stars.forEach((s, index) => {
+//             if (index < rating) {
+//                 s.textContent = '★';
+//                 s.style.color = '#ffeb3b';
+//             } else {
+//                 s.textContent = '☆';
+//                 s.style.color = 'rgba(255,255,255,0.3)';
+//             }
+//         });
         
-        showNotification(`⭐ ${rating} star rating given!`, 'success');
-    });
-});
+//         showNotification(`⭐ ${rating} star rating given!`, 'success');
+//     });
+// });
 
 // Scroll animations
 const observerOptions = {

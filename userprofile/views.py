@@ -1,8 +1,10 @@
 from django.contrib import messages
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate,login as auth_login,logout as auth_logout
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from cr.models import *
 from .models import *
+
 
 
 def login(request):
@@ -88,7 +90,39 @@ def logout(request):
     return redirect('login')
 
 def user_dasboard(request):
-    return render(request,'user_profile/user_dashboard.html')
+    user = User.objects.get(email=request.user.email)
+    review = Review.objects.filter(user=user).order_by('-created_at')
+    last = review.first()
+ 
+    
+    context = {
+        'user':user,
+        'review':review,
+        'last':last,
+    }
+
+    return render(request,'user_profile/user_dashboard.html',context)
+
+def view_profile(request):
+    user = User.objects.get(email=request.user.email)
+    review = Review.objects.filter(user=user).order_by('-created_at')
+
+    paginator = Paginator(review,5)
+    page_number = request.GET.get('page',1)
+
+    try:
+        review = paginator.page(page_number)
+    except PageNotAnInteger:
+        review = paginator.page(1)
+    except EmptyPage:
+        review = paginator.page(1)
+
+    context = {
+        'user':user,
+        'review':review,
+    }
+    
+    return render(request,'user_profile/view_profile.html',context)
 
 def admin_dashboard(request):
     return render(request,'user_profile/admin_dashboard.html')
