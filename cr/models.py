@@ -64,6 +64,7 @@ class CrProfile(models.Model):
 
     profile_picture = models.ImageField(upload_to='cr_profile_pictures/', blank=True, null=True)
     name = models.CharField(max_length=100)
+    gender = models.CharField(choices=[('M', 'Male'), ('F', 'Female')], max_length=1)
     email = models.EmailField(blank=True, null=True)
     phone = models.CharField(max_length=30, blank=True, null=True)
     st_id = models.CharField(max_length=50, unique=True)
