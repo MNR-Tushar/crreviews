@@ -142,27 +142,30 @@ def add_cr(request):
     }
 
     return render(request,'add_cr.html',context)
+@login_required
+def submit_review(request, cr_slug):
+    cr_profile = get_object_or_404(CrProfile, slug=cr_slug)
+    user = request.user
 
-# def submit_review(request, slug):
-#     if request.method == 'POST':
-#         review_cr = get_object_or_404(CrProfile, slug=slug)
+    # Check if the user already submitted a review for this CR
+    existing_review = Review.objects.filter(user=user, cr_profile=cr_profile).first()
+    if existing_review:
+        messages.warning(request, "You have already reviewed this CR.")
+        return redirect('submit_review')  # Redirect wherever you want
 
-#         existing_review = Review.objects.filter(cr_profile=review_cr, user=request.user).first()
-#         if existing_review:
-#             messages.error(request, 'You have already submitted a review for this course!')
-#             return redirect('cr_profile', slug=review_cr.slug)  # ✅ fixed variable name
+    if request.method == "POST":
+        rating = request.POST.get('rating')
+        description = request.POST.get('description', '')
 
-#         rating = request.POST.get('rating')
-#         description = request.POST.get('description')
+        # Create review
+        review = Review.objects.create(
+            user=user,
+            cr_profile=cr_profile,
+            rating=int(rating),
+            description=description
+        )
+        messages.success(request, "Your review has been submitted successfully!")
+        return redirect('cr_profile', slug=cr_profile.slug) # Redirect after submission
 
-#         review = Review.objects.create(
-#             cr_profile=review_cr,  # ✅ fixed variable name
-#             user=request.user,
-#             rating=rating,
-#             description=description
-#         )
-
-#         messages.success(request, '🎉 Review submitted successfully!')
-#         return redirect('cr_profile', slug=slug)
-    
-#     return redirect('home')
+    # If GET request, optionally show the modal/page
+    return redirect('cr_profile', slug=cr_profile.slug)

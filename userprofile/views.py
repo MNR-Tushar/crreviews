@@ -90,8 +90,8 @@ def logout(request):
     return redirect('login')
 
 @login_required
-def user_dasboard(request):
-    user = User.objects.get(email=request.user.email)
+def user_dasboard(request,slug):
+    user = User.objects.get(email=request.user.email,slug=slug)
     review = Review.objects.filter(user=user).order_by('-created_at')
     last = review.first()
  
@@ -104,8 +104,8 @@ def user_dasboard(request):
 
     return render(request,'user_profile/user_dashboard.html',context)
 @login_required
-def view_profile(request):
-    user = User.objects.get(email=request.user.email)
+def view_profile(request,slug):
+    user = User.objects.get(email=request.user.email,slug=slug)
     review = Review.objects.filter(user=user).order_by('-created_at')
 
     paginator = Paginator(review,5)

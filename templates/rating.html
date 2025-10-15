@@ -5,8 +5,8 @@
             <h2 style="color: white; font-size: 2rem; font-weight: 700; margin-bottom: 2rem;">⭐ Give Rating</h2>
             <p style="color: rgba(255,255,255,0.8); margin-bottom: 2rem;" id="rating-cr-name">{{ cr_profile.name }}</p>
             
-            {% comment %} <form id="rating-form" method="POST" action="{% url 'submit_review' cr_profile.slug %}">
-                {% csrf_token %} {% endcomment %}
+            {% comment %} <form id="rating-form" method="POST" action="{% url 'submit_review' cr_profile.slug %}"> {% endcomment %}
+                {% csrf_token %}
                 
                 <!-- Star Rating Input -->
                 <div style="margin: 2rem 0;">
@@ -37,7 +37,7 @@
                         ❌ Cancel
                     </button>
                 </div>
-            {% comment %} </form> {% endcomment %}
+            </form>
         </div>
     </div>
 </div>
