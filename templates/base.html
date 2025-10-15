@@ -51,12 +51,12 @@
                     </div>
                     <div class="dropdown-divider"></div>
 
-                    <a href="{% url 'user_dashboard' %}" class="dropdown-item">
+                    <a href="{% url 'user_dashboard' user.slug %}" class="dropdown-item">
                         <span class="dropdown-icon">🧭</span>
                         Dashboard
                     </a>
                     
-                    <a href="{% url 'view_profile' %}" class="dropdown-item">
+                    <a href="{% url 'view_profile' user.slug %}" class="dropdown-item">
                         <span class="dropdown-icon">👤</span>
                         View Profile
                     </a>
