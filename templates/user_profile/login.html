@@ -16,17 +16,7 @@
                             New Account? <a href="{% url 'registration' %}" style="color: #ffeb3b; font-weight: 700; text-decoration: none;">Register</a>
                         </p>
                     </form>
-                     <!-- Messages -->
-                    {% if messages %}
-                        {% for message in messages %}
-                        <p style="text-align:center;
-                                  color:{% if message.tags == 'error' %}red{% else %}#00ff00{% endif %};
-                                  font-weight:500;
-                                  margin-top:10px;">
-                            {{ message }}
-                        </p>
-                        {% endfor %}
-                    {% endif %}
+                    
                 </div>
             </div>
         </div>

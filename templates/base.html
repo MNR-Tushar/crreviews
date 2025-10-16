@@ -99,6 +99,17 @@
      <script src="{% static 'edit_user.js' %}"></script>
      <script src="{% static 'user_dashboard.js' %}"></script>
 
+     {% if messages %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+        {% for message in messages %}
+         showNotification("{{ message|escapejs }}", "{{ message.tags }}");
+        {% endfor %}
+        });
+    </script>
+    {% endif %}
+
+
 
 </body>
 </html>

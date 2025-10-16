@@ -447,12 +447,7 @@ document.querySelectorAll('.card, .section, .stat-card').forEach(el => {
     observer.observe(el);
 });
 
-// Welcome message - only show on home page
-// setTimeout(() => {
-//     if (window.location.pathname === '/' || document.getElementById('home')) {
-//         showNotification('🎉 Welcome to BD University CR Review!', 'success');
-//     }
-// }, 2000);
+
 setTimeout(() => {
     if ((window.location.pathname === '/' || document.getElementById('home')) 
         && !localStorage.getItem('welcomeShown')) {
@@ -461,3 +456,36 @@ setTimeout(() => {
         sessionStorage.setItem('welcomeShown', 'true');
     }
 }, 2000);
+
+function showNotification(message, type) {
+  const colors = {
+    success: "#4CAF50",
+    error: "#F44336",
+    warning: "#FF9800",
+    info: "#2196F3"
+  };
+  
+  const toast = document.createElement("div");
+  toast.textContent = message;
+  toast.style.position = "fixed";
+  toast.style.bottom = "30px";
+  toast.style.right = "30px";
+  toast.style.background = colors[type] || "#333";
+  toast.style.color = "white";
+  toast.style.padding = "12px 18px";
+  toast.style.borderRadius = "8px";
+  toast.style.boxShadow = "0 3px 6px rgba(0,0,0,0.3)";
+  toast.style.zIndex = "9999";
+  toast.style.opacity = "0";
+  toast.style.transition = "opacity 0.3s ease-in-out";
+  
+  document.body.appendChild(toast);
+  
+  // fade in
+  setTimeout(() => toast.style.opacity = "1", 100);
+  // fade out after 3s
+  setTimeout(() => {
+    toast.style.opacity = "0";
+    setTimeout(() => toast.remove(), 500);
+  }, 3000);
+}
