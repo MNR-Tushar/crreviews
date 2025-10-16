@@ -5,10 +5,10 @@ urlpatterns = [
     path('login/',login,name="login"),
     path('registration/',registration,name="registration"),
     path('logout/',logout,name="logout"),
-    path('user_dashboard/<str:slug>',user_dasboard,name="user_dashboard"),
+    path('user_dashboard/<str:slug>/',user_dasboard,name="user_dashboard"),
     path('view_profile/<str:slug>/',view_profile,name="view_profile"),
     path('user_view/<str:slug>/',user_view,name="user_view"),
     path('admin_dashboard/',admin_dashboard,name="admin_dashboard"),
-    path('edit_user/',edit_user,name="edit_user"),
+    path('edit_user/<str:slug>/',edit_user,name="edit_user"),
     path('settings/',settings,name="settings"),
 ]
