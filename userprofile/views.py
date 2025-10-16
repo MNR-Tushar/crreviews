@@ -1,11 +1,10 @@
 from django.contrib import messages
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth import authenticate,login as auth_login,logout as auth_logout
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from cr.models import *
 from .models import *
 from django.contrib.auth.decorators import login_required
-
 
 def login(request):
     if request.method == 'POST':
@@ -103,7 +102,7 @@ def user_dasboard(request,slug):
     }
 
     return render(request,'user_profile/user_dashboard.html',context)
-@login_required
+
 def view_profile(request,slug):
     user = User.objects.get(email=request.user.email,slug=slug)
     review = Review.objects.filter(user=user).order_by('-created_at')
@@ -124,6 +123,29 @@ def view_profile(request,slug):
     }
     
     return render(request,'user_profile/view_profile.html',context)
+
+def user_view(request,slug):
+    view_user =get_object_or_404(User,slug=slug)
+    review = Review.objects.filter(user=view_user).order_by('-created_at')
+
+    paginator = Paginator(review,5)
+    page_number = request.GET.get('page',1)
+
+    try:
+        review = paginator.page(page_number)
+    except PageNotAnInteger:
+        review = paginator.page(1)
+    except EmptyPage:
+        review = paginator.page(1)
+    
+    context = {
+        'view_user':view_user,
+        'user': request.user,
+        'review':review
+    }
+    
+
+    return render(request,'user_profile/user_view.html',context)
 
 @login_required
 def admin_dashboard(request):

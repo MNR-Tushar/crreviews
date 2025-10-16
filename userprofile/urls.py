@@ -7,5 +7,6 @@ urlpatterns = [
     path('logout/',logout,name="logout"),
     path('user_dashboard/<str:slug>',user_dasboard,name="user_dashboard"),
     path('view_profile/<str:slug>/',view_profile,name="view_profile"),
+    path('user_view/<str:slug>/',user_view,name="user_view"),
     path('admin_dashboard/',admin_dashboard,name="admin_dashboard"),
 ]
