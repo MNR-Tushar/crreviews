@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Profile{% endblock title %}
+{% block title %}CR Profile{% endblock title %}
 {% block content %}
      <!-- CR Profile Page -->
     <div id="cr-profile" class="page">
@@ -39,11 +39,13 @@
                         </div>
                     </div>
                     
-                    <button class="btn" onclick="openRatingModal(document.getElementById('profile-name').textContent)" style="font-size: 1.2rem; padding: 1rem 2rem;">
+                    <button class="btn" onclick="openRatingModal('{{ cr_profile.slug }}', '{{ cr_profile.name }}')" style="font-size: 1.2rem; padding: 1rem 2rem;">
                         ⭐ Give Rating
                     </button>
-                </div>
 
+                    
+                </div>
+                {% include 'rating.html' %}
                 <!-- Profile Details -->
                 <div class="search-section">
                     <h2 style="color: white; font-size: 1.8rem; font-weight: 700; margin-bottom: 2rem;">📋 Detailed Information</h2>

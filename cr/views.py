@@ -144,29 +144,32 @@ def add_cr(request):
     return render(request,'add_cr.html',context)
 
 
+@login_required
 def submit_review(request, cr_slug):
     cr_profile = get_object_or_404(CrProfile, slug=cr_slug)
     user = request.user
 
-    # Check if the user already submitted a review for this CR
-    existing_review = Review.objects.filter(user=user, cr_profile=cr_profile).first()
+    # Check if the user already submitted a review
+    existing_review = Review.objects.filter(user=user).first()
     if existing_review:
-        messages.warning(request, "You have already reviewed this CR.")
-        return redirect('submit_review')  # Redirect wherever you want
+        messages.warning(request, "You have already reviewed a CR. You can only review once!")
+        return redirect('cr_profile', slug=cr_profile.slug)
 
     if request.method == "POST":
         rating = request.POST.get('rating')
         description = request.POST.get('description', '')
 
-        # Create review
-        review = Review.objects.create(
-            user=user,
-            cr_profile=cr_profile,
-            rating=int(rating),
-            description=description
-        )
-        messages.success(request, "Your review has been submitted successfully!")
-        return redirect('cr_profile', slug=cr_profile.slug) # Redirect after submission
+        try:
+            review = Review.objects.create(
+                user=user,
+                cr_profile=cr_profile,
+                rating=int(rating),
+                description=description
+            )
+            messages.success(request, "Your review has been submitted successfully!")
+            return redirect('cr_profile', slug=cr_profile.slug)
+        except Exception as e:
+            messages.error(request, "Error submitting review. Please try again.")
+            return redirect('cr_profile', slug=cr_profile.slug)
 
-    # If GET request, optionally show the modal/page
     return redirect('cr_profile', slug=cr_profile.slug)
