@@ -10,21 +10,17 @@
                 <!-- Profile Header -->
                 <div class="search-section" style="text-align: center; margin-bottom: 3rem;">
                     <div class="profile-photo" style="width: 150px; height: 150px; font-size: 4rem; margin: 0 auto 2rem; position: relative;" id="profile-photo">
-                         {% if user.profile_picture %}
-                        <img src="{{ user.profile_picture.url }}" alt="{{ user.name }}" />
+                         {% if view_user.profile_picture %}
+                        <img src="{{ view_user.profile_picture.url }}" alt="{{ view_user.name }}" />
                         {% else %}
-                        <span>{{ user.first_name|first|upper }}</span>
+                        <span>{{ view_user.first_name|first|upper }}</span>
                         {% endif %}
                     </div>
                     <h1 style="color: white; font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem;" id="profile-name">{{user.name}}</h1>
                     <p style="color: rgba(255,255,255,0.9); font-size: 1.3rem; margin-bottom: 1.5rem;" id="profile-info">
-                        {{user.student_id}} | {{user.university}}
+                        {{view_user.student_id}} | {{view_user.university}}
                     </p>
-                    {% if user.is_authenticated %}
-                    <button class="btn" onclick="window.location.href='{% url 'add_cr'%}'" style="font-size: 1.2rem; padding: 1rem 2rem;">
-                        ➕ Add New CR
-                    </button>
-                    {% endif %}
+                   
                 </div>
 
                 <!-- Profile Details -->
@@ -35,15 +31,15 @@
                        
                         <div>
                             <strong style="color: rgba(255,255,255,0.8);">Department:</strong>
-                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem;">{{user.department}}</p>
+                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem;">{{view_user.department}}</p>
                         </div>
                         <div>
                             <strong style="color: rgba(255,255,255,0.8);">Batch:</strong>
-                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem;">{{user.batch}}</p>
+                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem;">{{view_user.batch}}</p>
                         </div>
                         <div>
                             <strong style="color: rgba(255,255,255,0.8);">Section:</strong>
-                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem;">{{user.section}}</p>
+                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem;">{{view_user.section}}</p>
                         </div>
                         
                     </div>
@@ -51,41 +47,41 @@
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
                          <div>
                             <strong style="color: rgba(255,255,255,0.8);">Gender:</strong>
-                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem; word-break: break-all;">{{user.gender}}</p>
+                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem; word-break: break-all;">{{view_user.gender}}</p>
                             
                         </div>
                          <div>
                             <strong style="color: rgba(255,255,255,0.8);">Birth Date:</strong>
-                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem; word-break: break-all;">{{user.date_of_birth}}</p>
+                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem; word-break: break-all;">{{view_user.date_of_birth}}</p>
                             
                         </div>
                         <div>
                             <strong style="color: rgba(255,255,255,0.8);">Account Created:</strong>
-                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem; word-break: break-all;">{{user.created_at}}</p>
+                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem; word-break: break-all;">{{view_user.created_at}}</p>
                             
                         </div>
                         <div>
                             <strong style="color: rgba(255,255,255,0.8);">Email:</strong>
-                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem; word-break: break-all;">{{user.email}}</p>
+                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem; word-break: break-all;">{{view_user.email}}</p>
                             
                         </div>
                         <div>
                             <strong style="color: rgba(255,255,255,0.8);">Phone:</strong>
-                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem;">{{user.phone}}</p>
+                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem;">{{view_user.phone}}</p>
                         </div>
                     </div>
 
                      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
                          <div>
                             <strong style="color: rgba(255,255,255,0.8);">Facebook_Url:</strong>
-                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem; word-break: break-all;">{{user.facebook_url}}</p>
+                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem; word-break: break-all;">{{view_user.facebook_url}}</p>
                             
                         </div>   
                     </div>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
                          <div>
                             <strong style="color: rgba(255,255,255,0.8);">Instagram_Url:</strong>
-                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem; word-break: break-all;">{{user.instagram_url}}</p>
+                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem; word-break: break-all;">{{view_user.instagram_url}}</p>
                             
                         </div>   
                     </div>
@@ -93,7 +89,7 @@
                      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
                          <div>
                             <strong style="color: rgba(255,255,255,0.8);">Linkedin_Url:</strong>
-                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem; word-break: break-all;">{{user.linkedin_url}}</p>
+                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem; word-break: break-all;">{{view_user.linkedin_url}}</p>
                             
                         </div>   
                     </div>
@@ -101,14 +97,14 @@
                     <div style="margin: 2rem 0;">
                         <strong style="color: rgba(255,255,255,0.8);">📝 About:</strong>
                         <p style="color: white; font-size: 1.1rem; line-height: 1.7; margin-top: 1rem;" id="profile-about">
-                            {{user.bio}}
+                            {{view_user.bio}}
                         </p>
                     </div>
                 </div>
 
                 <!-- Recent Reviews -->
                 <div class="section">
-                    <h2 style="color: white; font-size: 1.8rem; font-weight: 700; margin-bottom: 2rem;">💬 My Reviews</h2>
+                    <h2 style="color: white; font-size: 1.8rem; font-weight: 700; margin-bottom: 2rem;">💬 Recent Reviews Given By Him</h2>
                     
                     <div id="reviews-container">
                     {% for review in review %}
@@ -141,7 +137,7 @@
                  <!-- Pagination Section -->
                 {% if review.has_other_pages %}
                 <div class="pagination-section">
-                    <div class="pagination">
+                <div class="pagination">
                     {% if review.has_previous %}
                         <a href="?page=1" class="pagination-btn pagination-first">
                             <span>⏮️</span>

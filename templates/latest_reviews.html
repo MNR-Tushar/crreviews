@@ -12,7 +12,7 @@
                 <div class="review-card">
                     <div class="review-header">
                         <div>
-                            <strong style="font-size: 1rem;">👤 {{review.user.get_full_name}}</strong> - {{review.user.university}} - {{review.user.department}}
+                             <strong><a href="{% url 'user_view' review.user.slug %}" style="text-decoration: none; color: inherit;">👤 {{review.user.get_full_name}}</a> </strong> - {{review.user.university}} - {{review.user.department}}
                             <div class="rating">
                                 {% for i in "12345" %} {% if forloop.counter <= review.rating %}
                                 <span class="star filled">★</span>
