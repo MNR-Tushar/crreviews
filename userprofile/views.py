@@ -150,3 +150,11 @@ def user_view(request,slug):
 @login_required
 def admin_dashboard(request):
     return render(request,'user_profile/admin_dashboard.html')
+
+def edit_user(request):
+
+    return render(request,'user_profile/edit_user.html')
+
+def settings(request):
+
+    return render(request,'user_profile/settings.html')

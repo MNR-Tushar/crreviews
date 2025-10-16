@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Edit Profile{% endblock title %}
+{% block content %}
+    
+<div class="container_edit">
+        
+        <!-- Header -->
+        <div class="header">
+            <h1 id="pageTitle">Edit your Profile</h1>
+        </div>
+
+       
+
+        <!--  Edit Profile -->
+        <div class="tab-content active">
+            <div class="card_edit">
+                <h2>📷 Profile Photo</h2>
+                <div class="profile-photo-section_edit">
+                    <div class="profile-photo_edit">A</div>
+                    <div class="photo-upload_edit">
+                        <label for="photoInput">Change Photo</label>
+                        <input type="file" id="photoInput" accept="image/*">
+                        <div class="photo-info">
+                            Recommended size: 400x400px<br>
+                            Max file size: 5MB
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card_edit">
+                <h2>👤 Personal Information</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name *</label>
+                        <input type="text" id="firstName" placeholder="Enter your first name" value="Ahmed">
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name *</label>
+                        <input type="text" id="lastName" placeholder="Enter your last name" value="Hasan">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" placeholder="your@email.com" value="ahmed@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" placeholder="+880 1XXX XXXXXX" value="+880 1512345678">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="studentId">Student ID *</label>
+                        <input type="text" id="studentId" placeholder="Your student ID" value="DU-001234" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="batch">Batch *</label>
+                        <input type="text" id="batch" placeholder="e.g., 2021" value="2021">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="section">Section</label>
+                        <input type="text" id="section" placeholder="e.g., A" value="A">
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender">
+                            <option value="">Select Gender</option>
+                            <option value="M" selected>Male</option>
+                            <option value="F">Female</option>
+                            <option value="O">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" id="dob" value="1999-05-15">
+                </div>
+            </div>
+
+            <div class="card_edit">
+                <h2>🏫 Academic Information</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="university">University *</label>
+                        <select id="university">
+                            <option value="">Select University</option>
+                            <option value="DU" selected>Dhaka University</option>
+                            <option value="BUET">BUET</option>
+                            <option value="RU">Rajshahi University</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="department">Department *</label>
+                        <select id="department">
+                            <option value="">Select Department</option>
+                            <option value="CSE" selected>CSE</option>
+                            <option value="EEE">EEE</option>
+                            <option value="CE">CE</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card_edit">
+                <h2>🔗 Social Media Links</h2>
+                <div class="form-group">
+                    <label for="facebook">Facebook URL</label>
+                    <input type="url" id="facebook" placeholder="https://facebook.com/..." value="https://facebook.com/ahmed.hasan">
+                </div>
+                <div class="form-group">
+                    <label for="instagram">Instagram URL</label>
+                    <input type="url" id="instagram" placeholder="https://instagram.com/..." value="https://instagram.com/ahmed.hasan">
+                </div>
+                <div class="form-group">
+                    <label for="linkedin">LinkedIn URL</label>
+                    <input type="url" id="linkedin" placeholder="https://linkedin.com/in/..." value="https://linkedin.com/in/ahmed-hasan">
+                </div>
+            </div>
+
+            <div class="card_edit">
+                <h2>📝 Bio</h2>
+                <div class="form-group">
+                    <label for="bio">About You</label>
+                    <textarea id="bio" rows="5" placeholder="Tell us about yourself...">I am a dedicated CR working hard for the department.</textarea>
+                </div>
+                <div class="info-box">
+                    💡 Keep your bio professional and concise (max 500 characters)
+                </div>
+            </div>
+
+            <div class="card_edit">
+                <div class="button-group1">
+                    <button class="btn1 btn-primary1">💾 Save Changes</button>
+                    <button class="btn1 btn-secondary1" onclick="location.reload()">↺ Cancel</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock content %}

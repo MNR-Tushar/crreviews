@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <link rel="stylesheet" href="{% static 'add_cr.css' %}">
     <link rel="stylesheet" href="{% static 'user_dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'edit_user_settings.css' %}">
 </head>
 <body>
     <div class="loading" id="loading">
@@ -64,7 +65,7 @@
                         <span class="dropdown-icon">➕</span>
                         Add New CR
                     </a>
-                    <a href="#" class="dropdown-item">
+                    <a href="{% url 'settings' %}" class="dropdown-item">
                         <span class="dropdown-icon">⚙️</span>
                         Settings
                     </a>
@@ -95,6 +96,7 @@
 
      <script src="{% static 'script.js' %}"></script>
      <script src="{% static 'add_cr.js' %}"></script>
+     <script src="{% static 'edit_user.js' %}"></script>
      <script src="{% static 'user_dashboard.js' %}"></script>
 
 
