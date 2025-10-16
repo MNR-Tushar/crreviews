@@ -1,15 +1,5 @@
 // Global variables
-let selectedRating = 0;
 let currentCRName = '';
-
-const ratingTexts = {
-    0: 'Select a rating',
-    1: '😞 Very Bad',
-    2: '😐 Bad', 
-    3: '😊 Average',
-    4: '😄 Good',
-    5: '🌟 Excellent!'
-};
 
 // Create floating particles
 function createParticles() {
@@ -71,30 +61,35 @@ function showPage(pageId) {
 }
 
 
+let selectedRating = 0;
+
+function openRatingModal(slug, crName) {
+    document.getElementById('rating-cr-name').textContent = crName;
+    document.getElementById('rating-form').action = `/submit_review/${slug}/`;
+    document.getElementById('rating-modal').style.display = 'flex';
+    resetStars();
+}
+
 // Star rating functionality
 document.querySelectorAll('.rating-star').forEach(star => {
     star.addEventListener('click', function() {
         selectedRating = parseInt(this.dataset.value);
         updateStarDisplay(selectedRating);
         
-        // Enable submit button
         const submitBtn = document.getElementById('submit-rating');
         submitBtn.style.opacity = '1';
         submitBtn.style.pointerEvents = 'auto';
         submitBtn.disabled = false;
         
-        // Set hidden input value
         document.getElementById('rating-value').value = selectedRating;
     });
     
-    // Hover effect
     star.addEventListener('mouseenter', function() {
         const hoverValue = parseInt(this.dataset.value);
         updateStarDisplay(hoverValue);
     });
 });
 
-// Reset to selected rating on mouse leave
 document.querySelector('.rating-star').parentElement.addEventListener('mouseleave', function() {
     if (selectedRating > 0) {
         updateStarDisplay(selectedRating);
@@ -128,7 +123,6 @@ function resetStars() {
     document.getElementById('rating-text').textContent = 'Select a rating';
 }
 
-// Cancel button
 document.getElementById('cancel-rating').addEventListener('click', function() {
     closeRatingModal();
 });
@@ -146,18 +140,12 @@ function closeRatingModal() {
     submitBtn.disabled = true;
 }
 
-// Open modal function (call this from your "Give Rating" button)
-function openRatingModal() {
-    document.getElementById('rating-modal').style.display = 'flex';
-}
-
-// Close modal when clicking outside
 window.addEventListener('click', function(event) {
     const modal = document.getElementById('rating-modal');
     if (event.target === modal) {
         closeRatingModal();
     }
-})
+});
 
 // Enhanced search functionality
 document.querySelectorAll('.search-btn').forEach(btn => {
