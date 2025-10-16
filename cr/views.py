@@ -142,7 +142,8 @@ def add_cr(request):
     }
 
     return render(request,'add_cr.html',context)
-@login_required
+
+
 def submit_review(request, cr_slug):
     cr_profile = get_object_or_404(CrProfile, slug=cr_slug)
     user = request.user
