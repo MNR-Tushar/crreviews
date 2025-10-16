@@ -151,9 +151,57 @@ def user_view(request,slug):
 def admin_dashboard(request):
     return render(request,'user_profile/admin_dashboard.html')
 
-def edit_user(request):
+def edit_user(request,slug):
 
-    return render(request,'user_profile/edit_user.html')
+    user = get_object_or_404(User,slug=slug)
+    university = University.objects.all()
+    department = Department.objects.all()
+
+    if request.user != user:
+        messages.error(request, "You are not authorized to edit this profile.")
+        return redirect('home')
+    
+
+    if request.method == 'POST':
+            user.first_name = request.POST.get('first_name')
+            user.last_name = request.POST.get('last_name')
+            user.email = request.POST.get('email')
+            user.student_id = request.POST.get('student_id')
+            user.batch = request.POST.get('batch')
+            user.section = request.POST.get('section')
+            user.bio = request.POST.get('bio')
+            user.gender = request.POST.get('gender')
+            user.date_of_birth = request.POST.get('date_of_birth')
+            new_picture = request.FILES.get('profile_picture')
+            if new_picture:
+                user.profile_picture = new_picture
+
+            user.phone = request.POST.get('phone')
+
+            user.facebook_url = request.POST.get('facebook_url' '')
+            user.instagram_url = request.POST.get('instagram_url')
+            user.linkedin_url = request.POST.get('linkedin_url')
+
+            university_id = request.POST.get('university')
+            department_id = request.POST.get('department')
+
+            if university_id:
+                user.university = University.objects.get(id=university_id)
+            if department_id:
+                user.department = Department.objects.get(id=department_id)
+            
+
+            user.save()
+            messages.success(request, 'Profile updated successfully!')
+            return redirect('edit_user', slug=user.slug)
+
+    context = {
+            'user':request.user,
+            'university':university,
+            'department':department,
+        }
+
+    return render(request,'user_profile/edit_user.html',context)
 
 def settings(request):
 
