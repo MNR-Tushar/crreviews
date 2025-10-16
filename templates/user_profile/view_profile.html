@@ -16,7 +16,7 @@
                         <span>{{ user.first_name|first|upper }}</span>
                         {% endif %}
                     </div>
-                    <h1 style="color: white; font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem;" id="profile-name">{{user.name}}</h1>
+                    <h1 style="color: white; font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem;" id="profile-name">{{user.get_full_name}}</h1>
                     <p style="color: rgba(255,255,255,0.9); font-size: 1.3rem; margin-bottom: 1.5rem;" id="profile-info">
                         {{user.student_id}} | {{user.university}}
                     </p>
