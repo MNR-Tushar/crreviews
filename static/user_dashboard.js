@@ -17,16 +17,16 @@
         });
 
         // Edit profile button
-        document.querySelectorAll('.btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const text = this.textContent.trim();
-                if (text.includes('Edit Profile')) {
-                    alert('Edit Profile feature coming soon!');
-                } else if (text.includes('Settings')) {
-                    alert('Settings page coming soon!');
-                }
-            });
-        });
+        // document.querySelectorAll('.btn').forEach(btn => {
+        //     btn.addEventListener('click', function() {
+        //         const text = this.textContent.trim();
+        //         if (text.includes('Edit Profile')) {
+        //             alert('Edit Profile feature coming soon!');
+        //         } else if (text.includes('Settings')) {
+        //             alert('Settings page coming soon!');
+        //         }
+        //     });
+        // });
 
         // Saved CR items click
         document.querySelectorAll('.saved-cr-item').forEach(item => {
