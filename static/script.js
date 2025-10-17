@@ -255,42 +255,42 @@ document.querySelectorAll('.btn').forEach(btn => {
 });
 
 // Notification system
-function showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    const colors = {
-        info: 'linear-gradient(135deg, #4facfe, #00f2fe)',
-        success: 'linear-gradient(135deg, #11998e, #38ef7d)',
-        warning: 'linear-gradient(135deg, #f093fb, #f5576c)',
-        error: 'linear-gradient(135deg, #ff6b6b, #ee5a24)'
-    };
+// function showNotification(message, type = 'info') {
+//     const notification = document.createElement('div');
+//     const colors = {
+//         info: 'linear-gradient(135deg, #4facfe, #00f2fe)',
+//         success: 'linear-gradient(135deg, #11998e, #38ef7d)',
+//         warning: 'linear-gradient(135deg, #f093fb, #f5576c)',
+//         error: 'linear-gradient(135deg, #ff6b6b, #ee5a24)'
+//     };
     
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${colors[type]};
-        color: white;
-        padding: 1rem 2rem;
-        border-radius: 50px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        z-index: 10000;
-        font-weight: 600;
-        backdrop-filter: blur(10px);
-        animation: slideIn 0.5s ease;
-        max-width: 350px;
-        word-wrap: break-word;
-    `;
+//     notification.style.cssText = `
+//         position: fixed;
+//         top: 20px;
+//         right: 20px;
+//         background: ${colors[type]};
+//         color: white;
+//         padding: 1rem 2rem;
+//         border-radius: 50px;
+//         box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+//         z-index: 10000;
+//         font-weight: 600;
+//         backdrop-filter: blur(10px);
+//         animation: slideIn 0.5s ease;
+//         max-width: 350px;
+//         word-wrap: break-word;
+//     `;
     
-    notification.textContent = message;
-    document.body.appendChild(notification);
+//     notification.textContent = message;
+//     document.body.appendChild(notification);
     
-    setTimeout(() => {
-        notification.style.animation = 'slideOut 0.5s ease forwards';
-        setTimeout(() => {
-            notification.remove();
-        }, 500);
-    }, 3000);
-}
+//     setTimeout(() => {
+//         notification.style.animation = 'slideOut 0.5s ease forwards';
+//         setTimeout(() => {
+//             notification.remove();
+//         }, 500);
+//     }, 3000);
+// }
 
 // Add CSS animations for notifications
 const style = document.createElement('style');
@@ -446,6 +446,27 @@ const observer = new IntersectionObserver((entries) => {
 document.querySelectorAll('.card, .section, .stat-card').forEach(el => {
     observer.observe(el);
 });
+
+// Add interactivity
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (this.textContent.includes('Review')) {
+                    alert('Review form will open here');
+                } else if (this.textContent.includes('Save')) {
+                    this.textContent = this.textContent.includes('💾') ? '✅ Saved' : '💾 Save';
+                } else if (this.textContent.includes('Contact')) {
+                    alert('Contact form will open here');
+                }
+            });
+        });
+
+        // Social media links
+        document.querySelectorAll('.social-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Social media link will open in new tab');
+            });
+        });
 
 
 setTimeout(() => {

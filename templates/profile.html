@@ -43,49 +43,92 @@
                         ⭐ Give Rating
                     </button>
 
+                    <button class="btn btn-secondary">💾 Save</button>
+
                     
                 </div>
                 {% include 'rating.html' %}
-                <!-- Profile Details -->
+               
+
+                <!-- About -->
                 <div class="search-section">
-                    <h2 style="color: white; font-size: 1.8rem; font-weight: 700; margin-bottom: 2rem;">📋 Detailed Information</h2>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;" id="profile-details">
-                       
-                        <div>
-                            <strong style="color: rgba(255,255,255,0.8);">Department:</strong>
-                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem;">{{cr_profile.department}}</p>
+                     
+                    <div class="card1">
+                        <h3 class="card-title1">📝 About</h3>
+                        <div class="about-content">
+                        {{cr_profile.bio}}
                         </div>
-                        <div>
-                            <strong style="color: rgba(255,255,255,0.8);">Batch:</strong>
-                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem;">{{cr_profile.batch}}</p>
-                        </div>
-                        <div>
-                            <strong style="color: rgba(255,255,255,0.8);">Section:</strong>
-                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem;">{{cr_profile.section}}</p>
-                        </div>
-                        
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
-                        <div>
-                            <strong style="color: rgba(255,255,255,0.8);">Email:</strong>
-                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem; word-break: break-all;">{{cr_profile.email}}</p>
-                            
-                        </div>
-                        <div>
-                            <strong style="color: rgba(255,255,255,0.8);">Phone:</strong>
-                            <p style="color: white; font-size: 1.1rem; margin-top: 0.5rem;">{{cr_profile.phone}}</p>
-                        </div>
-                    </div>
-
-                    <div style="margin: 2rem 0;">
-                        <strong style="color: rgba(255,255,255,0.8);">📝 About:</strong>
-                        <p style="color: white; font-size: 1.1rem; line-height: 1.7; margin-top: 1rem;" id="profile-about">
-                            {{cr_profile.bio}}
-                        </p>
                     </div>
                 </div>
+
+                 <!-- Academic Information -->
+                <div class="search-section">
+                   
+                 <div class="card1" style="margin-top: 2rem;">
+                    <h3 class="card-title1">🎓 Academic Information</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Department</div>
+                            <div class="info-value">{{cr_profile.department}}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">University</div>
+                            <div class="info-value">{{cr_profile.university}}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Batch</div>
+                            <div class="info-value">{{cr_profile.batch}}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Section</div>
+                            <div class="info-value">{{cr_profile.section}}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Student ID</div>
+                            <div class="info-value">{{cr_profile.st_id}}</div>
+                        </div>
+                        
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Information -->
+                <div class="search-section">
+                    
+                 <div class="card1" style="margin-top: 2rem;">
+                    <h3 class="card-title1">👤 Personal Information</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Gender</div>
+                            <div class="info-value">{{cr_profile.gender}}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Date of Birth</div>
+                            <div class="info-value">{{cr_profile.date_of_birth}}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Email Address</div>
+                            <div class="info-value">{{cr_profile.email}}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Phone Number</div>
+                            <div class="info-value">{{cr_profile.phone}}</div>
+                        </div>
+                       
+                    </div>
+                    </div>
+                </div>
+               
+                <div class="search-section">
+                    <h3 class="card-title1" style="margin-top: 1.5rem;">🔗 Social Media</h3>
+                    <div class="social-links">
+                        <a href="#" class="social-btn" title="Facebook">f</a>
+                        <a href="#" class="social-btn" title="Instagram">📷</a>
+                        <a href="#" class="social-btn" title="LinkedIn">in</a>
+                        <a href="#" class="social-btn" title="Twitter">𝕏</a>
+                    </div>
+                </div>
+
 
                 <!-- Recent Reviews -->
                 <div class="section">
