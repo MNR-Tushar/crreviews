@@ -70,6 +70,17 @@ class User(AbstractBaseUser,PermissionsMixin):
             return self.profile_picture.url
         return '/media/users/default_profile.png'
     
+class SavedCR(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='saved_crs')
+    cr_profile = models.ForeignKey(CrProfile, on_delete=models.CASCADE, related_name='saved_by')
+    saved_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'cr_profile') 
+
+    def __str__(self):
+        return f"{self.user.get_full_name()} saved {self.cr_profile.name}"
+    
     
         
     
