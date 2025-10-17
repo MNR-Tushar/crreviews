@@ -144,10 +144,14 @@ def add_cr(request):
     return render(request,'add_cr.html',context)
 
 
-@login_required
+
 def submit_review(request, cr_slug):
     cr_profile = get_object_or_404(CrProfile, slug=cr_slug)
     user = request.user
+
+    if user.is_anonymous:
+        messages.error(request, "You must be logged in to submit a review.")
+        return redirect('cr_profile', slug=cr_profile.slug)
 
     # Check if the user already submitted a review
     existing_review = Review.objects.filter(user=user).first()
