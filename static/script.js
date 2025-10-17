@@ -473,7 +473,7 @@ setTimeout(() => {
     if ((window.location.pathname === '/' || document.getElementById('home')) 
         && !localStorage.getItem('welcomeShown')) {
         
-        showNotification('🎉 Welcome to BD University CR Review!', 'success');
+        showNotification('🎉 Welcome to CR Review!', 'success');
         sessionStorage.setItem('welcomeShown', 'true');
     }
 }, 2000);

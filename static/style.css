@@ -1564,3 +1564,43 @@
             line-height: 1.8;
             font-size: 1rem;
         }
+
+        .button_remove {
+            background: linear-gradient(135deg, #960404, #520303, #370303);
+            color: white;
+            border: none;
+            padding: 1rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin: 0.5rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4);
+            text-decoration: none;
+        }
+
+        
+
+        .button_save {
+            background: linear-gradient(135deg, #03e066, #03522b, #033711);
+            color: white;
+            border: none;
+            padding: 1rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin: 0.5rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4);
+            text-decoration: none;
+        }
+
+       
+
+        
