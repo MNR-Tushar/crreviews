@@ -47,20 +47,16 @@
                  {% if user.is_authenticated %}
 
                     {% if is_saved %}
-                    <a href="{% url 'remove_saved_cr' cr_profile.slug %}" class="btn btn-secondary">
+                    <a href="{% url 'remove_saved_cr' cr_profile.slug %}" class="button_remove">
                     Remove from Saved
                     </a>
                     {% else %}
-                    <a href="{% url 'save_cr' cr_profile.slug %}" class="btn btn-primary">
+                    <a href="{% url 'save_cr' cr_profile.slug %}" class="button_save">
                         
                     💾 Save CR
                     </a>
                     {% endif %}
                 {% endif %} 
-
-                
-
-
 
                     
                 </div>
