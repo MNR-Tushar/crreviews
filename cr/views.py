@@ -81,10 +81,16 @@ def cr_profile(request,slug):
     except EmptyPage:
         review=paginator.page(1)
 
+
+    is_saved = False
+    if request.user.is_authenticated:
+        is_saved = cr_profile.saved_by.filter(user=request.user).exists()
+
     context={
         'cr_profile':cr_profile,
         'review':review,
         'paginator':paginator,
+        'is_saved':is_saved
 
     }
     
