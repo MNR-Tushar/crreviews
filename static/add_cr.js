@@ -122,6 +122,6 @@
         });
 
         // Show welcome notification
-        setTimeout(() => {
-            showNotification('✨ Fill in the details to add a new CR profile!', 'info');
-        }, 100);
+        // setTimeout(() => {
+        //     showNotification('✨ Fill in the details to add a new CR profile!', 'info');
+        // }, 1000);
