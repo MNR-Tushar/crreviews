@@ -106,14 +106,15 @@
 
                 <!-- Recent Reviews -->
                 <div class="section">
-                    <h2 style="color: white; font-size: 1.8rem; font-weight: 700; margin-bottom: 2rem;">💬 Recent Reviews Given By Him</h2>
+                    <h2 style="color: white; font-size: 1.8rem; font-weight: 700; margin-bottom: 2rem;">💬 Recent Reviews Given By {{view_user.get_full_name}}</h2>
                     
                     <div id="reviews-container">
                     {% for review in review %}
                     <div class="review-card">
                     <div class="review-header">
                         <div>
-                            <strong style="font-size: 1rem;">👤 {{review.cr_profile.name}}</strong> - {{review.cr_profile.university}} - {{review.cr_profile.department}}
+                            <strong><a href="{% url 'cr_profile' review.cr_profile.slug %}" style="text-decoration: none; color: inherit;">👤 {{review.cr_profile.name}}</a>
+                                </strong> - {{review.cr_profile.university}} - {{review.cr_profile.department}}
                             <div class="rating">
                                 {% for i in "12345" %} {% if forloop.counter <= review.rating %}
                                 <span class="star filled">★</span>

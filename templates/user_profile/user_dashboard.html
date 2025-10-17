@@ -65,7 +65,17 @@
                 <div class="review-item">
                     <div class="review-header">
                         <div class="review-cr">
-                            <div class="cr-avatar">A</div>
+                            <div class="saved-avatar">
+                            {% if review.cr_profile.profile_picture %}
+                            <img src={{review.cr_profile.profile_picture.url}} alt={{review.cr_profile.name}} />
+                            {% else %}
+                             {{review.cr_profile.name|first|upper}}
+                            {% endif %}
+                            </div>
+                        <div class="saved-info">
+                            <h4>{{save_cr.cr_profile.name}}</h4>
+                            <p>{{save_cr.cr_profile.university}}</p>
+                        </div>
                             <div class="cr-info">
                                 <h4>{{review.cr_profile.name}}</h4>
                                 <p>{{review.cr_profile.university}} • {{review.cr_profile.department}}</p>
@@ -138,14 +148,20 @@
                 <!-- Saved CRs -->
                 <div class="dashboard-card">
                     <div class="card-header">
-                        <h2 class="card-title">💾 Saved CRs</h2>
+                        <h2 class="card-title">💾 Saved CRS</h2>
                         {% comment %} <a href="#" class="card-link">View All →</a> {% endcomment %}
                     </div>
 
                      {% for save_cr in saved_crs %}
                     <div class="saved-cr-item">
                        
-                        <div class="saved-avatar">A</div>
+                        <div class="saved-avatar">
+                        {% if save_cr.cr_profile.profile_picture %}
+                        <img src={{save_cr.cr_profile.profile_picture.url}} alt={{save_cr.cr_profile.name}} />
+                        {% else %}
+                        {{save_cr.cr_profile.name|first|upper}}
+                        {% endif %}
+                        </div>
                         <div class="saved-info">
                             <h4>{{save_cr.cr_profile.name}}</h4>
                             <p>{{save_cr.cr_profile.university}}</p>
