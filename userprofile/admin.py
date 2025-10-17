@@ -8,3 +8,7 @@ class UserAdmin(admin.ModelAdmin):
     search_fields=['email','first_name','last_name','student_id','batch','section']
     list_filter=['email','first_name','last_name','student_id','batch','section']
     ordering=['first_name','last_name','batch']
+
+@admin.register(SavedCR)
+class SavedCRAdmin(admin.ModelAdmin):
+    list_display=['user','cr_profile']

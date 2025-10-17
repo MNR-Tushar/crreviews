@@ -11,4 +11,8 @@ urlpatterns = [
     path('admin_dashboard/',admin_dashboard,name="admin_dashboard"),
     path('edit_user/<str:slug>/',edit_user,name="edit_user"),
     path('settings/',settings,name="settings"),
+    path('save-cr/<str:slug>/', save_cr, name='save_cr'),
+    path('remove-saved-cr/<str:slug>/', remove_saved_cr, name='remove_saved_cr'),
+    # path('saved-crs/', saved_cr_list, name='saved_cr_list'),
+
 ]

@@ -92,13 +92,17 @@ def logout(request):
 def user_dasboard(request,slug):
     user = User.objects.get(email=request.user.email,slug=slug)
     review = Review.objects.filter(user=user).order_by('-created_at')
+    saved_crs = SavedCR.objects.filter(user=request.user).select_related('cr_profile')
     last = review.first()
+    last_cr_saved= saved_crs.last()
  
     
     context = {
         'user':user,
         'review':review,
         'last':last,
+        'saved_crs':saved_crs,
+        'last_cr_saved':last_cr_saved,
     }
 
     return render(request,'user_profile/user_dashboard.html',context)
@@ -151,6 +155,7 @@ def user_view(request,slug):
 def admin_dashboard(request):
     return render(request,'user_profile/admin_dashboard.html')
 
+@login_required
 def edit_user(request,slug):
 
     user = get_object_or_404(User,slug=slug)
@@ -206,3 +211,27 @@ def edit_user(request,slug):
 def settings(request):
 
     return render(request,'user_profile/settings.html')
+
+
+
+
+@login_required
+def save_cr(request, slug):
+    cr_profile = get_object_or_404(CrProfile, slug=slug)
+    saved, created = SavedCR.objects.get_or_create(user=request.user, cr_profile=cr_profile)
+
+    if created:
+        messages.success(request, f"{cr_profile.name} saved to your favorites!")
+    else:
+        messages.info(request, f"{cr_profile.name} is already in your saved list.")
+
+    return redirect('cr_profile', slug=slug)
+
+@login_required
+def remove_saved_cr(request, slug):
+    cr_profile = get_object_or_404(CrProfile, slug=slug)
+    SavedCR.objects.filter(user=request.user, cr_profile=cr_profile).delete()
+    messages.success(request, f"{cr_profile.name} removed from your saved list.")
+    return redirect('cr_profile', slug=slug)
+
+
