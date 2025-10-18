@@ -55,8 +55,49 @@
 
         <!-- Content Grid -->
         <div class="content-grid">
-            <!-- My Reviews -->
+           <div> 
+
+              <!-- Your Added CRS -->
             <div class="dashboard-card">
+                <div class="card-header">
+                    <h2 class="card-title">📝 Your Added CRS</h2>
+                    
+                </div>
+                {% for add in add_crs %}
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="review-cr">
+                            <div class="saved-avatar">
+                            {% if add.cr_profile.profile_picture %}
+                            <img src={{add.cr_profile.profile_picture.url}} alt={{add.cr_profile.name}} />
+                            {% else %}
+                             {{add.cr_profile.name|first|upper}}
+                            {% endif %}
+                            </div>
+                            <div class="cr-info">
+                                <h4>{{add.cr_profile.name}}</h4>
+                                <p>{{add.cr_profile.university}} • {{add.cr_profile.department}}</p>
+                            </div>
+                        </div>
+                        <div class="rating">
+                            {% for i in "12345" %} {% if forloop.counter <= add.rating %}
+                            <span class="star filled">★</span>
+                            {% else %}
+                            <span class="star">☆</span>
+                            {% endif %} {% endfor %}
+                        </div>
+                    </div>
+                    <div class="review-actions">
+                        <button class="action-btn edit">✏️ Edit</button>
+                        <button class="action-btn delete">🗑️ Delete</button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <br>
+
+             <!-- My Reviews -->
+                <div class="dashboard-card">
                 <div class="card-header">
                     <h2 class="card-title">📝 My Reviews</h2>
                     {% comment %} <a href="#" class="card-link">View All →</a> {% endcomment %}
@@ -72,12 +113,8 @@
                              {{review.cr_profile.name|first|upper}}
                             {% endif %}
                             </div>
-                        <div class="saved-info">
-                            <h4>{{save_cr.cr_profile.name}}</h4>
-                            <p>{{save_cr.cr_profile.university}}</p>
-                        </div>
                             <div class="cr-info">
-                                <h4>{{review.cr_profile.name}}</h4>
+                                <h4><a href="{% url 'cr_profile' review.cr_profile.slug %}" style="text-decoration: none; color: inherit;">{{review.cr_profile.name}}</a></h4>
                                 <p>{{review.cr_profile.university}} • {{review.cr_profile.department}}</p>
                             </div>
                         </div>
@@ -98,7 +135,8 @@
                     </div>
                 </div>
                 {% endfor %}
-            </div>
+                </div>
+             </div> 
 
             <!-- Sidebar -->
             <div>
@@ -163,7 +201,7 @@
                         {% endif %}
                         </div>
                         <div class="saved-info">
-                            <h4>{{save_cr.cr_profile.name}}</h4>
+                            <h4><a href="{% url 'cr_profile' save_cr.cr_profile.slug %}"  style="text-decoration: none; color: inherit;">{{save_cr.cr_profile.name}}</a></h4>
                             <p>{{save_cr.cr_profile.university}}</p>
                         </div>
                         <div class="saved-rating">
@@ -204,6 +242,6 @@
                 </div>
             </div>
         </div>
-    </div> 
+</div> 
     {% include 'rating.html' %} 
 {% endblock content %}
