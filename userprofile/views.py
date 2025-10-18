@@ -95,7 +95,7 @@ def user_dasboard(request,slug):
     saved_crs = SavedCR.objects.filter(user=request.user).select_related('cr_profile')
     last = review.first()
     last_cr_saved= saved_crs.last()
-    add_crs = CrProfile.objects.filter(user=user)
+    add_crs = CrProfile.objects.filter(user=request.user)
  
     
     context = {

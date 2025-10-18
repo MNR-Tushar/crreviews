@@ -68,15 +68,15 @@
                     <div class="review-header">
                         <div class="review-cr">
                             <div class="saved-avatar">
-                            {% if add.cr_profile.profile_picture %}
-                            <img src={{add.cr_profile.profile_picture.url}} alt={{add.cr_profile.name}} />
+                            {% if add.profile_picture %}
+                            <img src={{add.profile_picture.url}} alt={{add.name}} />
                             {% else %}
-                             {{add.cr_profile.name|first|upper}}
+                             {{add.name|first|upper}}
                             {% endif %}
                             </div>
                             <div class="cr-info">
-                                <h4>{{add.cr_profile.name}}</h4>
-                                <p>{{add.cr_profile.university}} • {{add.cr_profile.department}}</p>
+                                <h4><a href="{% url 'cr_profile' add.slug %}" style="text-decoration: none; color: inherit;">{{add.name}}</a></h4>
+                                <p>{{add.university}} • {{add.department}}</p>
                             </div>
                         </div>
                         <div class="rating">
