@@ -149,6 +149,54 @@ def add_cr(request):
 
     return render(request,'add_cr.html',context)
 
+@login_required
+def edit_cr_profile(request,slug):
+
+    cr=get_object_or_404(CrProfile,slug=slug,user=request.user)
+    university = University.objects.all()
+    department = Department.objects.all()
+
+    if request.method == 'POST':
+        cr.name = request.POST.get('name')
+        cr.st_id = request.POST.get('st_id')
+        cr.gender = request.POST.get('gender')
+        cr.date_of_birth = request.POST.get('date_of_birth')
+        cr.university = University.objects.get(id=request.POST.get('university'))
+        cr.department = Department.objects.get(id=request.POST.get('department'))
+        cr.batch = request.POST.get('batch')
+        cr.dept_batch = request.POST.get('dept_batch')
+        cr.section = request.POST.get('section')
+        cr.email = request.POST.get('email')
+        cr.phone = request.POST.get('phone')
+        cr.bio = request.POST.get('bio')
+
+        cr.facebook_url = request.POST.get('facebook_url')
+        cr.instagram_url = request.POST.get('instagram_url')
+        cr.linkedin_url = request.POST.get('linkedin_url')
+
+        new_picture = request.FILES.get('profile_picture')
+        if new_picture:
+            cr.profile_picture = new_picture
+        cr.save()
+        messages.success(request, "CR profile updated successfully!")
+        return redirect('user_dashboard', slug=cr.slug)
+
+
+    context={
+        'cr':cr,
+        'university':university,
+        'department':department,
+    }
+    return render(request,'edit_cr_modal.html',context)
+
+
+@login_required
+def delete_cr_profile(request,slug):
+    cr=get_object_or_404(CrProfile,slug=slug,user=request.user)
+    cr.delete()
+    messages.success(request, "CR profile deleted successfully!")
+    return redirect('user_dashboard')
+
 
 
 def submit_review(request, cr_slug):

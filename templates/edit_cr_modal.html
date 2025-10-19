@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Edit CR Profile{% endblock %}
+
+{% block content %}
+<!-- Edit CR Modal -->
+<div id="editCRModal" class="modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal('editCRModal')">&times;</span>
+        <h2>Edit CR Profile</h2>
+        <form id="editCRForm" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="crName">Name</label>
+                <input type="text" id="crName" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="crEmail">Email</label>
+                <input type="email" id="crEmail" name="email">
+            </div>
+            <div class="form-group">
+                <label for="crPhone">Phone</label>
+                <input type="text" id="crPhone" name="phone">
+            </div>
+            <div class="form-group">
+                <label for="crBio">Bio</label>
+                <textarea id="crBio" name="bio" rows="4"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="crProfilePicture">Profile Picture</label>
+                <input type="file" id="crProfilePicture" name="profile_picture" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label for="crFacebook">Facebook URL</label>
+                <input type="url" id="crFacebook" name="facebook_url">
+            </div>
+            <div class="form-group">
+                <label for="crInstagram">Instagram URL</label>
+                <input type="url" id="crInstagram" name="instagram_url">
+            </div>
+            <div class="form-group">
+                <label for="crLinkedin">LinkedIn URL</label>
+                <input type="url" id="crLinkedin" name="linkedin_url">
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn-cancel" onclick="closeModal('editCRModal')">Cancel</button>
+                <button type="submit" class="btn-submit">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
