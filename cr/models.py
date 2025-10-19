@@ -70,9 +70,14 @@ class CrProfile(models.Model):
     phone = models.CharField(max_length=30, blank=True, null=True)
     st_id = models.CharField(max_length=50, unique=True)
     batch = models.CharField(max_length=20)
+    dept_batch = models.CharField(max_length=20 , blank=True, null=True)
     section = models.CharField(max_length=10)
     bio = models.TextField(blank=True, null=True)
     slug = models.SlugField(unique=True, blank=True)
+
+    facebook_url = models.URLField(default='https://www.facebook.com/')
+    instagram_url = models.URLField(default='https://www.instagram.com/')
+    linkedin_url = models.URLField(default='https://www.linkedin.com/')
 
 
     created_at=models.DateTimeField(auto_now_add=True)
