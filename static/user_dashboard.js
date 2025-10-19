@@ -1,23 +1,14 @@
- // Add interactivity
-        document.querySelectorAll('.stat-box').forEach(box => {
-            box.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-5px) scale(1.03)';
-            });
-            box.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-
-        // Action button clicks
-        // document.querySelectorAll('.action-btn').forEach(btn => {
-        //     btn.addEventListener('click', function() {
-        //         const action = this.textContent.trim();
-        //         alert(`${action} clicked!`);
-        //     });
-        // });
+// Add interactivity
+document.querySelectorAll('.stat-box').forEach(box => {
+    box.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-5px) scale(1.03)';
+    });
+    box.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0) scale(1)';
+    });
+});
 
 let deleteSlug = null;
-
 
 function openDeleteModal(slug, name) {
     deleteSlug = slug;
@@ -25,16 +16,14 @@ function openDeleteModal(slug, name) {
     document.getElementById('deleteConfirmModal').style.display = 'block';
 }
 
-
 function closeModal(id) {
     document.getElementById(id).style.display = 'none';
 }
 
-
 function confirmDelete() {
     if (!deleteSlug) return;
 
-    fetch(`/delete-cr/${deleteSlug}/`, {
+    fetch(`/delete_cr/${deleteSlug}/`, {  // ✅ underscore ব্যবহার করুন
         method: 'POST',
         headers: {
             'X-CSRFToken': getCookie('csrftoken'),
@@ -46,16 +35,25 @@ function confirmDelete() {
         if (data.success) {
             alert(data.message);
             closeModal('deleteConfirmModal');
-            // Optionally: পেজ রিফ্রেশ করো বা নির্দিষ্ট এলিমেন্ট রিমুভ করো
-            document.querySelector(`#cr-${deleteSlug}`).remove();
+            
+            const crElement = document.querySelector(`#cr-${deleteSlug}`);
+            if (crElement) {
+                crElement.remove();
+            }
+          
+            setTimeout(() => {
+                location.reload();
+            }, 500);
         } else {
             alert('Failed to delete profile!');
         }
     })
-    .catch(error => console.error('Error:', error));
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error deleting profile!');
+    });
 }
 
-// CSRF token নেওয়ার helper function (Django এর জন্য দরকার)
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -70,8 +68,3 @@ function getCookie(name) {
     }
     return cookieValue;
 }
-
-
-       
-    
-    

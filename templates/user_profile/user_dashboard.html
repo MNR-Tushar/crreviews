@@ -84,7 +84,7 @@
                      </div>
                   </div>
                   <div class="rating">
-                     {% for i in "12345" %} {% if forloop.counter <= add.rating %}
+                     {% for i in "12345" %} {% if forloop.counter <= add.average_rating %}
                      <span class="star filled">★</span>
                      {% else %}
                      <span class="star">☆</span>
@@ -93,7 +93,7 @@
                </div>
                <div class="review-actions">
                   <button class="action-btn edit" onclick="window.location.href='{% url 'edit_cr_profile' add.slug %}'">✏️ Edit</button>
-                  <button class="action-btn delete" onclick="openDeleteModal('{{ add.cr.slug }}', '{{ add.cr.name }}')">🗑️ Delete</button>
+                  <button class="action-btn delete" onclick="openDeleteModal('{{ add.slug }}', '{{ add.name }}')">🗑️ Delete</button>
                </div>
             </div>
             {% endfor %}
