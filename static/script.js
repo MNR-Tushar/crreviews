@@ -460,13 +460,7 @@ document.querySelectorAll('.card, .section, .stat-card').forEach(el => {
             });
         });
 
-        // Social media links
-        document.querySelectorAll('.social-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                alert('Social media link will open in new tab');
-            });
-        });
+     
 
 
 setTimeout(() => {

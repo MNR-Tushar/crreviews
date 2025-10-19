@@ -96,6 +96,12 @@
                             <div class="info-label">Section</div>
                             <div class="info-value">{{cr_profile.section}}</div>
                         </div>
+
+                        <div class="info-item">
+                            <div class="info-label">Department Batch</div>
+                            <div class="info-value">{{cr_profile.dept_batch}}</div>
+                        </div>
+
                         <div class="info-item">
                             <div class="info-label">Student ID</div>
                             <div class="info-value">{{cr_profile.st_id}}</div>
@@ -113,7 +119,13 @@
                     <div class="info-grid">
                         <div class="info-item">
                             <div class="info-label">Gender</div>
-                            <div class="info-value">{{cr_profile.gender}}</div>
+                            {% if cr_profile.gender == 'M' %}
+                            <div class="info-value">Male</div>
+                            {% elif cr_profile.gender == 'F' %}
+                            <div class="info-value">Female</div>
+                            {% else %}
+                            <div class="info-value">None</div>
+                            {% endif %}
                         </div>
                         <div class="info-item">
                             <div class="info-label">Date of Birth</div>
@@ -135,10 +147,10 @@
                 <div class="search-section">
                     <h3 class="card-title1" style="margin-top: 1.5rem;">🔗 Social Media</h3>
                     <div class="social-links">
-                        <a href="#" class="social-btn" title="Facebook">f</a>
-                        <a href="#" class="social-btn" title="Instagram">📷</a>
-                        <a href="#" class="social-btn" title="LinkedIn">in</a>
-                        <a href="#" class="social-btn" title="Twitter">𝕏</a>
+                        <a href="{{cr_profile.facebook_url}}" class="social-btn" title="Facebook">f</a>
+                        <a href="{{cr_profile.instagram_url}}" class="social-btn" title="Instagram">📷</a>
+                        <a href="{{cr_profile.linkedin_url}}" class="social-btn" title="LinkedIn">in</a>
+                       
                     </div>
                 </div>
 
@@ -152,7 +164,7 @@
                     <div class="review-card">
                     <div class="review-header">
                         <div>
-                            <strong style="font-size: 1rem;">👤 {{review.user.get_full_name}}</strong> - {{review.user.university}} - {{review.user.department}}
+                            <strong><a href="{% url 'user_view' review.user.slug %}" style="text-decoration: none; color: inherit;">👤 {{review.user.get_full_name}}</a></strong> - {{review.user.university}} - {{review.user.department}}
                             <div class="rating">
                                 {% for i in "12345" %} {% if forloop.counter <= review.rating %}
                                 <span class="star filled">★</span>
