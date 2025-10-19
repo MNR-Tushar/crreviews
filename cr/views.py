@@ -1,5 +1,6 @@
 
 from django.contrib import messages
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import *
@@ -179,7 +180,8 @@ def edit_cr_profile(request,slug):
             cr.profile_picture = new_picture
         cr.save()
         messages.success(request, "CR profile updated successfully!")
-        return redirect('user_dashboard', slug=cr.slug)
+        return redirect('user_dashboard', slug=cr.user.slug)
+
 
 
     context={
@@ -191,10 +193,22 @@ def edit_cr_profile(request,slug):
 
 
 @login_required
-def delete_cr_profile(request,slug):
-    cr=get_object_or_404(CrProfile,slug=slug,user=request.user)
-    cr.delete()
-    messages.success(request, "CR profile deleted successfully!")
+def delete_cr_profile(request, slug):
+    cr = get_object_or_404(CrProfile, slug=slug, user=request.user)
+    
+    if request.method == 'POST':
+        cr_name = cr.name
+        cr.delete()
+        
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': True,
+                'message': f'CR profile "{cr_name}" deleted successfully!'
+            })
+        else:
+            messages.success(request, f'CR profile deleted successfully!')
+            return redirect('user_dashboard')
+    
     return redirect('user_dashboard')
 
 
