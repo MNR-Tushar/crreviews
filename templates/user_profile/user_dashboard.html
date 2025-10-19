@@ -94,8 +94,8 @@
                         </div>
                     </div>
                     <div class="review-actions">
-                        <button class="action-btn edit">✏️ Edit</button>
-                        <button class="action-btn delete">🗑️ Delete</button>
+                        <button class="action-btn edit" onclick="window.location.href=''">>✏️ Edit</button>
+                        <button class="action-btn delete" onclick="confirmDeleteCR('{{ add.slug }}', '{{ add.name }}')">🗑️ Delete</button>
                     </div>
                 </div>
                 {% endfor %}
@@ -135,6 +135,9 @@
                 {% endif %}
             </div>
             <br>
+
+            {% include 'delete_confirm_cr.html' %}
+            
 
             <!-- My Reviews -->
             <div class="dashboard-card">
@@ -210,7 +213,7 @@
                 </div>
                 {% endif %}
             </div>
-        </div> 
+            </div> 
 
             <!--Right Side -->
             <div>
