@@ -73,6 +73,7 @@ class CrProfile(models.Model):
     dept_batch = models.CharField(max_length=20 , blank=True, null=True)
     section = models.CharField(max_length=10)
     bio = models.TextField(blank=True, null=True)
+    date_of_birth = models.DateField(blank=True, null=True)
     slug = models.SlugField(unique=True, blank=True)
 
     facebook_url = models.URLField(default='https://www.facebook.com/')
