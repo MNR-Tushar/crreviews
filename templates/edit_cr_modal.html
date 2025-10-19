@@ -1,52 +1,148 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Edit CR Profile{% endblock %}
-
+{% block title %}Edit CR Profile - {{cr.name}}{% endblock %}
 {% block content %}
-<!-- Edit CR Modal -->
-<div id="editCRModal" class="modal">
-    <div class="modal-content">
-        <span class="modal-close" onclick="closeModal('editCRModal')">&times;</span>
-        <h2>Edit CR Profile</h2>
-        <form id="editCRForm" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
+<div class="container_edit">
+   <div class="header">
+      <h1 id="pageTitle">Edit CR Profile</h1>
+   </div>
+   <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="tab-content active">
+         <!-- 📷 Profile Photo -->
+         <div class="card_edit">
+            <h2>📷 Profile Photo</h2>
+            <div class="profile-photo-section_edit">
+               <div class="profile-photo_edit">
+                  {% if cr.profile_picture %}
+                  <img src="{{ cr.profile_picture.url }}" alt="Profile" 
+                     style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+                  {% else %}
+                  A
+                  {% endif %}
+               </div>
+               <div class="photo-upload_edit">
+                  <label for="photoInput">Change Photo</label>
+                  <input type="file" id="photoInput" name="profile_picture" accept="image/*">
+                  <div class="photo-info">
+                     Recommended size: 400x400px<br>
+                     Max file size: 5MB
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!-- 👤 Personal Information -->
+         <div class="card_edit">
+            <h2>👤 Personal Information</h2>
+        
             <div class="form-group">
-                <label for="crName">Name</label>
-                <input type="text" id="crName" name="name" required>
+                <label for="firstName">Name *</label>
+                <input type="text" id="firstName" name="name" placeholder="Enter your name" value="{{ cr.name }}">
+            </div>
+               
+            <div class="form-row">
+               <div class="form-group">
+                  <label for="email">Email Address *</label>
+                  <input type="email" id="email" name="email" placeholder="your@email.com" value="{{ cr.email }}">
+               </div>
+               <div class="form-group">
+                  <label for="phone">Phone Number</label>
+                  <input type="tel" id="phone" name="phone" placeholder="+880 1XXX XXXXXX" value="{{ cr.phone }}">
+               </div>
+            </div>
+            <div class="form-row">
+               <div class="form-group">
+                  <label for="gender">Gender</label>
+                  <select id="gender" name="gender">
+                     <option value="">Select Gender</option>
+                     <option value="M" {% if cr.gender == 'M' %}selected{% endif %}>Male</option>
+                     <option value="F" {% if cr.gender == 'F' %}selected{% endif %}>Female</option>
+                  </select>
+               </div>
+               <div class="form-group">
+                  <label for="dob">Date of Birth</label>
+                  <input type="date" id="dob" name="date_of_birth" value="{{ cr.date_of_birth|date:'Y-m-d' }}">
+               </div>
+            </div>
+         </div>
+         <!-- 🏫 Academic Information -->
+         <div class="card_edit">
+            <h2>🏫 Academic Information</h2>
+            <div class="form-row">
+               <div class="form-group">
+                  <label for="university">University *</label>
+                  <select id="university" name="university" >
+                     <option value="">Select University</option>
+                     {% for uni in university %}
+                     <option value="{{ uni.id }}" {% if cr.university.id == uni.id %}selected{% endif %}>{{ uni.title }}</option>
+                     {% endfor %}
+                  </select>
+               </div>
+               <div class="form-group">
+                  <label for="department">Department *</label>
+                  <select id="department" name="department">
+                     <option value="">Select Department</option>
+                     {% for dept in department %}
+                     <option value="{{ dept.id }}" {% if cr.department.id == dept.id %}selected{% endif %}>{{ dept.title }}</option>
+                     {% endfor %}
+                  </select>
+               </div>
+            </div>
+            <div class="form-row">
+               <div class="form-group">
+                  <label for="studentId">Student ID *</label>
+                  <input type="text" id="studentId" name="st_id" placeholder="Your student ID" value="{{ cr.st_id }}">
+               </div>
+               <div class="form-group">
+                  <label for="batch">Batch *</label>
+                  <input type="text" id="batch" name="batch" placeholder="e.g., 2021" value="{{ cr.batch }}">
+               </div>
+            </div>
+            <div class="form-row">
+               <div class="form-group">
+                  <label for="batch">Department Batch</label>
+                  <input type="text" id="batch" name="dept_batch" placeholder="e.g., 2021" value="{{ cr.dept_batch }}">
+               </div>
+               <div class="form-group">
+                  <label for="section">Section</label>
+                  <input type="text" id="section" name="section" placeholder="e.g., A" value="{{ cr.section }}">
+               </div>
+            </div>
+         </div>
+         <!-- 🔗 Social Media -->
+         <div class="card_edit">
+            <h2>🔗 Social Media Links</h2>
+            <div class="form-group">
+               <label for="facebook">Facebook URL</label>
+               <input type="url" id="facebook" name="facebook_url" placeholder="https://facebook.com/..." value="{{ cr.facebook_url }}">
             </div>
             <div class="form-group">
-                <label for="crEmail">Email</label>
-                <input type="email" id="crEmail" name="email">
+               <label for="instagram">Instagram URL</label>
+               <input type="url" id="instagram" name="instagram_url" placeholder="https://instagram.com/..." value="{{ cr.instagram_url }}">
             </div>
             <div class="form-group">
-                <label for="crPhone">Phone</label>
-                <input type="text" id="crPhone" name="phone">
+               <label for="linkedin">LinkedIn URL</label>
+               <input type="url" id="linkedin" name="linkedin_url" placeholder="https://linkedin.com/in/..." value="{{ cr.linkedin_url }}">
             </div>
+         </div>
+         <!-- 📝 Bio -->
+         <div class="card_edit">
+            <h2>📝 Bio</h2>
             <div class="form-group">
-                <label for="crBio">Bio</label>
-                <textarea id="crBio" name="bio" rows="4"></textarea>
+               <label for="bio">About You</label>
+               <textarea id="bio" name="bio" rows="5" placeholder="Tell us about yourself...">{{ cr.bio }}</textarea>
             </div>
-            <div class="form-group">
-                <label for="crProfilePicture">Profile Picture</label>
-                <input type="file" id="crProfilePicture" name="profile_picture" accept="image/*">
+            <div class="info-box">
+               💡 Keep your bio professional and concise (max 500 characters)
             </div>
-            <div class="form-group">
-                <label for="crFacebook">Facebook URL</label>
-                <input type="url" id="crFacebook" name="facebook_url">
+         </div>
+         <div class="card_edit">
+            <div class="button-group1">
+               <button type="submit" class="btn1 btn-primary1">💾 Save Changes</button>
+               <button type="button" class="btn1 btn-secondary1" onclick="location.reload()">↺ Cancel</button>
             </div>
-            <div class="form-group">
-                <label for="crInstagram">Instagram URL</label>
-                <input type="url" id="crInstagram" name="instagram_url">
-            </div>
-            <div class="form-group">
-                <label for="crLinkedin">LinkedIn URL</label>
-                <input type="url" id="crLinkedin" name="linkedin_url">
-            </div>
-            <div class="form-actions">
-                <button type="button" class="btn-cancel" onclick="closeModal('editCRModal')">Cancel</button>
-                <button type="submit" class="btn-submit">Update</button>
-            </div>
-        </form>
-    </div>
+         </div>
+      </div>
+   </form>
 </div>
 {% endblock %}
