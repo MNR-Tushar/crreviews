@@ -33,17 +33,17 @@
         <div class="stats-row">
             <div class="stat-box">
                 <div class="stat-box-icon">👤</div>
-                <div class="stat-box-value">{{add_crs.count}}</div>
+                <div class="stat-box-value">{{add_crs.paginator.count}}</div>
                 <div class="stat-box-label">Added CR</div>
             </div>
             <div class="stat-box">
                 <div class="stat-box-icon">⭐</div>
-                <div class="stat-box-value">{{review.count}}</div>
+                <div class="stat-box-value">{{review.paginator.count}}</div>
                 <div class="stat-box-label">Reviews Given</div>
             </div>
             <div class="stat-box">
                 <div class="stat-box-icon">💾</div>
-                <div class="stat-box-value">{{saved_crs.count}}</div>
+                <div class="stat-box-value">{{saved_crs.paginator.count}}</div>
                 <div class="stat-box-label">Saved CRs</div>
             </div>
             <div class="stat-box">
@@ -60,13 +60,15 @@
 
         <!-- Content Grid -->
         <div class="content-grid">
-        <div> 
+            <!--left side-->
+            <div> 
 
             <!-- Your Added CRS -->
             <div class="dashboard-card">
                     <div class="card-header">
                     <h2 class="card-title">👤 Your Added CRS</h2> 
                     </div>
+                    {% if add_crs %}
                     {% for add in add_crs %}
                     <div class="review-item">
                         <div class="review-header">
@@ -97,16 +99,49 @@
                     </div>
                 </div>
                 {% endfor %}
-            </div>
+                
+                <!-- Pagination for Added CRS -->
+                {% if add_crs.has_other_pages %}
+                <div class="pagination-container">
+                    <nav aria-label="Added CRS pagination">
+                        <ul class="pagination">
+                            {% if add_crs.has_previous %}
+                            <li><a href="?add_crs_page=1">&laquo; First</a></li>
+                            <li><a href="?add_crs_page={{ add_crs.previous_page_number }}">← Previous</a></li>
+                            {% endif %}
 
+                            {% for num in add_crs.paginator.page_range %}
+                                {% if add_crs.number == num %}
+                                <li class="active"><span>{{ num }}</span></li>
+                                {% elif num > add_crs.number|add:'-3' and num < add_crs.number|add:'3' %}
+                                <li><a href="?add_crs_page={{ num }}">{{ num }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if add_crs.has_next %}
+                            <li><a href="?add_crs_page={{ add_crs.next_page_number }}">Next →</a></li>
+                            <li><a href="?add_crs_page={{ add_crs.paginator.num_pages }}">Last &raquo;</a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+                {% endif %}
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">😴</div>
+                    <h3>No CRs Added Yet</h3>
+                    <p>You haven't added any CRs. Start by adding your first CR!</p>
+                </div>
+                {% endif %}
+            </div>
             <br>
 
             <!-- My Reviews -->
             <div class="dashboard-card">
                 <div class="card-header">
                     <h2 class="card-title">📝 My Reviews</h2>
-                    {% comment %} <a href="#" class="card-link">View All →</a> {% endcomment %}
                 </div>
+                {% if review %}
                 {% for review in review %}
                 <div class="review-item">
                     <div class="review-header">
@@ -140,10 +175,44 @@
                     </div>
                 </div>
                 {% endfor %}
+                
+                <!-- Pagination for Reviews -->
+                {% if review.has_other_pages %}
+                <div class="pagination-container">
+                    <nav aria-label="Reviews pagination">
+                        <ul class="pagination">
+                            {% if review.has_previous %}
+                            <li><a href="?review_page=1">&laquo; First</a></li>
+                            <li><a href="?review_page={{ review.previous_page_number }}">← Previous</a></li>
+                            {% endif %}
+
+                            {% for num in review.paginator.page_range %}
+                                {% if review.number == num %}
+                                <li class="active"><span>{{ num }}</span></li>
+                                {% elif num > review.number|add:'-3' and num < review.number|add:'3' %}
+                                <li><a href="?review_page={{ num }}">{{ num }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if review.has_next %}
+                            <li><a href="?review_page={{ review.next_page_number }}">Next →</a></li>
+                            <li><a href="?review_page={{ review.paginator.num_pages }}">Last &raquo;</a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+                {% endif %}
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">📭</div>
+                    <h3>No Reviews Yet</h3>
+                    <p>You haven't written any reviews yet. Start by reviewing a CR!</p>
+                </div>
+                {% endif %}
             </div>
         </div> 
 
-            <!-- Sidebar -->
+            <!--Right Side -->
             <div>
                 <!-- Recent Activity -->
                 <div class="dashboard-card" style="margin-bottom: 2rem;">
@@ -195,6 +264,7 @@
                         {% comment %} <a href="#" class="card-link">View All →</a> {% endcomment %}
                     </div>
 
+                    {% if saved_crs %}
                      {% for save_cr in saved_crs %}
                     <div class="saved-cr-item">
                        
@@ -215,9 +285,45 @@
                         
                     </div>
                     {% endfor %}
+
+                    <!-- Pagination for Saved CRs -->
+                    {% if saved_crs.has_other_pages %}
+                    <div class="pagination-container">
+                        <nav aria-label="Saved CRs pagination">
+                            <ul class="pagination">
+                                {% if saved_crs.has_previous %}
+                                <li><a href="?saved_crs_page=1">&laquo; First</a></li>
+                                <li><a href="?saved_crs_page={{ saved_crs.previous_page_number }}">← Previous</a></li>
+                                {% endif %}
+
+                                {% for num in saved_crs.paginator.page_range %}
+                                    {% if saved_crs.number == num %}
+                                    <li class="active"><span>{{ num }}</span></li>
+                                    {% elif num > saved_crs.number|add:'-3' and num < saved_crs.number|add:'3' %}
+                                    <li><a href="?saved_crs_page={{ num }}">{{ num }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if saved_crs.has_next %}
+                                <li><a href="?saved_crs_page={{ saved_crs.next_page_number }}">Next →</a></li>
+                                <li><a href="?saved_crs_page={{ saved_crs.paginator.num_pages }}">Last &raquo;</a></li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔖</div>
+                        <h3>No Saved CRs</h3>
+                        <p>You haven't saved any CRs yet. Save your favorite CRs here!</p>
+                    </div>
+                    {% endif %}
+
+
                 </div>
             </div>
-        </div>
+        </div>   
 
         <!-- Quick Actions -->
         <div class="dashboard-card full-width-card" style="margin-top: 2rem;">

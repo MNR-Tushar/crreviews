@@ -97,7 +97,19 @@ def user_dasboard(request,slug):
     last_cr_saved= saved_crs.last()
     add_crs = CrProfile.objects.filter(user=request.user)
  
-    
+    items_per_page = 5
+    add_crs_paginator = Paginator(add_crs, items_per_page)
+    add_crs_page = request.GET.get('add_crs_page', 1)
+    add_crs = add_crs_paginator.get_page(add_crs_page)
+
+    saved_crs_paginator = Paginator(saved_crs, items_per_page)
+    saved_crs_page = request.GET.get('saved_crs_page', 1)
+    saved_crs = saved_crs_paginator.get_page(saved_crs_page)
+
+    review_paginator = Paginator(review, items_per_page)
+    review_page = request.GET.get('review_page', 1)
+    review = review_paginator.get_page(review_page)
+
     context = {
         'user':user,
         'review':review,
