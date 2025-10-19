@@ -1,373 +1,348 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %} User Dashboard {% endblock title %}
-
 {% block content %}
 <div class="dashboard-container">
-        <!-- Header -->
-        <div class="dashboard-header">
-            <div class="header-left">
-                <div class="profile-avatar-large">
-                    {% if user.profile_picture %}
-                    <img src={{user.profile_picture.url}} alt={{user.first_name}} />
-                    {% else %}
-                    {{user.first_name|first|upper}}
-                    {% endif %}
-                </div>
-                <div class="user-info">
-                    <h1>{{user.first_name}} {{user.last_name}}</h1>
-                    <div class="user-meta">
-                        <span>{{user.student_id}}</span>
-                        <span>🏛️ {{user.university}}</span>
-                        <span>📚 {{user.department}}</span>
-                    </div>
-                </div>
+   <!-- Header -->
+   <div class="dashboard-header">
+      <div class="header-left">
+         <div class="profile-avatar-large">
+            {% if user.profile_picture %}
+            <img src={{user.profile_picture.url}} alt={{user.first_name}} />
+            {% else %}
+            {{user.first_name|first|upper}}
+            {% endif %}
+         </div>
+         <div class="user-info">
+            <h1>{{user.first_name}} {{user.last_name}}</h1>
+            <div class="user-meta">
+               <span>{{user.student_id}}</span>
+               <span>🏛️ {{user.university}}</span>
+               <span>📚 {{user.department}}</span>
             </div>
-            <div class="header-right">
-                <button class="btn btn-secondary" onclick="window.location.href='{% url 'settings'%}'">⚙️ Settings</button>
-                <button class="btn btn-primary" onclick="window.location.href='{% url 'edit_user' user.slug %}'">✏️ Edit Profile</button>
-            </div>
-        </div>
-
-        <!-- Stats Row -->
-        <div class="stats-row">
-            <div class="stat-box">
-                <div class="stat-box-icon">👤</div>
-                <div class="stat-box-value">{{add_crs.paginator.count}}</div>
-                <div class="stat-box-label">Added CR</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-box-icon">⭐</div>
-                <div class="stat-box-value">{{review.paginator.count}}</div>
-                <div class="stat-box-label">Reviews Given</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-box-icon">💾</div>
-                <div class="stat-box-value">{{saved_crs.paginator.count}}</div>
-                <div class="stat-box-label">Saved CRs</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-box-icon">👁️</div>
-                <div class="stat-box-value">156</div>
-                <div class="stat-box-label">Profile Views</div>
-            </div>
-            {% comment %} <div class="stat-box">
-                <div class="stat-box-icon">🏆</div>
-                <div class="stat-box-value">Gold</div>
-                <div class="stat-box-label">Member Status</div>
-            </div> {% endcomment %}
-        </div>
-
-        <!-- Content Grid -->
-        <div class="content-grid">
-            <!--left side-->
-            <div> 
-
-            <!-- Your Added CRS -->
-            <div class="dashboard-card">
-                    <div class="card-header">
-                    <h2 class="card-title">👤 Your Added CRS</h2> 
-                    </div>
-                    {% if add_crs %}
-                    {% for add in add_crs %}
-                    <div class="review-item">
-                        <div class="review-header">
-                            <div class="review-cr">
-                                <div class="saved-avatar">
-                                    {% if add.profile_picture %}
-                                    <img src={{add.profile_picture.url}} alt={{add.name}} />
-                                    {% else %}
-                                    {{add.name|first|upper}}
-                                    {% endif %}
-                                </div>
-                                <div class="cr-info">
-                                    <h4><a href="{% url 'cr_profile' add.slug %}" style="text-decoration: none; color: inherit;">{{add.name}}</a></h4>
-                                    <p>{{add.university}} • {{add.department}}</p>
-                                </div>
-                            </div>
-                                <div class="rating">
-                                {% for i in "12345" %} {% if forloop.counter <= add.rating %}
-                                <span class="star filled">★</span>
-                                {% else %}
-                                <span class="star">☆</span>
-                                {% endif %} {% endfor %}
-                        </div>
-                    </div>
-                    <div class="review-actions">
-                        <button class="action-btn edit" onclick="window.location.href='{% url 'edit_cr_profile' add.slug %}'">✏️ Edit</button>
-                        <button class="action-btn delete" onclick="confirmDeleteCR('{{ add.slug }}', '{{ add.name }}')">🗑️ Delete</button>
-                    </div>
-                </div>
-                {% endfor %}
-                
-                <!-- Pagination for Added CRS -->
-                {% if add_crs.has_other_pages %}
-                <div class="pagination-container">
-                    <nav aria-label="Added CRS pagination">
-                        <ul class="pagination">
-                            {% if add_crs.has_previous %}
-                            <li><a href="?add_crs_page=1">&laquo; First</a></li>
-                            <li><a href="?add_crs_page={{ add_crs.previous_page_number }}">← Previous</a></li>
-                            {% endif %}
-
-                            {% for num in add_crs.paginator.page_range %}
-                                {% if add_crs.number == num %}
-                                <li class="active"><span>{{ num }}</span></li>
-                                {% elif num > add_crs.number|add:'-3' and num < add_crs.number|add:'3' %}
-                                <li><a href="?add_crs_page={{ num }}">{{ num }}</a></li>
-                                {% endif %}
-                            {% endfor %}
-
-                            {% if add_crs.has_next %}
-                            <li><a href="?add_crs_page={{ add_crs.next_page_number }}">Next →</a></li>
-                            <li><a href="?add_crs_page={{ add_crs.paginator.num_pages }}">Last &raquo;</a></li>
-                            {% endif %}
-                        </ul>
-                    </nav>
-                </div>
-                {% endif %}
-                {% else %}
-                <div class="empty-state">
-                    <div class="empty-state-icon">😴</div>
-                    <h3>No CRs Added Yet</h3>
-                    <p>You haven't added any CRs. Start by adding your first CR!</p>
-                </div>
-                {% endif %}
-            </div>
-            <br>
-
-            <!-- Delete Confirmation Modal -->
-            <div id="deleteConfirmModal" class="modal">
-    <div class="modal-content modal-small">
-        <span class="modal-close" onclick="closeModal('deleteConfirmModal')">&times;</span>
-        <h2>⚠️ Delete Confirmation</h2>
-        <p id="deleteMessage"></p>
-        <div class="form-actions">
-            <button type="button" class="btn-cancel" onclick="closeModal('deleteConfirmModal')">Cancel</button>
-            <button type="button" class="btn-delete" onclick="confirmDelete()">Delete</button>
-        </div>
-    </div>
-</div>
-
-            
-
-            <!-- My Reviews -->
-            <div class="dashboard-card">
-                <div class="card-header">
-                    <h2 class="card-title">📝 My Reviews</h2>
-                </div>
-                {% if review %}
-                {% for review in review %}
-                <div class="review-item">
-                    <div class="review-header">
-                        <div class="review-cr">
-                            <div class="saved-avatar">
-                            {% if review.cr_profile.profile_picture %}
-                            <img src={{review.cr_profile.profile_picture.url}} alt={{review.cr_profile.name}} />
-                            {% else %}
-                             {{review.cr_profile.name|first|upper}}
-                            {% endif %}
-                            </div>
-                            <div class="cr-info">
-                                <h4><a href="{% url 'cr_profile' review.cr_profile.slug %}" style="text-decoration: none; color: inherit;">{{review.cr_profile.name}}</a></h4>
-                                <p>{{review.cr_profile.university}} • {{review.cr_profile.department}}</p>
-                            </div>
-                        </div>
-                        <div class="rating">
-                            {% for i in "12345" %} {% if forloop.counter <= review.rating %}
-                            <span class="star filled">★</span>
-                            {% else %}
-                            <span class="star">☆</span>
-                            {% endif %} {% endfor %}
-                        </div>
-                    </div>
-                    <div class="review-text">
-                        "{{review.description}}"
-                    </div>
-                    <div class="review-actions">
-                        <button class="action-btn edit">✏️ Edit</button>
-                        <button class="action-btn delete">🗑️ Delete</button>
-                    </div>
-                </div>
-                {% endfor %}
-                
-                <!-- Pagination for Reviews -->
-                {% if review.has_other_pages %}
-                <div class="pagination-container">
-                    <nav aria-label="Reviews pagination">
-                        <ul class="pagination">
-                            {% if review.has_previous %}
-                            <li><a href="?review_page=1">&laquo; First</a></li>
-                            <li><a href="?review_page={{ review.previous_page_number }}">← Previous</a></li>
-                            {% endif %}
-
-                            {% for num in review.paginator.page_range %}
-                                {% if review.number == num %}
-                                <li class="active"><span>{{ num }}</span></li>
-                                {% elif num > review.number|add:'-3' and num < review.number|add:'3' %}
-                                <li><a href="?review_page={{ num }}">{{ num }}</a></li>
-                                {% endif %}
-                            {% endfor %}
-
-                            {% if review.has_next %}
-                            <li><a href="?review_page={{ review.next_page_number }}">Next →</a></li>
-                            <li><a href="?review_page={{ review.paginator.num_pages }}">Last &raquo;</a></li>
-                            {% endif %}
-                        </ul>
-                    </nav>
-                </div>
-                {% endif %}
-                {% else %}
-                <div class="empty-state">
-                    <div class="empty-state-icon">📭</div>
-                    <h3>No Reviews Yet</h3>
-                    <p>You haven't written any reviews yet. Start by reviewing a CR!</p>
-                </div>
-                {% endif %}
-            </div>
-            </div> 
-
-            <!--Right Side -->
-            <div>
-                <!-- Recent Activity -->
-                <div class="dashboard-card" style="margin-bottom: 2rem;">
-                    <div class="card-header">
-                        <h2 class="card-title">🔔 Recent Activity</h2>
-                    </div>
-
-                    <div class="activity-item">
-                        <div class="activity-icon">⭐</div>
-                        <div class="activity-content">
-                            <h4>Review Submitted</h4>
-                            <p>You reviewed {{last.cr_profile.name}}</p>
-                            <div class="activity-time">{{last.created_at}}</div>
-                        </div>
-                    </div>
-
-                    <div class="activity-item">
-                        <div class="activity-icon">💾</div>
-                        <div class="activity-content">
-                            <h4>CR Saved</h4>
-                            <p>You saved {{last_cr_saved.cr_profile.name}}</p>
-                            <div class="activity-time">{{last_cr_saved.saved_at}}</div>
-                        </div>
-                    </div>
-
-                    <div class="activity-item">
-                        <div class="activity-icon">✏️</div>
-                        <div class="activity-content">
-                            <h4>Profile Updated</h4>
-                            <p>You updated your profile</p>
-                            <div class="activity-time">{{user.updated_at}}</div>
-                        </div>
-                    </div>
-
-                    {% comment %} <div class="activity-item">
-                        <div class="activity-icon">🔍</div>
-                        <div class="activity-content">
-                            <h4>Search Performed</h4>
-                            <p>You searched for CRs</p>
-                            <div class="activity-time">5 days ago</div>
-                        </div>
-                    </div> {% endcomment %}
-                </div>
-
-                <!-- Saved CRs -->
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <h2 class="card-title">💾 Saved CRS</h2>
-                        {% comment %} <a href="#" class="card-link">View All →</a> {% endcomment %}
-                    </div>
-
-                    {% if saved_crs %}
-                     {% for save_cr in saved_crs %}
-                    <div class="saved-cr-item">
-                       
-                        <div class="saved-avatar">
-                        {% if save_cr.cr_profile.profile_picture %}
-                        <img src={{save_cr.cr_profile.profile_picture.url}} alt={{save_cr.cr_profile.name}} />
-                        {% else %}
-                        {{save_cr.cr_profile.name|first|upper}}
-                        {% endif %}
-                        </div>
-                        <div class="saved-info">
-                            <h4><a href="{% url 'cr_profile' save_cr.cr_profile.slug %}"  style="text-decoration: none; color: inherit;">{{save_cr.cr_profile.name}}</a></h4>
-                            <p>{{save_cr.cr_profile.university}}</p>
-                        </div>
-                        <div class="saved-rating">
-                            ⭐ {{save_cr.cr_profile.average_rating}}
-                        </div>
-                        
-                    </div>
-                    {% endfor %}
-
-                    <!-- Pagination for Saved CRs -->
-                    {% if saved_crs.has_other_pages %}
-                    <div class="pagination-container">
-                        <nav aria-label="Saved CRs pagination">
-                            <ul class="pagination">
-                                {% if saved_crs.has_previous %}
-                                <li><a href="?saved_crs_page=1">&laquo; First</a></li>
-                                <li><a href="?saved_crs_page={{ saved_crs.previous_page_number }}">← Previous</a></li>
-                                {% endif %}
-
-                                {% for num in saved_crs.paginator.page_range %}
-                                    {% if saved_crs.number == num %}
-                                    <li class="active"><span>{{ num }}</span></li>
-                                    {% elif num > saved_crs.number|add:'-3' and num < saved_crs.number|add:'3' %}
-                                    <li><a href="?saved_crs_page={{ num }}">{{ num }}</a></li>
-                                    {% endif %}
-                                {% endfor %}
-
-                                {% if saved_crs.has_next %}
-                                <li><a href="?saved_crs_page={{ saved_crs.next_page_number }}">Next →</a></li>
-                                <li><a href="?saved_crs_page={{ saved_crs.paginator.num_pages }}">Last &raquo;</a></li>
-                                {% endif %}
-                            </ul>
-                        </nav>
-                    </div>
-                    {% endif %}
-                    {% else %}
-                    <div class="empty-state">
-                        <div class="empty-state-icon">🔖</div>
-                        <h3>No Saved CRs</h3>
-                        <p>You haven't saved any CRs yet. Save your favorite CRs here!</p>
-                    </div>
-                    {% endif %}
-
-
-                </div>
-            </div>
-        </div>   
-
-        <!-- Quick Actions -->
-        <div class="dashboard-card full-width-card" style="margin-top: 2rem;">
+         </div>
+      </div>
+      <div class="header-right">
+         <button class="btn btn-secondary" onclick="window.location.href='{% url 'settings'%}'">⚙️ Settings</button>
+         <button class="btn btn-primary" onclick="window.location.href='{% url 'edit_user' user.slug %}'">✏️ Edit Profile</button>
+      </div>
+   </div>
+   <!-- Stats Row -->
+   <div class="stats-row">
+      <div class="stat-box">
+         <div class="stat-box-icon">👤</div>
+         <div class="stat-box-value">{{add_crs.paginator.count}}</div>
+         <div class="stat-box-label">Added CR</div>
+      </div>
+      <div class="stat-box">
+         <div class="stat-box-icon">⭐</div>
+         <div class="stat-box-value">{{review.paginator.count}}</div>
+         <div class="stat-box-label">Reviews Given</div>
+      </div>
+      <div class="stat-box">
+         <div class="stat-box-icon">💾</div>
+         <div class="stat-box-value">{{saved_crs.paginator.count}}</div>
+         <div class="stat-box-label">Saved CRs</div>
+      </div>
+      <div class="stat-box">
+         <div class="stat-box-icon">👁️</div>
+         <div class="stat-box-value">156</div>
+         <div class="stat-box-label">Profile Views</div>
+      </div>
+      {% comment %} 
+      <div class="stat-box">
+         <div class="stat-box-icon">🏆</div>
+         <div class="stat-box-value">Gold</div>
+         <div class="stat-box-label">Member Status</div>
+      </div>
+      {% endcomment %}
+   </div>
+   <!-- Content Grid -->
+   <div class="content-grid">
+      <!--left side-->
+      <div>
+         <!-- Your Added CRS -->
+         <div class="dashboard-card">
             <div class="card-header">
-                <h2 class="card-title1">⚡ Quick Actions</h2>
+               <h2 class="card-title">👤 Your Added CRS</h2>
             </div>
-            <div class="settings-grid">
-                <div class="setting-item">
-                    <div class="setting-icon">🔍</div>
-                    <h3>Search CRs</h3>
-                    <p>Find and review class representatives from your university</p>
-                </div>
-                <div class="setting-item">
-                    <div class="setting-icon">📝</div>
-                    <h3>Write Review</h3>
-                    <p>Share your experience with a CR and help other students</p>
-                </div>
-                <div class="setting-item">
-                    <div class="setting-icon">👤</div>
-                    <h3>Update Profile</h3>
-                    <p>Keep your profile information up to date</p>
-                </div>
-                <div class="setting-item">
-                    <div class="setting-icon">🔔</div>
-                    <h3>Notifications</h3>
-                    <p>Manage your notification preferences and alerts</p>
-                </div>
+            {% if add_crs %}
+            {% for add in add_crs %}
+            <div class="review-item">
+               <div class="review-header">
+                  <div class="review-cr">
+                     <div class="saved-avatar">
+                        {% if add.profile_picture %}
+                        <img src={{add.profile_picture.url}} alt={{add.name}} />
+                        {% else %}
+                        {{add.name|first|upper}}
+                        {% endif %}
+                     </div>
+                     <div class="cr-info">
+                        <h4><a href="{% url 'cr_profile' add.slug %}" style="text-decoration: none; color: inherit;">{{add.name}}</a></h4>
+                        <p>{{add.university}} • {{add.department}}</p>
+                     </div>
+                  </div>
+                  <div class="rating">
+                     {% for i in "12345" %} {% if forloop.counter <= add.rating %}
+                     <span class="star filled">★</span>
+                     {% else %}
+                     <span class="star">☆</span>
+                     {% endif %} {% endfor %}
+                  </div>
+               </div>
+               <div class="review-actions">
+                  <button class="action-btn edit" onclick="window.location.href='{% url 'edit_cr_profile' add.slug %}'">✏️ Edit</button>
+                  <button class="action-btn delete" onclick="openDeleteModal('{{ add.cr.slug }}', '{{ add.cr.name }}')">🗑️ Delete</button>
+               </div>
             </div>
-        </div>
-</div> 
-    {% comment %} {% include 'rating.html' %}  {% endcomment %}
+            {% endfor %}
+            <!-- Pagination for Added CRS -->
+            {% if add_crs.has_other_pages %}
+            <div class="pagination-container">
+               <nav aria-label="Added CRS pagination">
+                  <ul class="pagination">
+                     {% if add_crs.has_previous %}
+                     <li><a href="?add_crs_page=1">&laquo; First</a></li>
+                     <li><a href="?add_crs_page={{ add_crs.previous_page_number }}">← Previous</a></li>
+                     {% endif %}
+                     {% for num in add_crs.paginator.page_range %}
+                     {% if add_crs.number == num %}
+                     <li class="active"><span>{{ num }}</span></li>
+                     {% elif num > add_crs.number|add:'-3' and num < add_crs.number|add:'3' %}
+                     <li><a href="?add_crs_page={{ num }}">{{ num }}</a></li>
+                     {% endif %}
+                     {% endfor %}
+                     {% if add_crs.has_next %}
+                     <li><a href="?add_crs_page={{ add_crs.next_page_number }}">Next →</a></li>
+                     <li><a href="?add_crs_page={{ add_crs.paginator.num_pages }}">Last &raquo;</a></li>
+                     {% endif %}
+                  </ul>
+               </nav>
+            </div>
+            {% endif %}
+            {% else %}
+            <div class="empty-state">
+               <div class="empty-state-icon">😴</div>
+               <h3>No CRs Added Yet</h3>
+               <p>You haven't added any CRs. Start by adding your first CR!</p>
+            </div>
+            {% endif %}
+         </div>
+         <br>
+         <!-- Delete Confirmation Modal -->
+         <div id="deleteConfirmModal" class="modal">
+            <div class="modal-content modal-small">
+               <span class="modal-close" onclick="closeModal('deleteConfirmModal')">&times;</span>
+               <h2>⚠️ Delete Confirmation</h2>
+               <p id="deleteMessage"></p>
+               <div class="form-actions">
+                  <button type="button" class="btn-cancel" onclick="closeModal('deleteConfirmModal')">Cancel</button>
+                  <button type="button" class="btn-delete" onclick="confirmDelete()">Delete</button>
+               </div>
+            </div>
+         </div>
+         <!-- My Reviews -->
+         <div class="dashboard-card">
+            <div class="card-header">
+               <h2 class="card-title">📝 My Reviews</h2>
+            </div>
+            {% if review %}
+            {% for review in review %}
+            <div class="review-item">
+               <div class="review-header">
+                  <div class="review-cr">
+                     <div class="saved-avatar">
+                        {% if review.cr_profile.profile_picture %}
+                        <img src={{review.cr_profile.profile_picture.url}} alt={{review.cr_profile.name}} />
+                        {% else %}
+                        {{review.cr_profile.name|first|upper}}
+                        {% endif %}
+                     </div>
+                     <div class="cr-info">
+                        <h4><a href="{% url 'cr_profile' review.cr_profile.slug %}" style="text-decoration: none; color: inherit;">{{review.cr_profile.name}}</a></h4>
+                        <p>{{review.cr_profile.university}} • {{review.cr_profile.department}}</p>
+                     </div>
+                  </div>
+                  <div class="rating">
+                     {% for i in "12345" %} {% if forloop.counter <= review.rating %}
+                     <span class="star filled">★</span>
+                     {% else %}
+                     <span class="star">☆</span>
+                     {% endif %} {% endfor %}
+                  </div>
+               </div>
+               <div class="review-text">
+                  "{{review.description}}"
+               </div>
+               <div class="review-actions">
+                  <button class="action-btn edit">✏️ Edit</button>
+                  <button class="action-btn delete">🗑️ Delete</button>
+               </div>
+            </div>
+            {% endfor %}
+            <!-- Pagination for Reviews -->
+            {% if review.has_other_pages %}
+            <div class="pagination-container">
+               <nav aria-label="Reviews pagination">
+                  <ul class="pagination">
+                     {% if review.has_previous %}
+                     <li><a href="?review_page=1">&laquo; First</a></li>
+                     <li><a href="?review_page={{ review.previous_page_number }}">← Previous</a></li>
+                     {% endif %}
+                     {% for num in review.paginator.page_range %}
+                     {% if review.number == num %}
+                     <li class="active"><span>{{ num }}</span></li>
+                     {% elif num > review.number|add:'-3' and num < review.number|add:'3' %}
+                     <li><a href="?review_page={{ num }}">{{ num }}</a></li>
+                     {% endif %}
+                     {% endfor %}
+                     {% if review.has_next %}
+                     <li><a href="?review_page={{ review.next_page_number }}">Next →</a></li>
+                     <li><a href="?review_page={{ review.paginator.num_pages }}">Last &raquo;</a></li>
+                     {% endif %}
+                  </ul>
+               </nav>
+            </div>
+            {% endif %}
+            {% else %}
+            <div class="empty-state">
+               <div class="empty-state-icon">📭</div>
+               <h3>No Reviews Yet</h3>
+               <p>You haven't written any reviews yet. Start by reviewing a CR!</p>
+            </div>
+            {% endif %}
+         </div>
+      </div>
+      <!--Right Side -->
+      <div>
+         <!-- Recent Activity -->
+         <div class="dashboard-card" style="margin-bottom: 2rem;">
+            <div class="card-header">
+               <h2 class="card-title">🔔 Recent Activity</h2>
+            </div>
+            <div class="activity-item">
+               <div class="activity-icon">⭐</div>
+               <div class="activity-content">
+                  <h4>Review Submitted</h4>
+                  <p>You reviewed {{last.cr_profile.name}}</p>
+                  <div class="activity-time">{{last.created_at}}</div>
+               </div>
+            </div>
+            <div class="activity-item">
+               <div class="activity-icon">💾</div>
+               <div class="activity-content">
+                  <h4>CR Saved</h4>
+                  <p>You saved {{last_cr_saved.cr_profile.name}}</p>
+                  <div class="activity-time">{{last_cr_saved.saved_at}}</div>
+               </div>
+            </div>
+            <div class="activity-item">
+               <div class="activity-icon">✏️</div>
+               <div class="activity-content">
+                  <h4>Profile Updated</h4>
+                  <p>You updated your profile</p>
+                  <div class="activity-time">{{user.updated_at}}</div>
+               </div>
+            </div>
+            {% comment %} 
+            <div class="activity-item">
+               <div class="activity-icon">🔍</div>
+               <div class="activity-content">
+                  <h4>Search Performed</h4>
+                  <p>You searched for CRs</p>
+                  <div class="activity-time">5 days ago</div>
+               </div>
+            </div>
+            {% endcomment %}
+         </div>
+         <!-- Saved CRs -->
+         <div class="dashboard-card">
+            <div class="card-header">
+               <h2 class="card-title">💾 Saved CRS</h2>
+               {% comment %} <a href="#" class="card-link">View All →</a> {% endcomment %}
+            </div>
+            {% if saved_crs %}
+            {% for save_cr in saved_crs %}
+            <div class="saved-cr-item">
+               <div class="saved-avatar">
+                  {% if save_cr.cr_profile.profile_picture %}
+                  <img src={{save_cr.cr_profile.profile_picture.url}} alt={{save_cr.cr_profile.name}} />
+                  {% else %}
+                  {{save_cr.cr_profile.name|first|upper}}
+                  {% endif %}
+               </div>
+               <div class="saved-info">
+                  <h4><a href="{% url 'cr_profile' save_cr.cr_profile.slug %}"  style="text-decoration: none; color: inherit;">{{save_cr.cr_profile.name}}</a></h4>
+                  <p>{{save_cr.cr_profile.university}}</p>
+               </div>
+               <div class="saved-rating">
+                  ⭐ {{save_cr.cr_profile.average_rating}}
+               </div>
+            </div>
+            {% endfor %}
+            <!-- Pagination for Saved CRs -->
+            {% if saved_crs.has_other_pages %}
+            <div class="pagination-container">
+               <nav aria-label="Saved CRs pagination">
+                  <ul class="pagination">
+                     {% if saved_crs.has_previous %}
+                     <li><a href="?saved_crs_page=1">&laquo; First</a></li>
+                     <li><a href="?saved_crs_page={{ saved_crs.previous_page_number }}">← Previous</a></li>
+                     {% endif %}
+                     {% for num in saved_crs.paginator.page_range %}
+                     {% if saved_crs.number == num %}
+                     <li class="active"><span>{{ num }}</span></li>
+                     {% elif num > saved_crs.number|add:'-3' and num < saved_crs.number|add:'3' %}
+                     <li><a href="?saved_crs_page={{ num }}">{{ num }}</a></li>
+                     {% endif %}
+                     {% endfor %}
+                     {% if saved_crs.has_next %}
+                     <li><a href="?saved_crs_page={{ saved_crs.next_page_number }}">Next →</a></li>
+                     <li><a href="?saved_crs_page={{ saved_crs.paginator.num_pages }}">Last &raquo;</a></li>
+                     {% endif %}
+                  </ul>
+               </nav>
+            </div>
+            {% endif %}
+            {% else %}
+            <div class="empty-state">
+               <div class="empty-state-icon">🔖</div>
+               <h3>No Saved CRs</h3>
+               <p>You haven't saved any CRs yet. Save your favorite CRs here!</p>
+            </div>
+            {% endif %}
+         </div>
+      </div>
+   </div>
+   <!-- Quick Actions -->
+   <div class="dashboard-card full-width-card" style="margin-top: 2rem;">
+      <div class="card-header">
+         <h2 class="card-title1">⚡ Quick Actions</h2>
+      </div>
+      <div class="settings-grid">
+         <div class="setting-item">
+            <div class="setting-icon">🔍</div>
+            <h3>Search CRs</h3>
+            <p>Find and review class representatives from your university</p>
+         </div>
+         <div class="setting-item">
+            <div class="setting-icon">📝</div>
+            <h3>Write Review</h3>
+            <p>Share your experience with a CR and help other students</p>
+         </div>
+         <div class="setting-item">
+            <div class="setting-icon">👤</div>
+            <h3>Update Profile</h3>
+            <p>Keep your profile information up to date</p>
+         </div>
+         <div class="setting-item">
+            <div class="setting-icon">🔔</div>
+            <h3>Notifications</h3>
+            <p>Manage your notification preferences and alerts</p>
+         </div>
+      </div>
+   </div>
+</div>
+{% comment %} {% include 'rating.html' %}  {% endcomment %}
 {% endblock content %}
