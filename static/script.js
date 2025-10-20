@@ -504,3 +504,63 @@ function showNotification(message, type) {
     setTimeout(() => toast.remove(), 500);
   }, 3000);
 }
+
+
+let currentReviewSlug = '';
+
+function openEditReviewModal(slug, rating, description) {
+    currentReviewSlug = slug;
+    document.getElementById('editReviewForm').action = `/review/${slug}/edit/`;
+    document.getElementById('editRatingValue').value = rating;
+    document.getElementById('editReviewComment').value = description;
+    
+    // Set active star
+    document.querySelectorAll('.rating-star-edit').forEach(star => {
+        star.classList.remove('active');
+        if (parseInt(star.dataset.value) === rating) {
+            star.classList.add('active');
+        }
+    });
+    
+    document.getElementById('editReviewModal').classList.add('show');
+}
+
+function setEditRating(value) {
+    document.getElementById('editRatingValue').value = value;
+    document.querySelectorAll('.rating-star-edit').forEach(star => {
+        star.classList.remove('active');
+        if (parseInt(star.dataset.value) <= value) {
+            star.classList.add('active');
+        }
+    });
+}
+
+function closeReviewModal() {
+    document.getElementById('editReviewModal').classList.remove('show');
+}
+
+function openDeleteReviewModal(slug) {
+    currentReviewSlug = slug;
+    document.getElementById('deleteReviewModal').classList.add('show');
+}
+
+function closeDeleteReviewModal() {
+    document.getElementById('deleteReviewModal').classList.remove('show');
+}
+
+function confirmDeleteReview() {
+    window.location.href = `/review/${currentReviewSlug}/delete/`;
+}
+
+// Close modal when clicking outside
+document.addEventListener('click', function(event) {
+    const editModal = document.getElementById('editReviewModal');
+    const deleteModal = document.getElementById('deleteReviewModal');
+    
+    if (event.target === editModal) {
+        closeReviewModal();
+    }
+    if (event.target === deleteModal) {
+        closeDeleteReviewModal();
+    }
+});
