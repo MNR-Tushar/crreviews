@@ -254,7 +254,7 @@ def edit_review(request,slug):
         messages.error(request, "You do not have permission to edit this review.")
         return redirect('user_dashboard')
 
-    if request.method == "POST":
+    if request.method == 'POST':
         rating = request.POST.get('rating')
         description = request.POST.get('description', '')
 
