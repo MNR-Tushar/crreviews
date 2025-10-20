@@ -506,61 +506,116 @@ function showNotification(message, type) {
 }
 
 
+// Fixed Review Modal Functions
 let currentReviewSlug = '';
 
 function openEditReviewModal(slug, rating, description) {
     currentReviewSlug = slug;
-    document.getElementById('editReviewForm').action = `/review/${slug}/edit/`;
-    document.getElementById('editRatingValue').value = rating;
-    document.getElementById('editReviewComment').value = description;
     
-    // Set active star
-    document.querySelectorAll('.rating-star-edit').forEach(star => {
-        star.classList.remove('active');
-        if (parseInt(star.dataset.value) === rating) {
-            star.classList.add('active');
-        }
-    });
+    // Set form action
+    const form = document.getElementById('editReviewForm');
+    if (form) {
+        form.action = `/edit_review/${slug}/`;
+    }
     
-    document.getElementById('editReviewModal').classList.add('show');
+    // Set rating value
+    const ratingInput = document.getElementById('editRatingValue');
+    if (ratingInput) {
+        ratingInput.value = rating;
+    }
+    
+    // Set description
+    const descriptionInput = document.getElementById('editReviewComment');
+    if (descriptionInput) {
+        descriptionInput.value = description;
+    }
+    
+    // Update star display
+    updateEditStarDisplay(rating);
+    
+    // Show modal
+    const modal = document.getElementById('editReviewModal');
+    if (modal) {
+        modal.classList.add('show');
+        modal.style.display = 'flex';
+    }
+    
+    console.log('Edit modal opened for slug:', slug);
 }
 
 function setEditRating(value) {
-    document.getElementById('editRatingValue').value = value;
-    document.querySelectorAll('.rating-star-edit').forEach(star => {
-        star.classList.remove('active');
-        if (parseInt(star.dataset.value) <= value) {
+    const ratingInput = document.getElementById('editRatingValue');
+    if (ratingInput) {
+        ratingInput.value = value;
+    }
+    updateEditStarDisplay(value);
+}
+
+function updateEditStarDisplay(rating) {
+    const stars = document.querySelectorAll('.rating-star-edit');
+    stars.forEach((star, index) => {
+        if (index < rating) {
             star.classList.add('active');
+            star.style.color = '#ffeb3b';
+            star.style.textShadow = '0 0 20px rgba(255, 235, 59, 0.8)';
+        } else {
+            star.classList.remove('active');
+            star.style.color = 'rgba(255, 255, 255, 0.3)';
+            star.style.textShadow = 'none';
         }
     });
 }
 
 function closeReviewModal() {
-    document.getElementById('editReviewModal').classList.remove('show');
+    const modal = document.getElementById('editReviewModal');
+    if (modal) {
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+    }
 }
 
 function openDeleteReviewModal(slug) {
     currentReviewSlug = slug;
-    document.getElementById('deleteReviewModal').classList.add('show');
+    const modal = document.getElementById('deleteReviewModal');
+    if (modal) {
+        modal.classList.add('show');
+        modal.style.display = 'flex';
+    }
+    
+    console.log('Delete modal opened for slug:', slug);
 }
 
 function closeDeleteReviewModal() {
-    document.getElementById('deleteReviewModal').classList.remove('show');
+    const modal = document.getElementById('deleteReviewModal');
+    if (modal) {
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+    }
 }
 
 function confirmDeleteReview() {
-    window.location.href = `/review/${currentReviewSlug}/delete/`;
+    if (currentReviewSlug) {
+        window.location.href = `/delete_review/${currentReviewSlug}/`;
+    }
 }
 
-// Close modal when clicking outside
+// Close modals when clicking outside
 document.addEventListener('click', function(event) {
     const editModal = document.getElementById('editReviewModal');
     const deleteModal = document.getElementById('deleteReviewModal');
     
-    if (event.target === editModal) {
+    if (editModal && event.target === editModal) {
         closeReviewModal();
     }
-    if (event.target === deleteModal) {
+    if (deleteModal && event.target === deleteModal) {
+        closeDeleteReviewModal();
+    }
+});
+
+// Close modals when pressing Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeReviewModal();
         closeDeleteReviewModal();
     }
 });
