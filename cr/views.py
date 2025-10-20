@@ -245,3 +245,40 @@ def submit_review(request, cr_slug):
             return redirect('cr_profile', slug=cr_profile.slug)
 
     return redirect('cr_profile', slug=cr_profile.slug)
+
+@login_required
+def edit_review(request,slug):
+    review = get_object_or_404(Review,slug=slug,user=request.user)
+
+    if review.user != request.user:
+        messages.error(request, "You do not have permission to edit this review.")
+        return redirect('user_dashboard')
+
+    if request.method == "POST":
+        rating = request.POST.get('rating')
+        description = request.POST.get('description', '')
+
+        try:
+            review.rating = int(rating)
+            review.description = description
+            review.save()
+            messages.success(request, "Your review has been updated successfully!")
+            return redirect('user_dashboard')
+        except Exception as e:
+            messages.error(request, "Error updating review. Please try again.")
+            return redirect('user_dashboard')
+
+    return render(request, 'user_profile/user_dashboard.html')
+
+@login_required
+def delete_review(request,slug):
+    review = get_object_or_404(Review,slug=slug,user=request.user)
+
+    if review.user != request.user:
+        messages.error(request, "You do not have permission to delete this review.")
+        return redirect('user_dashboard')
+
+    
+    review.delete()
+    messages.success(request, "Your review has been deleted successfully!")
+    return redirect('user_dashboard')

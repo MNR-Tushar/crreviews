@@ -10,4 +10,6 @@ urlpatterns = [
     path('edit_cr/<str:slug>/',edit_cr_profile,name='edit_cr_profile'),
     path('delete_cr/<str:slug>/',delete_cr_profile,name='delete_cr_profile'),
     path('submit_review/<str:cr_slug>/',submit_review,name='submit_review'),
+    path('edit_review/<str:slug>/',edit_review,name='edit_review'),
+    path('delete_review/<str:slug>/',delete_review,name='delete_review'),
 ]

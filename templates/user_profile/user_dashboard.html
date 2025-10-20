@@ -176,8 +176,9 @@
                   "{{review.description}}"
                </div>
                <div class="review-actions">
-                  <button class="action-btn edit">✏️ Edit</button>
-                  <button class="action-btn delete">🗑️ Delete</button>
+                  <button class="action-btn edit" onclick="openEditReviewModal('{{ review.slug }}', {{ review.rating }}, '{{ review.description }}')">✏️ Edit </button>
+                  
+                  <button class="action-btn delete" onclick="openDeleteReviewModal('{{ review.slug }}')">🗑️ Delete</button>
                </div>
             </div>
             {% endfor %}
@@ -214,6 +215,51 @@
             {% endif %}
          </div>
       </div>
+
+      <!-- Edit Review Modal -->
+<div id="editReviewModal" class="modal">
+    <div class="modal-content modal-medium">
+        <span class="modal-close" onclick="closeReviewModal()">&times;</span>
+        <h2>✏️ Edit Review</h2>
+        <form id="editReviewForm" method="POST" action="">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="form-label">Rating</label>
+                <div class="rating-edit">
+                    {% for i in "12345" %}
+                    <span class="rating-star-edit" data-value="{{ i }}" onclick="setEditRating({{ i }})">★</span>
+                    {% endfor %}
+                </div>
+                <input type="hidden" id="editRatingValue" name="rating" value="">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Your Comment</label>
+                <textarea class="form-input" id="editReviewComment" name="description" placeholder="Share your experience..." required></textarea>
+            </div>
+            
+            <div class="form-actions">
+                <button type="button" class="btn-cancel" onclick="closeReviewModal()">Cancel</button>
+                <button type="submit" class="btn-save">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Delete Review Modal -->
+<div id="deleteReviewModal" class="modal">
+    <div class="modal-content modal-small">
+        <span class="modal-close" onclick="closeDeleteReviewModal()">&times;</span>
+        <h2>⚠️ Delete Review</h2>
+        <p>Are you sure you want to delete this review? This action cannot be undone.</p>
+        <div class="form-actions">
+            <button type="button" class="btn-cancel" onclick="closeDeleteReviewModal()">Cancel</button>
+            <button type="button" class="btn-delete" onclick="confirmDeleteReview()">Delete</button>
+        </div>
+    </div>
+</div>
+
+
       <!--Right Side -->
       <div>
          <!-- Recent Activity -->
