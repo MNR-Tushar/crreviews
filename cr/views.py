@@ -252,7 +252,7 @@ def edit_review(request,slug):
 
     if review.user != request.user:
         messages.error(request, "You do not have permission to edit this review.")
-        return redirect('user_dashboard')
+        return redirect('user_dashboard',slug=request.user.slug)
 
     if request.method == 'POST':
         rating = request.POST.get('rating')
@@ -263,10 +263,10 @@ def edit_review(request,slug):
             review.description = description
             review.save()
             messages.success(request, "Your review has been updated successfully!")
-            return redirect('user_dashboard')
+            return redirect('user_dashboard',slug=request.user.slug)
         except Exception as e:
             messages.error(request, "Error updating review. Please try again.")
-            return redirect('user_dashboard')
+            return redirect('user_dashboard',slug=request.user.slug)
 
     return render(request, 'user_profile/user_dashboard.html')
 
@@ -276,9 +276,9 @@ def delete_review(request,slug):
 
     if review.user != request.user:
         messages.error(request, "You do not have permission to delete this review.")
-        return redirect('user_dashboard')
+        return redirect('user_dashboard',slug=request.user.slug)
 
     
     review.delete()
     messages.success(request, "Your review has been deleted successfully!")
-    return redirect('user_dashboard')
+    return redirect('user_dashboard',slug=request.user.slug)
