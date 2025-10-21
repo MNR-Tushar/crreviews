@@ -68,3 +68,104 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    // Fixed Review Modal Functions
+    let currentReviewSlug = '';
+
+    window.openEditReviewModal = function(slug, rating, description) {
+        currentReviewSlug = slug;
+        
+        const form = document.getElementById('editReviewForm');
+        if (form) form.action = `/edit_review/${slug}/`;
+
+        const ratingInput = document.getElementById('editRatingValue');
+        if (ratingInput) ratingInput.value = rating;
+
+        const descriptionInput = document.getElementById('editReviewComment');
+        if (descriptionInput) descriptionInput.value = description;
+
+        updateEditStarDisplay(rating);
+
+        const modal = document.getElementById('editReviewModal');
+        if (modal) {
+            modal.classList.add('show');
+            modal.style.display = 'flex';
+        }
+
+        console.log('✅ Edit modal opened for slug:', slug);
+    }
+
+    window.setEditRating = function(value) {
+        const ratingInput = document.getElementById('editRatingValue');
+        if (ratingInput) ratingInput.value = value;
+        updateEditStarDisplay(value);
+    }
+
+    function updateEditStarDisplay(rating) {
+        const stars = document.querySelectorAll('.rating-star-edit');
+        stars.forEach((star, index) => {
+            if (index < rating) {
+                star.classList.add('active');
+                star.style.color = '#ffeb3b';
+                star.style.textShadow = '0 0 20px rgba(255, 235, 59, 0.8)';
+            } else {
+                star.classList.remove('active');
+                star.style.color = 'rgba(255, 255, 255, 0.3)';
+                star.style.textShadow = 'none';
+            }
+        });
+    }
+
+    window.closeReviewModal = function() {
+        const modal = document.getElementById('editReviewModal');
+        if (modal) {
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+        }
+    }
+
+    window.openDeleteReviewModal = function(slug) {
+        currentReviewSlug = slug;
+        const modal = document.getElementById('deleteReviewModal');
+        if (modal) {
+            modal.classList.add('show');
+            modal.style.display = 'flex';
+        }
+        console.log('✅ Delete modal opened for slug:', slug);
+    }
+
+    window.closeDeleteReviewModal = function() {
+        const modal = document.getElementById('deleteReviewModal');
+        if (modal) {
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+        }
+    }
+
+    window.confirmDeleteReview = function() {
+        if (currentReviewSlug) {
+            window.location.href = `/delete_review/${currentReviewSlug}/`;
+        }
+    }
+
+    // Close modals when clicking outside
+    document.addEventListener('click', function(event) {
+        const editModal = document.getElementById('editReviewModal');
+        const deleteModal = document.getElementById('deleteReviewModal');
+        
+        if (editModal && event.target === editModal) closeReviewModal();
+        if (deleteModal && event.target === deleteModal) closeDeleteReviewModal();
+    });
+
+    // Close modals when pressing Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeReviewModal();
+            closeDeleteReviewModal();
+        }
+    });
+});
