@@ -580,18 +580,6 @@
             backdrop-filter: blur(10px);
         }
 
-        .form-input {
-            padding: 0.8rem 0rem;
-            border: none;
-            border-radius: 25px;
-            background: rgba(255, 255, 255, 0.9);
-            font-size: 1rem;
-            font-weight: 300;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-        }
-
         .search-input:focus {
             outline: none;
             transform: translateY(-2px);
@@ -1251,27 +1239,7 @@
     }
 }
 
-        /* Form Styles */
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
 
-        .form-label {
-            color: white;
-            font-weight: 600;
-            display: block;
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-        }
-
-        select.form-input, textarea.form-input {
-            font-family: inherit;
-        }
-
-        textarea.form-input {
-            resize: vertical;
-            min-height: 120px;
-        }
 
         .footer {
             background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.2));
