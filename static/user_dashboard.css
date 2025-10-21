@@ -673,9 +673,13 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.05);
-    color: white;
+    color: rgb(0, 0, 0);
     font-family: inherit;
+    font-size: 1rem;
+    font-weight: 300;
     transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
 }
 
 .form-input:focus {
@@ -688,6 +692,15 @@
 .form-input::placeholder {
     color: rgba(255, 255, 255, 0.5);
 }
+
+ select.form-input, textarea.form-input {
+            font-family: inherit;
+        }
+
+        textarea.form-input {
+            resize: vertical;
+            min-height: 120px;
+        }
 
 .rating-edit {
     display: flex;
