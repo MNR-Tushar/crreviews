@@ -7,7 +7,7 @@
         
         <!-- Header -->
         <div class="header">
-            <h1 id="pageTitle">Setting</h1>
+            <h1 id="pageTitle">Settings</h1>
         </div>
 
         
@@ -36,7 +36,7 @@
                         <div class="setting-label">Email Notifications</div>
                         <div style="color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-top: 0.3rem;">Receive email updates about reviews</div>
                     </div>
-                    <button class="toggle-switch active" onclick="toggleSwitch(this)"></button>
+                    <button class="toggle-switch deactive" onclick="toggleSwitch(this)"></button>
                 </div>
 
                 <div class="setting-item">
@@ -44,7 +44,7 @@
                         <div class="setting-label">Review Alerts</div>
                         <div style="color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-top: 0.3rem;">Get notified when you receive new reviews</div>
                     </div>
-                    <button class="toggle-switch active" onclick="toggleSwitch(this)"></button>
+                    <button class="toggle-switch deactive" onclick="toggleSwitch(this)"></button>
                 </div>
 
                 <div class="setting-item">
@@ -52,7 +52,7 @@
                         <div class="setting-label">Marketing Emails</div>
                         <div style="color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-top: 0.3rem;">Receive promotional emails and updates</div>
                     </div>
-                    <button class="toggle-switch" onclick="toggleSwitch(this)"></button>
+                    <button class="toggle-switch deactive" onclick="toggleSwitch(this)"></button>
                 </div>
             </div>
 
@@ -63,15 +63,15 @@
                         <div class="setting-label">Public Profile</div>
                         <div style="color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-top: 0.3rem;">Allow others to view your profile</div>
                     </div>
-                    <button class="toggle-switch active" onclick="toggleSwitch(this)"></button>
+                    <button class="toggle-switch deactive" onclick="toggleSwitch(this)"></button>
                 </div>
 
                 <div class="setting-item">
                     <div>
-                        <div class="setting-label">Show Email Address</div>
+                        <div class="setting-label deactive">Show Email Address</div>
                         <div style="color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-top: 0.3rem;">Display your email on your profile</div>
                     </div>
-                    <button class="toggle-switch" onclick="toggleSwitch(this)"></button>
+                    <button class="toggle-switch deactive" onclick="toggleSwitch(this)"></button>
                 </div>
 
                 <div class="setting-item">
@@ -79,7 +79,7 @@
                         <div class="setting-label">Show Contact Information</div>
                         <div style="color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-top: 0.3rem;">Display phone and social media links</div>
                     </div>
-                    <button class="toggle-switch active" onclick="toggleSwitch(this)"></button>
+                    <button class="toggle-switch deactive" onclick="toggleSwitch(this)"></button>
                 </div>
             </div>
 
@@ -104,26 +104,26 @@
 
             <div class="card_edit">
                 <h2>📱 Active Sessions</h2>
-                <div class="setting-item">
+                {% comment %} <div class="setting-item1">
                     <div>
-                        <div class="setting-label">🖥️ This Device</div>
+                        <div class="setting-label1">🖥️ This Device</div>
                         <div style="color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-top: 0.3rem;">Chrome on Windows • Last active now</div>
                     </div>
                     <button class="btn1 btn-secondary1" style="margin: 0;">Current</button>
                 </div>
 
-                <div class="setting-item" style="margin-top: 1rem;">
+                <div class="setting-item1" style="margin-top: 1rem;">
                     <div>
-                        <div class="setting-label">📱 Mobile Device</div>
+                        <div class="setting-label1">📱 Mobile Device</div>
                         <div style="color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-top: 0.3rem;">Safari on iPhone • Last active 2 days ago</div>
                     </div>
                     <button class="btn1 btn-secondary1" style="margin: 0;">Logout</button>
-                </div>
+                </div> {% endcomment %}
             </div>
 
             <div class="card_edit">
                 <div class="button-group1">
-                    <button class="btn1 btn-primary1">💾 Save Settings</button>
+                    <button class="btn1 btn-primary1" onclick="window.location.href='{% url 'user_dashboard' user.slug %}'">💾 Save Settings</button>
                     <button class="btn1 btn-secondary1" onclick="location.reload()">↺ Reset</button>
                 </div>
             </div>

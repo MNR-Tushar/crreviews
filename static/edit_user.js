@@ -11,9 +11,9 @@
             document.getElementById('pageTitle').textContent = titles[index];
         }
 
-        function toggleSwitch(btn) {
-            btn.classList.toggle('active');
-        }
+        // function toggleSwitch(btn) {
+        //     btn.classList.toggle('deactive');
+        // }
 
         // Photo upload preview
         document.getElementById('photoInput').addEventListener('change', function(e) {

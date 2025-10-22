@@ -230,7 +230,7 @@
         .setting-label {
             color: white;
             font-weight: 600;
-        }
+        } 
 
         .toggle-switch {
             width: 50px;
@@ -246,6 +246,7 @@
         .toggle-switch.active {
             background: #4facfe;
         }
+       
 
         .toggle-switch::after {
             content: '';
