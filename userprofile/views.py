@@ -187,6 +187,7 @@ def edit_user(request,slug):
             user.email = request.POST.get('email')
             user.student_id = request.POST.get('student_id')
             user.batch = request.POST.get('batch')
+            user.dept_batch = request.POST.get('dept_batch')
             user.section = request.POST.get('section')
             user.bio = request.POST.get('bio')
             user.gender = request.POST.get('gender')
