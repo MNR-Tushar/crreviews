@@ -31,7 +31,7 @@ def home(request):
 
 def all_cr(request):
     crs = CrProfile.objects.all().order_by('-created_at')
-    paginator = Paginator(crs, 12)
+    paginator = Paginator(crs, 5)
     page_number =  request.GET.get('page',1)
 
     try:

@@ -1,0 +1,272 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 140" width="400" height="140">
+  <defs>
+    <!-- Premium Gradients -->
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea"/>
+      <stop offset="50%" style="stop-color:#764ba2"/>
+      <stop offset="100%" style="stop-color:#f093fb"/>
+    </linearGradient>
+    
+    <linearGradient id="secondaryGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff6b6b"/>
+      <stop offset="33%" style="stop-color:#4ecdc4"/>
+      <stop offset="66%" style="stop-color:#45b7d1"/>
+      <stop offset="100%" style="stop-color:#f093fb"/>
+    </linearGradient>
+    
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffd700"/>
+      <stop offset="50%" style="stop-color:#ffed4e"/>
+      <stop offset="100%" style="stop-color:#ff9800"/>
+    </linearGradient>
+    
+    <radialGradient id="bgGlow" cx="50%" cy="50%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:0.4"/>
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:0"/>
+    </radialGradient>
+    
+    <!-- Advanced Filters -->
+    <filter id="premiumGlow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feFlood flood-color="#667eea" flood-opacity="0.7"/>
+      <feComposite in2="blur" operator="in" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <filter id="textShadow">
+      <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+    
+    <filter id="starShine">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feFlood flood-color="#ffeb3b" flood-opacity="0.8"/>
+      <feComposite in2="blur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Clip Path for Badge -->
+    <clipPath id="badgeClip">
+      <circle cx="70" cy="70" r="55"/>
+    </clipPath>
+  </defs>
+  
+  <!-- Background Glow Effect -->
+  <ellipse cx="70" cy="70" rx="80" ry="85" fill="url(#bgGlow)" opacity="0.6">
+    <animate attributeName="rx" values="80;90;80" dur="4s" repeatCount="indefinite"/>
+    <animate attributeName="ry" values="85;95;85" dur="4s" repeatCount="indefinite"/>
+  </ellipse>
+  
+  <!-- Main Badge Circle -->
+  <g transform="translate(70, 70)">
+    <!-- Outer Decorative Rings -->
+    <circle cx="0" cy="0" r="62" fill="none" stroke="url(#primaryGrad)" stroke-width="1.5" opacity="0.3">
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="25s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="0" cy="0" r="58" fill="none" stroke="url(#secondaryGrad)" stroke-width="1" opacity="0.4">
+      <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="20s" repeatCount="indefinite"/>
+    </circle>
+    
+    <!-- Main Badge Background -->
+    <circle cx="0" cy="0" r="55" fill="url(#primaryGrad)" opacity="0.2"/>
+    <circle cx="0" cy="0" r="55" fill="none" stroke="url(#primaryGrad)" stroke-width="4" filter="url(#premiumGlow)"/>
+    
+    <!-- Inner Glassmorphic Circle -->
+    <circle cx="0" cy="0" r="48" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+    
+    <!-- Large CR Letters -->
+    <g filter="url(#textShadow)">
+      <!-- C Letter -->
+      <path d="M -22 -20 Q -35 -20 -35 -5 L -35 5 Q -35 20 -22 20 L -12 20" 
+            fill="none" 
+            stroke="#ffffff" 
+            stroke-width="8" 
+            stroke-linecap="round"
+            opacity="0.95">
+        <animate attributeName="stroke-dasharray" values="0 120;100 120" dur="1.2s" fill="freeze"/>
+      </path>
+      
+      <!-- R Letter -->
+      <path d="M 5 -20 L 5 20 M 5 -20 L 20 -20 Q 35 -20 35 -5 Q 35 2 28 5 L 5 5 M 25 5 L 38 20" 
+            fill="none" 
+            stroke="#ffffff" 
+            stroke-width="8" 
+            stroke-linecap="round" 
+            stroke-linejoin="round"
+            opacity="0.95">
+        <animate attributeName="stroke-dasharray" values="0 180;150 180" dur="1.2s" fill="freeze"/>
+      </path>
+    </g>
+    
+    <!-- Center Star Icon -->
+    <g transform="translate(0, 35)">
+      <path d="M 0 -8 L 2.5 -1 L 10 -1 L 4 3 L 6.5 11 L 0 6 L -6.5 11 L -4 3 L -10 -1 L -2.5 -1 Z" 
+            fill="url(#goldGrad)" 
+            filter="url(#starShine)"
+            transform="scale(0.9)">
+        <animateTransform attributeName="transform" type="scale" values="0.9;1.1;0.9" dur="2s" repeatCount="indefinite" additive="sum"/>
+        <animate attributeName="opacity" values="0.9;1;0.9" dur="2s" repeatCount="indefinite"/>
+      </path>
+    </g>
+    
+    <!-- Small Orbiting Stars -->
+    <g opacity="0.7">
+      <circle cx="0" cy="-60" r="3" fill="url(#goldGrad)">
+        <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="8s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="0" cy="-60" r="3" fill="url(#goldGrad)">
+        <animateTransform attributeName="transform" type="rotate" from="120" to="480" dur="8s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" begin="0.7s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="0" cy="-60" r="3" fill="url(#goldGrad)">
+        <animateTransform attributeName="transform" type="rotate" from="240" to="600" dur="8s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" begin="1.3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+  </g>
+  
+  <!-- Main Text: CR REVIEWS -->
+  <g transform="translate(150, 50)">
+    <!-- CR Text -->
+    <text x="0" y="0" 
+          font-family="Poppins, system-ui, -apple-system, sans-serif" 
+          font-size="55" 
+          font-weight="800" 
+          fill="url(#secondaryGrad)" 
+          filter="url(#textShadow)"
+          letter-spacing="-2">
+      CR
+    </text>
+    
+    <!-- REVIEWS Subtitle -->
+    <text x="0" y="32" 
+          font-family="Poppins, system-ui, sans-serif" 
+          font-size="30" 
+          font-weight="600" 
+          fill="#ffffff" 
+          opacity="0.95"
+          letter-spacing="3">
+      REVIEWS
+    </text>
+    
+    <!-- Animated Rating Stars -->
+    <g transform="translate(0, 52)">
+      <g transform="translate(0, 0)">
+        <path d="M 0 0 L 2 4 L 6 4 L 3 7 L 4 11 L 0 8 L -4 11 L -3 7 L -6 4 L -2 4 Z" 
+              fill="url(#goldGrad)" 
+              opacity="0.85"
+              transform="scale(0.8)">
+          <animate attributeName="opacity" values="0.6;1;0.6" dur="1.5s" repeatCount="indefinite"/>
+        </path>
+      </g>
+      <g transform="translate(16, 0)">
+        <path d="M 0 0 L 2 4 L 6 4 L 3 7 L 4 11 L 0 8 L -4 11 L -3 7 L -6 4 L -2 4 Z" 
+              fill="url(#goldGrad)" 
+              opacity="0.9"
+              transform="scale(0.8)">
+          <animate attributeName="opacity" values="0.6;1;0.6" dur="1.5s" begin="0.3s" repeatCount="indefinite"/>
+        </path>
+      </g>
+      <g transform="translate(32, 0)">
+        <path d="M 0 0 L 2 4 L 6 4 L 3 7 L 4 11 L 0 8 L -4 11 L -3 7 L -6 4 L -2 4 Z" 
+              fill="url(#goldGrad)" 
+              opacity="0.95"
+              transform="scale(0.8)">
+          <animate attributeName="opacity" values="0.6;1;0.6" dur="1.5s" begin="0.6s" repeatCount="indefinite"/>
+        </path>
+      </g>
+      <g transform="translate(48, 0)">
+        <path d="M 0 0 L 2 4 L 6 4 L 3 7 L 4 11 L 0 8 L -4 11 L -3 7 L -6 4 L -2 4 Z" 
+              fill="url(#goldGrad)" 
+              opacity="0.9"
+              transform="scale(0.8)">
+          <animate attributeName="opacity" values="0.6;1;0.6" dur="1.5s" begin="0.9s" repeatCount="indefinite"/>
+        </path>
+      </g>
+      <g transform="translate(64, 0)">
+        <path d="M 0 0 L 2 4 L 6 4 L 3 7 L 4 11 L 0 8 L -4 11 L -3 7 L -6 4 L -2 4 Z" 
+              fill="url(#goldGrad)" 
+              opacity="0.85"
+              transform="scale(0.8)">
+          <animate attributeName="opacity" values="0.6;1;0.6" dur="1.5s" begin="1.2s" repeatCount="indefinite"/>
+        </path>
+      </g>
+    </g>
+  </g>
+  
+  <!-- Decorative Sparkles Around -->
+  <g opacity="0.6">
+    <!-- Sparkle 1 -->
+    <g transform="translate(135, 30)">
+      <circle cx="0" cy="0" r="3" fill="url(#goldGrad)">
+        <animate attributeName="r" values="2;4;2" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <line x1="-5" y1="0" x2="5" y2="0" stroke="url(#goldGrad)" stroke-width="1.5" opacity="0.8">
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite"/>
+      </line>
+      <line x1="0" y1="-5" x2="0" y2="5" stroke="url(#goldGrad)" stroke-width="1.5" opacity="0.8">
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite"/>
+      </line>
+    </g>
+    
+    <!-- Sparkle 2 -->
+    <g transform="translate(350, 45)">
+      <circle cx="0" cy="0" r="3" fill="url(#goldGrad)">
+        <animate attributeName="r" values="2;4;2" dur="2.5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite"/>
+      </circle>
+      <line x1="-5" y1="0" x2="5" y2="0" stroke="url(#goldGrad)" stroke-width="1.5" opacity="0.8">
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite"/>
+      </line>
+      <line x1="0" y1="-5" x2="0" y2="5" stroke="url(#goldGrad)" stroke-width="1.5" opacity="0.8">
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite"/>
+      </line>
+    </g>
+    
+    <!-- Sparkle 3 -->
+    <g transform="translate(320, 105)">
+      <circle cx="0" cy="0" r="2.5" fill="url(#goldGrad)">
+        <animate attributeName="r" values="2;3.5;2" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <line x1="-4" y1="0" x2="4" y2="0" stroke="url(#goldGrad)" stroke-width="1.5" opacity="0.8">
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/>
+      </line>
+      <line x1="0" y1="-4" x2="0" y2="4" stroke="url(#goldGrad)" stroke-width="1.5" opacity="0.8">
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/>
+      </line>
+    </g>
+    
+    <!-- Sparkle 4 -->
+    <g transform="translate(140, 110)">
+      <circle cx="0" cy="0" r="2.5" fill="url(#goldGrad)">
+        <animate attributeName="r" values="2;3.5;2" dur="2.8s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="2.8s" repeatCount="indefinite"/>
+      </circle>
+      <line x1="-4" y1="0" x2="4" y2="0" stroke="url(#goldGrad)" stroke-width="1.5" opacity="0.8">
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="2.8s" repeatCount="indefinite"/>
+      </line>
+      <line x1="0" y1="-4" x2="0" y2="4" stroke="url(#goldGrad)" stroke-width="1.5" opacity="0.8">
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="2.8s" repeatCount="indefinite"/>
+      </line>
+    </g>
+  </g>
+  
+  <!-- Subtle Background Pattern -->
+  <g opacity="0.1">
+    <circle cx="300" cy="70" r="40" fill="none" stroke="url(#primaryGrad)" stroke-width="1">
+      <animate attributeName="r" values="40;45;40" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="180" cy="120" r="30" fill="none" stroke="url(#secondaryGrad)" stroke-width="1">
+      <animate attributeName="r" values="30;35;30" dur="4s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+</svg>
