@@ -113,10 +113,12 @@ def add_cr(request):
             
 
         name = request.POST.get('name')
+        gender = request.POST.get('gender')
         st_id = request.POST.get('st_id')
         university = request.POST.get('university')
         department = request.POST.get('department')
         batch = request.POST.get('batch')
+        dept_batch = request.POST.get('dept_batch')
         section = request.POST.get('section')
         email = request.POST.get('email')
         phone = request.POST.get('phone')
@@ -126,10 +128,12 @@ def add_cr(request):
         cr = CrProfile.objects.create(
             user=request.user,
             name=name,
+            gender=gender,
             st_id=st_id,
             university=University.objects.get(id=university),
             department=Department.objects.get(id=department),
             batch=batch,
+            dept_batch=dept_batch,
             section=section,
             email=email,
             phone=phone,
