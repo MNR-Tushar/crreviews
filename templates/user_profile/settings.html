@@ -14,13 +14,19 @@
         <div class="tab-content active">
             <div class="card_edit">
                 <h2>🔐 Account Security</h2>
-                <div class="setting-item">
-                    <div>
-                        <div class="setting-label">Change Password</div>
-                        <div style="color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-top: 0.3rem;">Update your password regularly</div>
-                    </div>
-                    <button class="btn1 btn-secondary1" style="margin: 0;">Change</button>
-                </div>
+                
+<div class="setting-item">
+    <div>
+        <div class="setting-label">Change Password</div>
+        <div style="color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-top: 0.3rem;">
+            Update your password regularly
+        </div>
+    </div>
+    <button class="btn1 btn-secondary1" style="margin: 0;" 
+            onclick="window.location.href='{% url 'change_password' %}'">
+        Change
+    </button>
+</div>
             </div>
 
             <div class="card_edit">

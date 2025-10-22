@@ -13,6 +13,7 @@ urlpatterns = [
     path('settings/',settings,name="settings"),
     path('save-cr/<str:slug>/', save_cr, name='save_cr'),
     path('remove-saved-cr/<str:slug>/', remove_saved_cr, name='remove_saved_cr'),
+    path('change_password/', change_password, name='change_password'),
     
 
 ]
