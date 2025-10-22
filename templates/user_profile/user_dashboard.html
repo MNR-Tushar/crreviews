@@ -42,20 +42,20 @@
       <div class="stat-box">
          <div class="stat-box-icon">💾</div>
          <div class="stat-box-value">{{saved_crs.paginator.count}}</div>
-         <div class="stat-box-label">Saved CRs</div>
+         <div class="stat-box-label">Saved CRS</div>
       </div>
-      <div class="stat-box">
+      {% comment %} <div class="stat-box">
          <div class="stat-box-icon">👁️</div>
          <div class="stat-box-value">156</div>
          <div class="stat-box-label">Profile Views</div>
-      </div>
-      {% comment %} 
+      </div> {% endcomment %}
+      
       <div class="stat-box">
          <div class="stat-box-icon">🏆</div>
          <div class="stat-box-value">Gold</div>
          <div class="stat-box-label">Member Status</div>
       </div>
-      {% endcomment %}
+      
    </div>
    <!-- Content Grid -->
    <div class="content-grid">
@@ -368,26 +368,26 @@
       <!-- Quick Actions -->
       <div class="dashboard-card full-width-card" style="margin-top: 2rem;">
                <div class="card-header">
-                  <h2 class="card-title1">⚡ Quick Actions</h2>
+                  <h2 class="card-title">⚡ Quick Actions</h2>
                </div>
-               <div class="settings-grid">
-                  <div class="setting-item">
-                     <div class="setting-icon">🔍</div>
+               <div class="settings-grid1">
+                  <div class="setting-item1">
+                     <div class="setting-icon1">🔍</div>
                      <h3>Search CRs</h3>
                      <p>Find and review class representatives from your university</p>
                   </div>
-                  <div class="setting-item">
-                     <div class="setting-icon">📝</div>
+                  <div class="setting-item1">
+                     <div class="setting-icon1">📝</div>
                      <h3>Write Review</h3>
                      <p>Share your experience with a CR and help other students</p>
                   </div>
-                  <div class="setting-item">
-                     <div class="setting-icon">👤</div>
+                  <div class="setting-item1">
+                     <div class="setting-icon1">👤</div>
                      <h3>Update Profile</h3>
                      <p>Keep your profile information up to date</p>
                   </div>
-                  <div class="setting-item">
-                     <div class="setting-icon">🔔</div>
+                  <div class="setting-item1">
+                     <div class="setting-icon1">🔔</div>
                      <h3>Notifications</h3>
                      <p>Manage your notification preferences and alerts</p>
                   </div>
@@ -396,5 +396,5 @@
 
 </div>
 
-{% comment %} {% include 'rating.html' %}  {% endcomment %}
+
 {% endblock content %}
