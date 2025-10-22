@@ -81,7 +81,14 @@
                     <div class="info-grid">
                         <div class="info-item">
                             <div class="info-label">Gender</div>
-                            <div class="info-value">{{user.gender}}</div>
+                            {% if user.gender == 'M' %}
+                            <div class="info-value">Male</div>
+                            {% elif user.gender == 'F'%}
+                            <div class="info-value">Female</div>
+                            {% else %}
+                            <div class="info-value">None</div>
+                            {%endif%}
+
                         </div>
                         <div class="info-item">
                             <div class="info-label">Date of Birth</div>
