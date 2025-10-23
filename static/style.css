@@ -572,7 +572,7 @@
             padding: 1rem;
             border: none;
             border-radius: 20px;
-            background: rgba(255, 255, 255, 0.3);
+            background:rgba(255, 255, 255, 0.3);
             font-size: 1rem;
             font-weight: 200;
             transition: all 0.3s ease;
@@ -951,6 +951,7 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4);
+            text-decoration: none;
         }
 
         .btn::before {
@@ -977,6 +978,7 @@
             background: linear-gradient(135deg, #a8edea, #fed6e3, #d299c2);
             color: #333;
             box-shadow: 0 10px 30px rgba(168, 237, 234, 0.4);
+            text-decoration: none;
         }
 
         .btn-secondary:hover {
@@ -1338,17 +1340,33 @@
             padding: 1rem 1.5rem;
             border: none;
             border-radius: 50px;
-            background: rgba(255, 255, 255, 0.9);
+            background:rgba(255, 255, 255, 0.3);
+          
             font-weight: 600;
             transition: all 0.3s ease;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
         }
 
         .filter-select:focus {
             outline: none;
             transform: translateY(-2px);
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            background:rgba(255, 255, 255, 0.3);
+
         }
+
+
+        @media (max-width: 768px) {
+    .search-bar {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+
+        
+
 
         .review-card {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));

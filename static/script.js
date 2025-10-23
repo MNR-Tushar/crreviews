@@ -724,15 +724,15 @@ document.addEventListener('keydown', function(e) {
 });
 
 // Show search shortcuts hint
-const firstSearchInput = document.querySelector('input[name="search"]');
-if (firstSearchInput) {
-    firstSearchInput.addEventListener('focus', function() {
-        if (!this.dataset.hintShown) {
-            showNotification('💡 Tip: Press "/" to quick search, "Esc" to clear', 'info');
-            this.dataset.hintShown = 'true';
-        }
-    });
-}
+// const firstSearchInput = document.querySelector('input[name="search"]');
+// if (firstSearchInput) {
+//     firstSearchInput.addEventListener('focus', function() {
+//         if (!this.dataset.hintShown) {
+//             showNotification('💡 Tip: Press "/" to quick search, "Esc" to clear', 'info');
+//             this.dataset.hintShown = 'true';
+//         }
+//     });
+// }
 
 // Animate filter results count
 function animateCount(element) {
