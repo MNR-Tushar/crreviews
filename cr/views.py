@@ -240,6 +240,7 @@ def add_cr(request):
         phone = request.POST.get('phone')
         bio = request.POST.get('bio')
         profile_picture = request.FILES.get('profile_picture')
+        cr_status = request.POST.get('cr_status')
 
         cr = CrProfile.objects.create(
             user=request.user,
@@ -255,6 +256,7 @@ def add_cr(request):
             phone=phone,
             bio=bio,
             profile_picture=profile_picture,
+            cr_status=cr_status,
         )
         cr.save()
         
@@ -290,6 +292,7 @@ def edit_cr_profile(request,slug):
         cr.email = request.POST.get('email')
         cr.phone = request.POST.get('phone')
         cr.bio = request.POST.get('bio')
+        cr.cr_status = request.POST.get('cr_status')
 
         cr.facebook_url = request.POST.get('facebook_url')
         cr.instagram_url = request.POST.get('instagram_url')

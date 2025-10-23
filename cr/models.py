@@ -63,6 +63,13 @@ class CrProfile(models.Model):
     university=models.ForeignKey(University, on_delete=models.CASCADE,related_name='university_crs')
     department=models.ForeignKey(Department, on_delete=models.CASCADE,related_name='department_crs')
 
+
+    cr_status = models.CharField(
+    max_length=20, 
+    choices=[('Present', 'Present CR'), ('Former', 'Former CR')], 
+    default='Present'
+    )
+    
     profile_picture = models.ImageField(upload_to='cr_profile_pictures/', blank=True, null=True)
     name = models.CharField(max_length=100)
     gender = models.CharField(choices=[('M', 'Male'), ('F', 'Female')], max_length=1)

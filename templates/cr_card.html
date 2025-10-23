@@ -1,4 +1,16 @@
 <div class="card">
+
+  <!-- CR Status Badge -->
+  <div class="cr-status-badge {{ cr.cr_status|lower }}">
+    {% if cr.cr_status == 'Present' %}
+  
+      <span class="badge-text">Present CR</span>
+    {% else %}
+      
+      <span class="badge-text">Former CR</span>
+    {% endif %}
+  </div>
+
   <div class="profile-photo">
     {% if cr.profile_picture %}
     <img src="{{ cr.profile_picture.url }}" alt="{{ cr.name }}" />
