@@ -4,17 +4,17 @@
                 <div class="pagination">
                     {% if cr.has_previous %}
                         <a href="?page=1" class="pagination-btn pagination-first">
-                            <span>⏮️</span>
+                            <span>First</span>
                         </a>
                         <a href="?page={{ cr.previous_page_number }}" class="pagination-btn pagination-prev">
-                            <span>◀️</span>
+                            <span>Previous</span>
                         </a>
                     {% else %}
                         <span class="pagination-btn pagination-disabled">
-                            <span>⏮️</span>
+                            <span>First</span>
                         </span>
                         <span class="pagination-btn pagination-disabled">
-                            <span>◀️</span>
+                            <span>Previous</span>
                         </span>
                     {% endif %}
 
@@ -30,17 +30,17 @@
 
                     {% if cr.has_next %}
                         <a href="?page={{ cr.next_page_number }}" class="pagination-btn pagination-next">
-                            <span>▶️</span>
+                            <span>Next</span>
                         </a>
                         <a href="?page={{ cr.paginator.num_pages }}" class="pagination-btn pagination-last">
-                            <span>⏭️</span>
+                            <span>Last</span>
                         </a>
                     {% else %}
                         <span class="pagination-btn pagination-disabled">
-                            <span>▶️</span>
+                            <span>Next</span>
                         </span>
                         <span class="pagination-btn pagination-disabled">
-                            <span>⏭️</span>
+                            <span>Last</span>
                         </span>
                     {% endif %}
                 </div>
