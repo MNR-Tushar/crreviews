@@ -43,7 +43,7 @@
         }
 
         .particle::before {
-            content: '✨';
+            content: '✩';
             font-size: 20px;
             color: rgba(255, 255, 255, 0.8);
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
