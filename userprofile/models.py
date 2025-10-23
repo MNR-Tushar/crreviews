@@ -24,7 +24,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     email = models.EmailField(unique=True)
     phone=models.CharField(max_length=20,null=True,blank=True)
     date_of_birth=models.DateField(null=True,blank=True)
-    student_id=models.CharField(max_length=50,unique=True)
+    student_id=models.CharField(max_length=50,unique=True,null=True,blank=True)
     batch=models.CharField(max_length=20,null=True,blank=True)
     dept_batch = models.CharField(max_length=20 , blank=True, null=True)
     section=models.CharField(max_length=20,null=True,blank=True)

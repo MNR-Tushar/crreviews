@@ -17,7 +17,7 @@
         <form id="addCrForm" method='POST' action="{% url 'add_cr' %}" enctype="multipart/form-data" class="form-main">
             {% csrf_token %}
 
-            <!-- Basic Information -->
+            <!-- Academic Information -->
             <div class="form-section">
                 
                 <div class="section-header">
@@ -59,15 +59,14 @@
                             <span>Batch</span>
                             <span class="required-star">*</span>
                         </label>
-                        <input type="text" name="batch" class="input-field" placeholder="e.g., 231" required>
+                        <input type="text" name="batch" class="input-field" placeholder="231" required>
                     </div>
 
                     <div class="input-group">
                         <label class="input-label">
                             <span>Department Batch</span>
-                            <span class="required-star">*</span>
                         </label>
-                        <input type="text" name="dept_batch" class="input-field" placeholder="e.g., 64" required>
+                        <input type="text" name="dept_batch" class="input-field" placeholder="64">
                     </div>
                 </div>
 
@@ -78,7 +77,7 @@
                             <span>Student ID</span>
                             <span class="required-star">*</span>
                         </label>
-                        <input type="text" name="st_id" class="input-field" placeholder="e.g., 2021-1-60-001" required>
+                        <input type="text" name="st_id" class="input-field" placeholder="024231000510xxxx" required>
                     </div>
     
                     <div class="input-group">
@@ -86,7 +85,7 @@
                             <span>Section</span>
                             <span class="required-star">*</span>
                         </label>
-                        <input type="text" name="section" class="input-field" placeholder="e.g., A" required>
+                        <input type="text" name="section" class="input-field" placeholder="64_X" required>
                     </div>
                 </div>
 
@@ -99,13 +98,15 @@
                     <h2 class="section-title">Personal Details</h2>
                 </div>
 
-                 <div class="input-group">
+                <div class="input-group">
                         <label class="input-label">
                             <span>Full Name</span>
                             <span class="required-star">*</span>
                         </label>
                         <input type="text" name="name" class="input-field" placeholder="Enter full name" required>
-                    </div>
+                </div>
+
+                <br>
 
                 <div class="form-row">
                     <div class="input-group">
@@ -167,6 +168,8 @@
                         <div class="input-hint">💡 Optional but recommended</div>
                     </div>
                 </div>
+
+
 
                 
             </div>
