@@ -6,10 +6,32 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import *
 from userprofile.models import *
 from django.contrib.auth.decorators import login_required
-# Create your views here.
+from django.db.models import Q, Avg
+
 def home(request):
+
+    search_quary = request.GET.get('search')
+    university_filter = request.GET.get('university')
+    department_filter = request.GET.get('department')
+
+    
  
-    cr=CrProfile.objects.all().order_by('-created_at')
+    cr=CrProfile.objects.all()
+   
+
+    if search_quary:
+        cr = cr.filter(
+            Q(name__icontains=search_quary)|
+            Q(st_id__icontains=search_quary)|
+            Q(email__icontains=search_quary)
+            
+        )
+    if university_filter:
+        cr = cr.filter(university__id=university_filter)
+    if department_filter:
+        cr = cr.filter(department__id=department_filter)
+
+    cr=cr.order_by('-created_at')
     total_university=University.objects.count()
     total_department=Department.objects.count()
     total_review=Review.objects.count()
@@ -19,12 +41,20 @@ def home(request):
     reverse=True
     )
 
+    universities = University.objects.all()
+    departments = Department.objects.all()
+
     context={
         'cr':cr,
         'total_university':total_university,
         'total_department':total_department,
         'total_review':total_review,
         'crs':crs,
+        'universities':universities,
+        'departments':departments,
+        'university_filter':university_filter,
+        'department_filter':department_filter,
+
         
     }
     return render(request,'home.html',context)
