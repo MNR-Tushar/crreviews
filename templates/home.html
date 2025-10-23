@@ -116,45 +116,45 @@
                 </div>
 
                 <div class="section">
-                    <h2 class="section-title">Rating Distribution</h2>
-                    <div class="rating-chart">
-                        <div class="chart-bar">
-                            <div class="chart-label">5 Stars</div>
-                            <div class="chart-progress">
-                                <div class="chart-fill" style="width: 45%;"></div>
-                            </div>
-                            <div>45%</div>
-                        </div>
-                        <div class="chart-bar">
-                            <div class="chart-label">4 Stars</div>
-                            <div class="chart-progress">
-                                <div class="chart-fill" style="width: 30%;"></div>
-                            </div>
-                            <div>30%</div>
-                        </div>
-                        <div class="chart-bar">
-                            <div class="chart-label">3 Stars</div>
-                            <div class="chart-progress">
-                                <div class="chart-fill" style="width: 15%;"></div>
-                            </div>
-                            <div>15%</div>
-                        </div>
-                        <div class="chart-bar">
-                            <div class="chart-label">2 Stars</div>
-                            <div class="chart-progress">
-                                <div class="chart-fill" style="width: 7%;"></div>
-                            </div>
-                            <div>7%</div>
-                        </div>
-                        <div class="chart-bar">
-                            <div class="chart-label">1 Star</div>
-                            <div class="chart-progress">
-                                <div class="chart-fill" style="width: 3%;"></div>
-                            </div>
-                            <div>3%</div>
-                        </div>
-                    </div>
-                </div>
+    <h2 class="section-title">Rating Distribution</h2>
+    <div class="rating-chart">
+        <div class="chart-bar">
+            <div class="chart-label">⭐⭐⭐⭐⭐</div>
+            <div class="chart-progress">
+                <div class="chart-fill" style="width: {{ rating_percentages.5 }}%;"></div>
+            </div>
+            <div>{{ rating_percentages.5 }}% ({{ rating_distribution.5 }})</div>
+        </div>
+        <div class="chart-bar">
+            <div class="chart-label">⭐⭐⭐⭐</div>
+            <div class="chart-progress">
+                <div class="chart-fill" style="width: {{ rating_percentages.4 }}%;"></div>
+            </div>
+            <div>{{ rating_percentages.4 }}% ({{ rating_distribution.4 }})</div>
+        </div>
+        <div class="chart-bar">
+            <div class="chart-label">⭐⭐⭐</div>
+            <div class="chart-progress">
+                <div class="chart-fill" style="width: {{ rating_percentages.3 }}%;"></div>
+            </div>
+            <div>{{ rating_percentages.3 }}% ({{ rating_distribution.3 }})</div>
+        </div>
+        <div class="chart-bar">
+            <div class="chart-label">⭐⭐</div>
+            <div class="chart-progress">
+                <div class="chart-fill" style="width: {{ rating_percentages.2 }}%;"></div>
+            </div>
+            <div>{{ rating_percentages.2 }}% ({{ rating_distribution.2 }})</div>
+        </div>
+        <div class="chart-bar">
+            <div class="chart-label">⭐</div>
+            <div class="chart-progress">
+                <div class="chart-fill" style="width: {{ rating_percentages.1 }}%;"></div>
+            </div>
+            <div>{{ rating_percentages.1 }}% ({{ rating_distribution.1 }})</div>
+        </div>
+    </div>
+</div>
             {% endif %}
         </div>
     </div>
