@@ -148,28 +148,28 @@ window.addEventListener('click', function(event) {
 });
 
 // Enhanced search functionality
-document.querySelectorAll('.search-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const ripple = document.createElement('div');
-        ripple.style.cssText = `
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.6);
-            width: 20px;
-            height: 20px;
-            animation: ripple 0.6s ease-out;
-            pointer-events: none;
-        `;
-        btn.style.position = 'relative';
-        btn.appendChild(ripple);
+// document.querySelectorAll('.search-btn').forEach(btn => {
+//     btn.addEventListener('click', (e) => {
+//         e.preventDefault();
+//         const ripple = document.createElement('div');
+//         ripple.style.cssText = `
+//             position: absolute;
+//             border-radius: 50%;
+//             background: rgba(255,255,255,0.6);
+//             width: 20px;
+//             height: 20px;
+//             animation: ripple 0.6s ease-out;
+//             pointer-events: none;
+//         `;
+//         btn.style.position = 'relative';
+//         btn.appendChild(ripple);
         
-        setTimeout(() => {
-            ripple.remove();
-            showNotification('🔍 Search feature coming soon!', 'info');
-        }, 100);
-    });
-});
+//         setTimeout(() => {
+//             ripple.remove();
+//             showNotification('🔍 Search feature coming soon!', 'info');
+//         }, 100);
+//     });
+// });
 
 // Rating star click handlers
 document.querySelectorAll('.rating-star').forEach(star => {
@@ -234,25 +234,25 @@ function addNewReview(rating, comment) {
 }
 
 // Enhanced button interactions - DO NOT prevent form submissions
-document.querySelectorAll('.btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        // Allow form submit buttons to work normally
-        if (btn.type === 'submit' || btn.closest('form')) {
-            return;
-        }
+// document.querySelectorAll('.btn').forEach(btn => {
+//     btn.addEventListener('click', (e) => {
+//         // Allow form submit buttons to work normally
+//         if (btn.type === 'submit' || btn.closest('form')) {
+//             return;
+//         }
         
-        if (btn.textContent.includes('Rate') || btn.textContent.includes('রেটিং')) {
-            e.preventDefault();
-            showNotification('⭐ Rating feature coming soon!', 'success');
-        } else if (btn.textContent.includes('Profile') || btn.textContent.includes('প্রোফাইল')) {
-            e.preventDefault();
-            showNotification('👤 Profile view coming soon!', 'info');
-        } else if (btn.textContent.includes('Add CR') || btn.textContent.includes('সিআর যোগ')) {
-            e.preventDefault();
-            showNotification('➕ Add CR form coming soon!', 'warning');
-        }
-    });
-});
+//         if (btn.textContent.includes('Rate') || btn.textContent.includes('রেটিং')) {
+//             e.preventDefault();
+//             showNotification('⭐ Rating feature coming soon!', 'success');
+//         } else if (btn.textContent.includes('Profile') || btn.textContent.includes('প্রোফাইল')) {
+//             e.preventDefault();
+//             showNotification('👤 Profile view coming soon!', 'info');
+//         } else if (btn.textContent.includes('Add CR') || btn.textContent.includes('সিআর যোগ')) {
+//             e.preventDefault();
+//             showNotification('➕ Add CR form coming soon!', 'warning');
+//         }
+//     });
+// });
 
 // Notification system
 // function showNotification(message, type = 'info') {
@@ -619,3 +619,283 @@ document.addEventListener('keydown', function(event) {
         closeDeleteReviewModal();
     }
 });
+
+
+// Enhanced Search and Filter Functionality
+
+// Preserve scroll position on page reload (for pagination with filters)
+window.addEventListener('beforeunload', function() {
+    sessionStorage.setItem('scrollPosition', window.scrollY);
+});
+
+window.addEventListener('load', function() {
+    const scrollPosition = sessionStorage.getItem('scrollPosition');
+    if (scrollPosition) {
+        window.scrollTo(0, parseInt(scrollPosition));
+        sessionStorage.removeItem('scrollPosition');
+    }
+});
+
+// Real-time search suggestion (optional enhancement)
+const searchInputs = document.querySelectorAll('input[name="search"]');
+searchInputs.forEach(input => {
+    let timeout;
+    input.addEventListener('input', function() {
+        clearTimeout(timeout);
+        
+        // Add a subtle animation to show typing
+        this.style.borderColor = 'rgba(102, 126, 234, 0.5)';
+        this.style.boxShadow = '0 0 20px rgba(102, 126, 234, 0.3)';
+        
+        timeout = setTimeout(() => {
+            this.style.borderColor = '';
+            this.style.boxShadow = '';
+        }, 1000);
+    });
+});
+
+// Auto-submit form on filter change with loading animation
+const filterSelects = document.querySelectorAll('.filter-select');
+filterSelects.forEach(select => {
+    select.addEventListener('change', function() {
+        const form = this.closest('form');
+        if (form) {
+            // Show loading indicator
+            const loading = document.getElementById('loading');
+            if (loading) {
+                loading.classList.add('active');
+            }
+            
+            // Add animation to the select
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 200);
+        }
+    });
+});
+
+// Smooth scroll to results after filter/search
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.has('search') || urlParams.has('university') || urlParams.has('department') || urlParams.has('rating')) {
+    setTimeout(() => {
+        const resultsSection = document.querySelector('.section');
+        if (resultsSection) {
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }, 500);
+}
+
+// Enhanced pagination with filter preservation
+document.querySelectorAll('.pagination-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        // Show loading animation
+        const loading = document.getElementById('loading');
+        if (loading) {
+            loading.classList.add('active');
+        }
+    });
+});
+
+// Clear individual filter tags
+function clearFilter(filterName) {
+    const url = new URL(window.location.href);
+    url.searchParams.delete(filterName);
+    window.location.href = url.toString();
+}
+
+// Add keyboard shortcuts for search
+document.addEventListener('keydown', function(e) {
+    // Press '/' to focus search
+    if (e.key === '/' && !e.target.matches('input, textarea')) {
+        e.preventDefault();
+        const searchInput = document.querySelector('input[name="search"]');
+        if (searchInput) {
+            searchInput.focus();
+            searchInput.select();
+        }
+    }
+    
+    // Press 'Escape' to clear search
+    if (e.key === 'Escape' && e.target.matches('input[name="search"]')) {
+        e.target.value = '';
+        e.target.blur();
+    }
+});
+
+// Show search shortcuts hint
+const firstSearchInput = document.querySelector('input[name="search"]');
+if (firstSearchInput) {
+    firstSearchInput.addEventListener('focus', function() {
+        if (!this.dataset.hintShown) {
+            showNotification('💡 Tip: Press "/" to quick search, "Esc" to clear', 'info');
+            this.dataset.hintShown = 'true';
+        }
+    });
+}
+
+// Animate filter results count
+function animateCount(element) {
+    if (!element) return;
+    
+    const text = element.textContent;
+    const match = text.match(/\d+/);
+    if (match) {
+        const finalCount = parseInt(match[0]);
+        let currentCount = 0;
+        const increment = Math.ceil(finalCount / 20);
+        const duration = 1000;
+        const stepTime = duration / (finalCount / increment);
+        
+        const timer = setInterval(() => {
+            currentCount += increment;
+            if (currentCount >= finalCount) {
+                element.textContent = text.replace(/\d+/, finalCount);
+                clearInterval(timer);
+            } else {
+                element.textContent = text.replace(/\d+/, currentCount);
+            }
+        }, stepTime);
+    }
+}
+
+// Animate result count on page load
+window.addEventListener('load', () => {
+    const countElement = document.querySelector('.section-title');
+    if (countElement && countElement.textContent.includes('found')) {
+        animateCount(countElement);
+    }
+});
+
+// Enhanced filter dropdown animations
+filterSelects.forEach(select => {
+    select.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-2px)';
+        this.style.boxShadow = '0 15px 40px rgba(0, 0, 0, 0.2)';
+    });
+    
+    select.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+        this.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.1)';
+    });
+});
+
+// Add ripple effect to search button
+const searchButtons = document.querySelectorAll('.search-btn');
+searchButtons.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        const rect = this.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const ripple = document.createElement('span');
+        ripple.style.cssText = `
+            position: absolute;
+            left: ${x}px;
+            top: ${y}px;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            transform: translate(-50%, -50%);
+            animation: rippleEffect 0.6s ease-out;
+            pointer-events: none;
+        `;
+        
+        this.style.position = 'relative';
+        this.appendChild(ripple);
+        
+        setTimeout(() => ripple.remove(), 600);
+    });
+});
+
+// Add ripple animation CSS
+if (!document.getElementById('ripple-styles')) {
+    const style = document.createElement('style');
+    style.id = 'ripple-styles';
+    style.textContent = `
+        @keyframes rippleEffect {
+            from { width: 0; height: 0; opacity: 1; }
+            to { width: 300px; height: 300px; opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// Auto-focus search on page load (home page only)
+if (window.location.pathname === '/' || window.location.pathname === '/home/') {
+    window.addEventListener('load', () => {
+        const searchInput = document.querySelector('input[name="search"]');
+        if (searchInput && !urlParams.has('search')) {
+            setTimeout(() => {
+                searchInput.focus();
+            }, 1500);
+        }
+    });
+}
+
+// Add loading state to forms
+document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', function() {
+        const submitBtn = this.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = '⏳ Searching...';
+            submitBtn.disabled = true;
+            
+            // Re-enable after a timeout as fallback
+            setTimeout(() => {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }, 5000);
+        }
+    });
+});
+
+// Highlight matching text in search results (if search query exists)
+if (urlParams.has('search')) {
+    const searchQuery = urlParams.get('search').toLowerCase();
+    if (searchQuery.length > 2) {
+        setTimeout(() => {
+            document.querySelectorAll('.cr-name, .cr-details').forEach(element => {
+                const text = element.textContent;
+                const regex = new RegExp(`(${searchQuery})`, 'gi');
+                if (regex.test(text)) {
+                    element.innerHTML = text.replace(regex, '<span style="background: rgba(255, 235, 59, 0.4); padding: 2px 4px; border-radius: 4px; font-weight: 600;">$1</span>');
+                }
+            });
+        }, 500);
+    }
+}
+
+// Mobile: Collapse filters on mobile
+if (window.innerWidth <= 768) {
+    const filterSection = document.querySelector('.filter-section');
+    if (filterSection) {
+        const filterTitle = filterSection.querySelector('h3');
+        if (filterTitle) {
+            filterTitle.style.cursor = 'pointer';
+            filterTitle.innerHTML += ' <span style="float: right; font-size: 0.8em;">▼</span>';
+            
+            const filterContent = filterSection.querySelector('.filter-row');
+            let isCollapsed = true;
+            
+            if (filterContent) {
+                filterContent.style.display = 'none';
+            }
+            
+            filterTitle.addEventListener('click', function() {
+                isCollapsed = !isCollapsed;
+                if (filterContent) {
+                    filterContent.style.display = isCollapsed ? 'none' : 'grid';
+                }
+                const arrow = this.querySelector('span');
+                if (arrow) {
+                    arrow.textContent = isCollapsed ? '▼' : '▲';
+                }
+            });
+        }
+    }
+}
+
+console.log('🔍 Search and Filter functionality loaded successfully!');
