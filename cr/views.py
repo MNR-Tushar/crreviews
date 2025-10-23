@@ -6,7 +6,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import *
 from userprofile.models import *
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q, Avg
+from django.db.models import Q
 
 def home(request):
 
@@ -336,7 +336,7 @@ def delete_cr_profile(request, slug):
     return redirect('user_dashboard')
 
 
-
+@login_required
 def submit_review(request, cr_slug):
     cr_profile = get_object_or_404(CrProfile, slug=cr_slug)
     user = request.user
