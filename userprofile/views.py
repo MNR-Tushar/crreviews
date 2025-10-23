@@ -97,7 +97,7 @@ def registration(request):
     
     return render(request, 'user_profile/registration.html', context)
 
-
+@login_required
 def logout(request):
     auth_logout(request)
     return redirect('login')
@@ -237,6 +237,7 @@ def edit_user(request,slug):
 
     return render(request,'user_profile/edit_user.html',context)
 
+@login_required
 def settings(request):
 
     return render(request,'user_profile/settings.html')
