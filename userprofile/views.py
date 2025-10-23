@@ -48,9 +48,20 @@ def registration(request):
             messages.error(request, 'Email already exists!')
             return redirect('registration')
         
-        if User.objects.filter(student_id=student_id).exists():
-            messages.error(request, 'Student ID already exists!')
+        if len(password) < 8:
+            messages.error(request, 'Password must be at least 8 characters long!')
             return redirect('registration')
+        
+        if password.isdigit():
+            messages.error(request, 'Password must contain at least one letter!')
+            return redirect('registration')
+        
+        try:
+            validate_password(password)
+        except ValidationError as e:
+            messages.error(request, str(e))
+            return redirect('registration')
+        
         
         try:
             
@@ -194,7 +205,7 @@ def edit_user(request,slug):
             user.section = request.POST.get('section')
             user.bio = request.POST.get('bio')
             user.gender = request.POST.get('gender')
-            user.date_of_birth = request.POST.get('date_of_birth')
+            user.date_of_birth = request.POST.get('date_of_birth') or None
             new_picture = request.FILES.get('profile_picture')
             if new_picture:
                 user.profile_picture = new_picture
@@ -230,7 +241,7 @@ def settings(request):
 
     return render(request,'user_profile/settings.html')
 
-
+@login_required
 def change_password(request):
     if request.method == 'POST':
         current_password = request.POST.get('current_password')

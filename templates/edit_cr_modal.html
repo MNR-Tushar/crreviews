@@ -37,11 +37,11 @@
 
             <div class="form-row">
                <div class="form-group">
-                <label for="firstName">Name *</label>
+                <label for="firstName">Full Name *</label>
                 <input type="text" id="firstName" name="name" placeholder="Enter your name" value="{{ cr.name }}">
                </div>
                <div class="form-group">
-                  <label>CR Status</label>
+                  <label>CR Status *</label>
                   <select name="cr_status">
                   <option value="Present" {% if cr.cr_status == 'Present' %}selected{% endif %}>Present CR</option>
                   <option value="Former" {% if cr.cr_status == 'Former' %}selected{% endif %}>Former CR</option>
@@ -51,7 +51,7 @@
                
             <div class="form-row">
                <div class="form-group">
-                  <label for="email">Email Address *</label>
+                  <label for="email">Email Address</label>
                   <input type="email" id="email" name="email" placeholder="your@email.com" value="{{ cr.email }}">
                </div>
                <div class="form-group">
@@ -61,7 +61,7 @@
             </div>
             <div class="form-row">
                <div class="form-group">
-                  <label for="gender">Gender</label>
+                  <label for="gender">Gender *</label>
                   <select id="gender" name="gender">
                      <option value="">Select Gender</option>
                      <option value="M" {% if cr.gender == 'M' %}selected{% endif %}>Male</option>
@@ -104,17 +104,17 @@
                </div>
                <div class="form-group">
                   <label for="batch">Batch *</label>
-                  <input type="text" id="batch" name="batch" placeholder="e.g., 2021" value="{{ cr.batch }}">
+                  <input type="text" id="batch" name="batch" placeholder="231" value="{{ cr.batch }}">
                </div>
             </div>
             <div class="form-row">
                <div class="form-group">
                   <label for="batch">Department Batch</label>
-                  <input type="text" id="batch" name="dept_batch" placeholder="e.g., 2021" value="{{ cr.dept_batch }}">
+                  <input type="text" id="batch" name="dept_batch" placeholder="64" value="{{ cr.dept_batch }}">
                </div>
                <div class="form-group">
-                  <label for="section">Section</label>
-                  <input type="text" id="section" name="section" placeholder="e.g., A" value="{{ cr.section }}">
+                  <label for="section">Section*</label>
+                  <input type="text" id="section" name="section" placeholder="64_X" value="{{ cr.section }}">
                </div>
             </div>
          </div>

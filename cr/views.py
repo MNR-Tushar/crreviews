@@ -223,9 +223,10 @@ def add_cr(request):
     if request.method == 'POST':
 
        
-        if hasattr(request.user, 'cr_profile'):
+        if hasattr(request.user, 'user_profile'):
             messages.error(request, "You already have a CR profile!")
             return redirect('add_cr')
+
             
 
         name = request.POST.get('name')
@@ -283,7 +284,7 @@ def edit_cr_profile(request,slug):
         cr.name = request.POST.get('name')
         cr.st_id = request.POST.get('st_id')
         cr.gender = request.POST.get('gender')
-        cr.date_of_birth = request.POST.get('date_of_birth')
+        cr.date_of_birth = request.POST.get('date_of_birth') or None
         cr.university = University.objects.get(id=request.POST.get('university'))
         cr.department = Department.objects.get(id=request.POST.get('department'))
         cr.batch = request.POST.get('batch')
