@@ -40,9 +40,10 @@
                         <select name="university" class="filter-select" onchange="this.form.submit()">
                             <option value="">🏛️ All Universities</option>
                             {% for uni in universities %}
-                                <option value="{{ uni.id }}" {% if request.GET.university == uni.id|stringformat:"s" %}selected{% endif %}>
-                                    {{ uni.name }}
+                                <option class="option" value="{{ uni.id }}" {% if request.GET.university == uni.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ uni.title }}
                                 </option>
+                              
                             {% endfor %}
                         </select>
                         
@@ -51,7 +52,7 @@
                             <option value="">📚 All Departments</option>
                             {% for dept in departments %}
                                 <option value="{{ dept.id }}" {% if request.GET.department == dept.id|stringformat:"s" %}selected{% endif %}>
-                                    {{ dept.name }}
+                                    {{ dept.title }}
                                 </option>
                             {% endfor %}
                         </select>

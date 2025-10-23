@@ -99,13 +99,25 @@
                     <h2 class="section-title">Personal Details</h2>
                 </div>
 
-                <div class="form-row">
-                    <div class="input-group">
+                 <div class="input-group">
                         <label class="input-label">
                             <span>Full Name</span>
                             <span class="required-star">*</span>
                         </label>
                         <input type="text" name="name" class="input-field" placeholder="Enter full name" required>
+                    </div>
+
+                <div class="form-row">
+                    <div class="input-group">
+                        <label class="input-label">
+                            <span>CR Status</span>
+                            <span class="required-star">*</span>
+                        </label>
+                        <select name="cr_status" class="select-field" required>
+                            <option value="">Select Status</option>
+                             <option value="Present" {% if cr.cr_status == 'Present' %}selected{% endif %}>Present CR</option>
+                            <option value="Former" {% if cr.cr_status == 'Former' %}selected{% endif %}>Former CR</option>
+                        </select>
                     </div>
 
                      <div class="input-group">

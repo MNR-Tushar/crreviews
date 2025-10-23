@@ -2,6 +2,8 @@
 {% load static %}
 {% block title %}CR Profile{% endblock title %}
 {% block content %}
+
+
      <!-- CR Profile Page -->
     <div id="cr-profile" class="page">
         <div class="container">
@@ -20,6 +22,17 @@
                     <p style="color: rgba(255,255,255,0.9); font-size: 1.3rem; margin-bottom: 1.5rem;" id="profile-info">
                         {{cr_profile.st_id}} | {{cr_profile.university}}
                     </p>
+
+                        <!-- CR Status Badge -->
+  <div class="cr-status-badge {{ cr_profile.cr_status|lower }}">
+    {% if cr_profile.cr_status == 'Present' %}
+  
+      <span class="badge-text">Present CR</span>
+    {% else %}
+      
+      <span class="badge-text">Former CR</span>
+    {% endif %}
+  </div>
                     
                     <!-- Rating Display -->
                     <div style="margin: 2rem 0;">

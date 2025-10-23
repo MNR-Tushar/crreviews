@@ -1329,6 +1329,11 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
+        .option{
+            color: #000;
+        }
+
+
         .filter-row {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -1355,6 +1360,10 @@
             background:rgba(255, 255, 255, 0.3);
 
         }
+
+       
+           
+       
 
 
         @media (max-width: 768px) {
@@ -1606,5 +1615,242 @@
         }
 
        
+.cr-status-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  z-index: 10;
+  animation: fadeInSlide 0.6s ease-out;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
 
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Present CR Badge - Vibrant Green/Cyan Theme */
+.cr-status-badge.present {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.95), rgba(6, 182, 212, 0.95));
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.cr-status-badge.present::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shimmerPresent 2.5s ease-in-out infinite;
+}
+
+@keyframes shimmerPresent {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.cr-status-badge.present::after {
+  content: '●';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #10b981;
+  font-size: 0.8rem;
+  animation: pulseGreen 1.5s ease-in-out infinite;
+  text-shadow: 0 0 10px rgba(16, 185, 129, 0.8);
+}
+
+@keyframes pulseGreen {
+  0%, 100% { opacity: 1; transform: translateY(-50%) scale(1); }
+  50% { opacity: 0.6; transform: translateY(-50%) scale(1.3); }
+}
+
+/* Former CR Badge - Elegant Purple/Gray Theme */
+.cr-status-badge.former {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.9), rgba(107, 114, 142, 0.9));
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.cr-status-badge.former::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmerFormer 3s ease-in-out infinite;
+}
+
+@keyframes shimmerFormer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Badge Icon Animations */
+.badge-icon {
+  font-size: 1.1rem;
+  display: inline-block;
+  position: relative;
+  z-index: 2;
+}
+
+.cr-status-badge.present .badge-icon {
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { 
+    transform: scale(1) rotate(0deg);
+    filter: brightness(1);
+  }
+  25% { 
+    transform: scale(1.2) rotate(-10deg);
+    filter: brightness(1.3);
+  }
+  50% { 
+    transform: scale(1) rotate(0deg);
+    filter: brightness(1);
+  }
+  75% { 
+    transform: scale(1.2) rotate(10deg);
+    filter: brightness(1.3);
+  }
+}
+
+.cr-status-badge.former .badge-icon {
+  animation: gentleFloat 3s ease-in-out infinite;
+}
+
+@keyframes gentleFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+/* Badge Text */
+.badge-text {
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Hover Effects */
+.cr-status-badge:hover {
+  transform: scale(1.1) translateY(-3px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.cr-status-badge.present:hover {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 1), rgba(6, 182, 212, 1));
+  box-shadow: 0 15px 40px rgba(16, 185, 129, 0.6);
+}
+
+.cr-status-badge.former:hover {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 1), rgba(107, 114, 142, 1));
+  box-shadow: 0 15px 40px rgba(139, 92, 246, 0.5);
+}
+
+/* Card needs position relative for absolute badge positioning */
+.card {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Optional: Add subtle glow to card based on status */
+.card:has(.cr-status-badge.present):hover {
+  box-shadow: 0 30px 60px rgba(16, 185, 129, 0.2);
+}
+
+.card:has(.cr-status-badge.former):hover {
+  box-shadow: 0 30px 60px rgba(139, 92, 246, 0.2);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .cr-status-badge {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    top: 12px;
+    left: 12px;
+  }
+  
+  
+  .badge-text {
+    font-size: 0.7rem;
+  }
+  
+  .cr-status-badge.present::after {
+    right: 10px;
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cr-status-badge {
+    padding: 0.4rem 0.9rem;
+    font-size: 0.7rem;
+    top: 10px;
+    left: 10px;
+    gap: 0.4rem;
+  }
+  
+  .badge-icon {
+    font-size: 0.9rem;
+  }
+  
+  .badge-text {
+    font-size: 0.65rem;
+    letter-spacing: 0.5px;
+  }
+  
+  .cr-status-badge.present::after {
+    display: none; /* Hide pulse dot on very small screens */
+  }
+}
+
+/* Extra polish: Badge entrance animation on page load */
+@keyframes badgeEntrance {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px) scale(0.8);
+  }
+  60% {
+    transform: translateX(5px) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.cr-status-badge {
+  animation: badgeEntrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
         
