@@ -24,9 +24,9 @@
      
             
             <ul class="nav-links">
-                <li><a href="{% url 'home' %}" class="nav-link">Home</a></li>
-                <li><a href="{% url 'all_cr' %}" class="nav-link" >All CRS</a></li>
-                <li><a href="{% url 'latest_reviews' %}" class="nav-link" >Latest Reviews</a></li>
+                <li><a href="{% url 'home' %}" class="nav-link">⌂ Home</a></li>
+                <li><a href="{% url 'all_cr' %}" class="nav-link" >👥 All CRS</a></li>
+                <li><a href="{% url 'latest_reviews' %}" class="nav-link" >✩ Latest Reviews</a></li>
                 {% if user.is_authenticated %}
                 <!-- User Profile Dropdown -->
                 <li class="user-dropdown">
@@ -82,8 +82,8 @@
                 </div>
                 </li>
                 {% else %}
-                <li><a href="{% url 'login'%}" class="nav-link" >Login</a></li>
-                <li><a href="{%url 'registration'%}" class="nav-link">Registration</a></li>
+                <li><a href="{% url 'login'%}" class="nav-link" >🔑 Login</a></li>
+                <li><a href="{%url 'registration'%}" class="nav-link">👤+ Registration</a></li>
                 {% endif %}
                 
             </ul>
