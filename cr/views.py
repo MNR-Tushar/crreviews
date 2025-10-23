@@ -60,8 +60,50 @@ def home(request):
     return render(request,'home.html',context)
 
 def all_cr(request):
-    crs = CrProfile.objects.all().order_by('-created_at')
-    paginator = Paginator(crs, 5)
+
+    search_query = request.GET.get('search')
+    university_filter = request.GET.get('university')
+    department_filter = request.GET.get('department')
+    rating_filter = request.GET.get('rating')
+
+
+    crs = CrProfile.objects.all()
+
+    if search_query:
+        crs = crs.filter(
+            Q(name__icontains=search_query) |
+            Q(st_id__icontains=search_query) |
+            Q(email__icontains=search_query)|
+            Q(batch__icontains=search_query)|
+            Q(dept_batch__icontains=search_query)|
+            Q(section__icontains=search_query)
+        )
+
+    if university_filter:
+        crs = crs.filter(university__id=university_filter)
+    if department_filter:
+        crs = crs.filter(department__id=department_filter)
+
+    if rating_filter:
+        filtered_crs = []
+        for cr in crs:
+            avg_rating = cr.average_rating
+            if rating_filter == '5' and avg_rating >= 4.5:
+                filtered_crs.append(cr)
+            elif rating_filter == '4' and 3.5 <= avg_rating < 4.5:
+                filtered_crs.append(cr)
+            elif rating_filter == '3' and 2.5 <= avg_rating < 3.5:
+                filtered_crs.append(cr)
+            elif rating_filter == '2' and 1.5 <= avg_rating < 2.5:
+                filtered_crs.append(cr)
+            elif rating_filter == '1' and avg_rating < 1.5:
+                filtered_crs.append(cr)
+        crs = filtered_crs
+    else:
+        crs = crs.order_by('-created_at')
+
+    
+    paginator = Paginator(crs, 9)
     page_number =  request.GET.get('page',1)
 
     try:
@@ -71,9 +113,17 @@ def all_cr(request):
     except EmptyPage:
         crs = paginator.page(1)
 
+    universities = University.objects.all()
+    departments = Department.objects.all()
+
     context={
         'cr':crs,
-        'paginator':paginator
+        'paginator':paginator,
+        'universities':universities,
+        'departments':departments,
+        'university_filter':university_filter,
+        'department_filter':department_filter,
+        'rating_filter':rating_filter,
        
         
     }
