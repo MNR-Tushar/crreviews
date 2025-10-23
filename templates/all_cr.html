@@ -1,57 +1,137 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %} CRS {% endblock title %}
+{% block title %} All CRs {% endblock title %}
 {% block content %}
     <div id="all-cr" class="page">
         <div class="container">
-            {% comment %} <h1 class="title">All CRS</h1> {% endcomment %}
             
+            <!-- Search Section -->
             <div class="search-section">
-                <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 700;">Find Your CR</h3>
-                <div class="search-bar">
-                    <input type="text" class="search-input" placeholder="Enter Name or ID...">
-                    <button class="search-btn">Search</button>
-                </div>
-            </div>
-
-            {% comment %} <div class="search-section">
-                <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 700;">➕ Add Your CR</h3>
-                
-                <button class="btn" style="width: 100%; font-size: 1.2rem;" onclick="window.location.href={% url 'add_cr' %}">🆕 Add New CR</button>
-            </div> {% endcomment %}
-            
-            <div class="filter-section">
-                <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 700;">Filters</h3>
-                <div class="filter-row">
-                    <select class="filter-select">
-                        <option>🏛️ All Universities</option>
-                        <option>Dhaka University</option>
-                        
-                    </select>
-                    <select class="filter-select">
-                        <option>📚 All Departments</option>
-                        <option>Computer Science</option>
-                        
-                    </select>
-                    <select class="filter-select">
-                        <option>⭐ Rating By</option>
-                        <option>5 Stars</option>
-                        <option>4 Stars</option>
-                        <option>3 Stars</option>
-                        <option>2 Stars</option>
-                        <option>1 Star</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="grid">
-                    {% for cr in cr%}
-                        {% include "cr_card.html" %}
-                    {% endfor %}
+                <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 700;">🔍 Find Your CR</h3>
+                <form method="GET" action="{% url 'all_cr' %}" class="search-bar">
+                    <input 
+                        type="text" 
+                        name="search" 
+                        class="search-input" 
+                        placeholder="🔎 Search by Name, ID, Email, Batch, Section..." 
+                        value="{{ request.GET.search }}"
+                    >
+                    <button type="submit" class="search-btn">🔍 Search</button>
                     
-                </div>
+                    {% if request.GET.search %}
+                        <a href="{% url 'all_cr' %}" class="btn btn-secondary" style="padding: 1rem 2rem;">
+                            ✖ Clear Search
+                        </a>
+                    {% endif %}
+                </form>
             </div>
+            
+            <!-- Filter Section -->
+            <div class="filter-section">
+                <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 700;">🎯 Filters</h3>
+                <form method="GET" action="{% url 'all_cr' %}" id="filterForm">
+                    <!-- Preserve search query when filtering -->
+                    {% if request.GET.search %}
+                        <input type="hidden" name="search" value="{{ request.GET.search }}">
+                    {% endif %}
+                    
+                    <div class="filter-row">
+                        <!-- University Filter -->
+                        <select name="university" class="filter-select" onchange="this.form.submit()">
+                            <option value="">🏛️ All Universities</option>
+                            {% for uni in universities %}
+                                <option value="{{ uni.id }}" {% if request.GET.university == uni.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ uni.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        
+                        <!-- Department Filter -->
+                        <select name="department" class="filter-select" onchange="this.form.submit()">
+                            <option value="">📚 All Departments</option>
+                            {% for dept in departments %}
+                                <option value="{{ dept.id }}" {% if request.GET.department == dept.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ dept.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        
+                        <!-- Rating Filter -->
+                        <select name="rating" class="filter-select" onchange="this.form.submit()">
+                            <option value="">⭐ All Ratings</option>
+                            <option value="5" {% if request.GET.rating == "5" %}selected{% endif %}>⭐⭐⭐⭐⭐ 5 Stars (4.5+)</option>
+                            <option value="4" {% if request.GET.rating == "4" %}selected{% endif %}>⭐⭐⭐⭐ 4 Stars (3.5-4.5)</option>
+                            <option value="3" {% if request.GET.rating == "3" %}selected{% endif %}>⭐⭐⭐ 3 Stars (2.5-3.5)</option>
+                            <option value="2" {% if request.GET.rating == "2" %}selected{% endif %}>⭐⭐ 2 Stars (1.5-2.5)</option>
+                            <option value="1" {% if request.GET.rating == "1" %}selected{% endif %}>⭐ 1 Star (Below 1.5)</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Active Filters Display -->
+                    {% if request.GET.university or request.GET.department or request.GET.rating %}
+                        <div style="margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+                            <span style="color: white; font-weight: 600;">Active Filters:</span>
+                            
+                            {% if request.GET.university %}
+                                <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if request.GET.department %}department={{ request.GET.department }}&{% endif %}{% if request.GET.rating %}rating={{ request.GET.rating }}{% endif %}" 
+                                   class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                    🏛️ University ✖
+                                </a>
+                            {% endif %}
+                            
+                            {% if request.GET.department %}
+                                <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if request.GET.university %}university={{ request.GET.university }}&{% endif %}{% if request.GET.rating %}rating={{ request.GET.rating }}{% endif %}" 
+                                   class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                    📚 Department ✖
+                                </a>
+                            {% endif %}
+                            
+                            {% if request.GET.rating %}
+                                <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if request.GET.university %}university={{ request.GET.university }}&{% endif %}{% if request.GET.department %}department={{ request.GET.department }}{% endif %}" 
+                                   class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                    ⭐ Rating ✖
+                                </a>
+                            {% endif %}
+                            
+                            <a href="{% url 'all_cr' %}" class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem; background: linear-gradient(135deg, #f87171, #ef4444);">
+                                🔄 Clear All Filters
+                            </a>
+                        </div>
+                    {% endif %}
+                </form>
+            </div>
+
+            <!-- Results Section -->
+            <div class="section">
+                <h2 class="section-title">
+                    {% if request.GET.search or request.GET.university or request.GET.department or request.GET.rating %}
+                        🎯 {{ cr.paginator.count }} CR{{ cr.paginator.count|pluralize }} found
+                    {% else %}
+                        👥 All CRs ({{ cr.paginator.count }})
+                    {% endif %}
+                </h2>
+                
+                {% if cr %}
+                    <div class="grid">
+                        {% for cr_item in cr %}
+                            {% with cr=cr_item %}
+                                {% include "cr_card.html" %}
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div style="text-align: center; padding: 4rem 2rem; color: white;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">😔</div>
+                        <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">No CRs Found</h3>
+                        <p style="font-size: 1.1rem; opacity: 0.8; margin-bottom: 2rem;">
+                            Try adjusting your search or filters
+                        </p>
+                        <a href="{% url 'all_cr' %}" class="btn">🔄 Reset All</a>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Pagination with Filter Preservation -->
             {% include 'pagination.html' %}
         </div>
     </div>

@@ -1,52 +1,63 @@
-        <!-- Pagination Section -->
-            {% if cr.has_other_pages %}
-            <div class="pagination-section">
-                <div class="pagination">
-                    {% if cr.has_previous %}
-                        <a href="?page=1" class="pagination-btn pagination-first">
-                            <span>First</span>
-                        </a>
-                        <a href="?page={{ cr.previous_page_number }}" class="pagination-btn pagination-prev">
-                            <span>Previous</span>
-                        </a>
-                    {% else %}
-                        <span class="pagination-btn pagination-disabled">
-                            <span>First</span>
-                        </span>
-                        <span class="pagination-btn pagination-disabled">
-                            <span>Previous</span>
-                        </span>
-                    {% endif %}
+<!-- Pagination Section with Filter Preservation -->
+{% if cr.has_other_pages %}
+<div class="pagination-section">
+    <div class="pagination">
+        {% if cr.has_previous %}
+            <a href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.university %}&university={{ request.GET.university }}{% endif %}{% if request.GET.department %}&department={{ request.GET.department }}{% endif %}{% if request.GET.rating %}&rating={{ request.GET.rating }}{% endif %}" 
+               class="pagination-btn pagination-first">
+                <span>⏮️ First</span>
+            </a>
+            <a href="?page={{ cr.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.university %}&university={{ request.GET.university }}{% endif %}{% if request.GET.department %}&department={{ request.GET.department }}{% endif %}{% if request.GET.rating %}&rating={{ request.GET.rating }}{% endif %}" 
+               class="pagination-btn pagination-prev">
+                <span>◀️ Previous</span>
+            </a>
+        {% else %}
+            <span class="pagination-btn pagination-disabled">
+                <span>⏮️ First</span>
+            </span>
+            <span class="pagination-btn pagination-disabled">
+                <span>◀️ Previous</span>
+            </span>
+        {% endif %}
 
-                    <div class="pagination-numbers">
-                        {% for num in cr.paginator.page_range %}
-                            {% if cr.number == num %}
-                                <span class="pagination-btn pagination-active">{{ num }}</span>
-                            {% elif num > cr.number|add:'-3' and num < cr.number|add:'3' %}
-                                <a href="?page={{ num }}" class="pagination-btn">{{ num }}</a>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
+        <div class="pagination-numbers">
+            {% for num in cr.paginator.page_range %}
+                {% if cr.number == num %}
+                    <span class="pagination-btn pagination-active">{{ num }}</span>
+                {% elif num > cr.number|add:'-3' and num < cr.number|add:'3' %}
+                    <a href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.university %}&university={{ request.GET.university }}{% endif %}{% if request.GET.department %}&department={{ request.GET.department }}{% endif %}{% if request.GET.rating %}&rating={{ request.GET.rating }}{% endif %}" 
+                       class="pagination-btn">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+        </div>
 
-                    {% if cr.has_next %}
-                        <a href="?page={{ cr.next_page_number }}" class="pagination-btn pagination-next">
-                            <span>Next</span>
-                        </a>
-                        <a href="?page={{ cr.paginator.num_pages }}" class="pagination-btn pagination-last">
-                            <span>Last</span>
-                        </a>
-                    {% else %}
-                        <span class="pagination-btn pagination-disabled">
-                            <span>Next</span>
-                        </span>
-                        <span class="pagination-btn pagination-disabled">
-                            <span>Last</span>
-                        </span>
-                    {% endif %}
-                </div>
+        {% if cr.has_next %}
+            <a href="?page={{ cr.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.university %}&university={{ request.GET.university }}{% endif %}{% if request.GET.department %}&department={{ request.GET.department }}{% endif %}{% if request.GET.rating %}&rating={{ request.GET.rating }}{% endif %}" 
+               class="pagination-btn pagination-next">
+                <span>Next ▶️</span>
+            </a>
+            <a href="?page={{ cr.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.university %}&university={{ request.GET.university }}{% endif %}{% if request.GET.department %}&department={{ request.GET.department }}{% endif %}{% if request.GET.rating %}&rating={{ request.GET.rating }}{% endif %}" 
+               class="pagination-btn pagination-last">
+                <span>Last ⏭️</span>
+            </a>
+        {% else %}
+            <span class="pagination-btn pagination-disabled">
+                <span>Next ▶️</span>
+            </span>
+            <span class="pagination-btn pagination-disabled">
+                <span>Last ⏭️</span>
+            </span>
+        {% endif %}
+    </div>
 
-                <div class="pagination-info">
-                    <p>Page {{ cr.number }} of {{ cr.paginator.num_pages }} • Showing {{ cr.start_index }} to {{ cr.end_index }} of {{ cr.paginator.count }} results</p>
-                </div>
-            </div>
+    <div class="pagination-info">
+        <p>
+            📄 Page {{ cr.number }} of {{ cr.paginator.num_pages }} • 
+            Showing {{ cr.start_index }} to {{ cr.end_index }} of {{ cr.paginator.count }} result{{ cr.paginator.count|pluralize }}
+            {% if request.GET.search or request.GET.university or request.GET.department or request.GET.rating %}
+                <span style="color: #4ade80; font-weight: 600;">(Filtered)</span>
             {% endif %}
+        </p>
+    </div>
+</div>
+{% endif %}
