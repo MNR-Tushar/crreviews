@@ -1617,12 +1617,12 @@
        
 .cr-status-badge {
   position: absolute;
-  top: 15px;
-  left: 15px;
+  top: 10px;
+  left: 10px;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.6rem 1.2rem;
+  padding: 0.6rem ;
   border-radius: 50px;
   font-weight: 700;
   font-size: 0.85rem;
@@ -1752,7 +1752,7 @@
 
 /* Badge Text */
 .badge-text {
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.8px;
   text-transform: uppercase;
   font-size: 0.75rem;
