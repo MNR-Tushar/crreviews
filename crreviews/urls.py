@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('cr.urls')),
     path('',include('userprofile.urls')),
+    path('',include('footer.urls')),
 ]
 
 if settings.DEBUG:
