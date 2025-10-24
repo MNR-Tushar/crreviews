@@ -99,9 +99,9 @@
             {% endfor %}
             <!-- Pagination for Added CRS -->
             {% if add_crs.has_other_pages %}
-            <div class="pagination-container">
-               <nav aria-label="Added CRS pagination">
-                  <ul class="pagination">
+            <div class="pagination-container1">
+               <nav aria-label="Added CRS pagination1">
+                  <ul class="pagination1">
                      {% if add_crs.has_previous %}
                      <li><a href="?add_crs_page=1">&laquo; First</a></li>
                      <li><a href="?add_crs_page={{ add_crs.previous_page_number }}">← Previous</a></li>
@@ -189,9 +189,9 @@
             {% endfor %}
             <!-- Pagination for Reviews -->
             {% if review.has_other_pages %}
-            <div class="pagination-container">
-               <nav aria-label="Reviews pagination">
-                  <ul class="pagination">
+            <div class="pagination-container1">
+               <nav aria-label="Reviews pagination1">
+                  <ul class="pagination1">
                      {% if review.has_previous %}
                      <li><a href="?review_page=1">&laquo; First</a></li>
                      <li><a href="?review_page={{ review.previous_page_number }}">← Previous</a></li>
@@ -339,12 +339,12 @@
                      {% endfor %}
                      <!-- Pagination for Saved CRs -->
                      {% if saved_crs.has_other_pages %}
-                     <div class="pagination-container">
+                     <div class="pagination-container1">
                         <nav aria-label="Saved CRs pagination">
-                           <ul class="pagination">
+                           <ul class="pagination1">
                               {% if saved_crs.has_previous %}
                               <li><a href="?saved_crs_page=1">&laquo; First</a></li>
-                              <li><a href="?saved_crs_page={{ saved_crs.previous_page_number }}">← Previous</a></li>
+                              <li><a href="?saved_crs_page={{ saved_crs.previous_page_number }}">Previous</a></li>
                               {% endif %}
                               {% for num in saved_crs.paginator.page_range %}
                               {% if saved_crs.number == num %}
@@ -354,7 +354,7 @@
                               {% endif %}
                               {% endfor %}
                               {% if saved_crs.has_next %}
-                              <li><a href="?saved_crs_page={{ saved_crs.next_page_number }}">Next →</a></li>
+                              <li><a href="?saved_crs_page={{ saved_crs.next_page_number }}">Next</a></li>
                               <li><a href="?saved_crs_page={{ saved_crs.paginator.num_pages }}">Last &raquo;</a></li>
                               {% endif %}
                            </ul>
