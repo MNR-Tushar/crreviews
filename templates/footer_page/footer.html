@@ -1,6 +1,6 @@
 {% load static %}
 <footer class="footer">
-       <div class="footer-content">
+    <div class="footer-content">
         
         <!-- Compact Logo Section -->
         <div class="footer-section footer-brand">
@@ -8,7 +8,6 @@
                 <img src="{% static 'logo.svg' %}" alt="CR Reviews" style="height: 55px;">
             </div>
             <p class="footer-tagline">Share, Rate & Review CRs</p>
-           
         </div> 
         
         <!-- Quick Links -->
@@ -27,6 +26,7 @@
         <div class="footer-section">
             <h3>About</h3>
             <a href="{% url 'about_us' %}">ℹ️ About Us</a>
+            <a href="{% url 'developer' %}">👨‍💻 Developer</a>
             <a href="{% url 'privacy_policy' %}">🔒 Privacy Policy</a>
             <a href="{% url 'terms_conditions' %}">📜 Terms & Conditions</a>
             <a href="{% url 'help_support' %}">❓ Help & Support</a>
@@ -38,9 +38,13 @@
             <form id="footerContactForm" class="footer-contact-form">
                 {% csrf_token %}
                 <input type="email" name="email" placeholder="Your Email" required class="footer-input">
-                <textarea name="message" placeholder="Your Message" rows="3" required class="footer-textarea"></textarea>
-                <button type="submit" class="footer-submit-btn">Send Message 📩</button>
+                <textarea name="message" placeholder="Your Message (min 10 characters)" rows="3" required class="footer-textarea"></textarea>
+                <button type="submit" class="footer-submit-btn">
+                    <span class="btn-text">Send Message 📩</span>
+                    <span class="btn-loading" style="display: none;">Sending...</span>
+                </button>
             </form>
+            <div id="footerMessage" class="footer-message" style="display: none;"></div>
             <div class="footer-contact-info">
                 <a href="mailto:crreviews@gmail.com">📧 crreviews@gmail.com</a>
                 <a href="tel:+8801700000000">📞 +880 170 0000 000</a>
@@ -48,12 +52,13 @@
         </div>
 
     </div>
-        <div style="text-align: center; padding: 2rem; border-top: 2px solid rgba(255,255,255,0.2); margin-top: 2rem; color: rgba(255,255,255,0.8); background: linear-gradient(90deg, rgba(255,255,255,0.05), rgba(255,255,255,0.1), rgba(255,255,255,0.05));">
-            <p style="font-size: 1.1rem; font-weight: 600;">
-                © 2025 CR Reviews. All Rights Reserved.
-            </p>
-            <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
-                Made with love for Bangladeshi students
-            </p>
-        </div>
-    </footer>
+    
+    <div style="text-align: center; padding: 2rem; border-top: 2px solid rgba(255,255,255,0.2); margin-top: 2rem; color: rgba(255,255,255,0.8); background: linear-gradient(90deg, rgba(255,255,255,0.05), rgba(255,255,255,0.1), rgba(255,255,255,0.05));">
+        <p style="font-size: 1.1rem; font-weight: 600;">
+            © 2025 CR Reviews. All Rights Reserved.
+        </p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Made with ❤️ for Bangladeshi students
+        </p>
+    </div>
+</footer>

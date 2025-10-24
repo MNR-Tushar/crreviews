@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'footer/about.css' %}">
+
+{% endblock %} 
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title">Help & Support</h1>
+        <p class="page-subtitle">We're Here to Help You</p>
+    </div>
+
+    <div class="content-card">
+        <div class="section-icon">❓</div>
+        <h2 class="section-heading">Frequently Asked Questions</h2>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                🔐 How do I create an account?
+            </div>
+            <div class="faq-answer">
+                Click the "Register" button in the navigation bar, provide your university email, 
+                name, and other details. You'll receive a verification email to activate your account.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                👤 Are my reviews really anonymous?
+            </div>
+            <div class="faq-answer">
+                Yes! When you submit a review, your name is NOT displayed publicly. Only the review 
+                content and rating are visible. We protect your identity to encourage honest feedback.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                ⭐ How does the rating system work?
+            </div>
+            <div class="faq-answer">
+                You can rate CRs from 1 to 5 stars. The average rating is calculated from all reviews. 
+                Higher ratings indicate better performance in communication, responsibility, and leadership.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                ✏️ Can I edit or delete my review?
+            </div>
+            <div class="faq-answer">
+                Once submitted, reviews cannot be edited to maintain authenticity. However, you can 
+                contact us at crreviews@gmail.com to request removal of inappropriate or mistaken reviews.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                🚫 What happens if I violate the guidelines?
+            </div>
+            <div class="faq-answer">
+                Violations may result in review removal, warnings, or account suspension. Serious 
+                offenses like harassment or spam can lead to permanent bans.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                🎓 Can I add a new CR to the platform?
+            </div>
+            <div class="faq-answer">
+                Currently, CRs are added by our team. If you'd like to suggest a CR, please contact 
+                us with their name, university, department, and batch information.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                🔍 How do I search for a specific CR?
+            </div>
+            <div class="faq-answer">
+                Use the search bar on the homepage. You can filter by university, department, batch, 
+                or search by CR name. Results update instantly as you type.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                📧 I didn't receive a verification email
+            </div>
+            <div class="faq-answer">
+                Check your spam/junk folder. If it's still missing, contact us at crreviews@gmail.com 
+                and we'll manually verify your account.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                🔒 How secure is my data?
+            </div>
+            <div class="faq-answer">
+                We use SSL encryption, secure password hashing, and follow industry best practices. 
+                We never sell your data to third parties. Read our Privacy Policy for more details.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-card">
+        <div class="section-icon">📞</div>
+        <h2 class="section-heading">Contact Methods</h2>
+        
+        <div class="contact-methods">
+            <div class="contact-method">
+                <div class="contact-icon">📧</div>
+                <div class="contact-title">Email Support</div>
+                <div class="contact-info">
+                    Get help via email<br>
+                    Response time: 24-48 hours
+                </div>
+                <a href="mailto:crreviews@gmail.com" class="contact-link">
+                    crreviews@gmail.com →
+                </a>
+            </div>
+
+            <div class="contact-method">
+                <div class="contact-icon">📱</div>
+                <div class="contact-title">Phone Support</div>
+                <div class="contact-info">
+                    Call us for urgent issues<br>
+                    Mon-Fri: 9 AM - 6 PM
+                </div>
+                <a href="tel:+8801700000000" class="contact-link">
+                    +880 170 0000 000 →
+                </a>
+            </div>
+
+            <div class="contact-method">
+                <div class="contact-icon">💬</div>
+                <div class="contact-title">Live Chat</div>
+                <div class="contact-info">
+                    Coming Soon!<br>
+                    Real-time assistance
+                </div>
+                <span class="contact-link" style="opacity: 0.5; cursor: not-allowed;">
+                    Available Soon
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-card">
+        <div class="section-icon">🐛</div>
+        <h2 class="section-heading">Report a Bug</h2>
+        <p class="section-text">
+            Found a technical issue? Help us improve by reporting bugs. Include:
+        </p>
+        <ul class="feature-list">
+            <li>📝 Detailed description of the problem</li>
+            <li>🖥️ Device and browser you're using</li>
+            <li>📸 Screenshots if applicable</li>
+            <li>🔁 Steps to reproduce the issue</li>
+        </ul>
+        <p class="section-text" style="margin-top: 1rem;">
+            Send bug reports to: <strong>crreviews@gmail.com</strong>
+        </p>
+    </div>
+
+    <div class="content-card">
+        <div class="section-icon">💡</div>
+        <h2 class="section-heading">Feature Requests</h2>
+        <p class="section-text">
+            Have ideas to improve CR Reviews? We'd love to hear them! Share your suggestions 
+            and help us build a better platform for everyone.
+        </p>
+        <p class="section-text" style="margin-top: 1rem;">
+            Submit ideas to: <strong>crreviews@gmail.com</strong>
+        </p>
+    </div>
+
+    <div class="content-card cta-card">
+        <h2 class="section-heading">Still Need Help?</h2>
+        <p class="section-text">
+            Our support team is ready to assist you. Don't hesitate to reach out!
+        </p>
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="mailto:crreviews@gmail.com" class="btn">Contact Support</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}
