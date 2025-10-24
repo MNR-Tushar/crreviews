@@ -229,11 +229,14 @@
                      {% csrf_token %}
                      <div class="form-group">
                         <label class="form-label">Rating</label>
-                        <div class="rating-edit">
+                        <div style="margin: 2rem 0;">
+                           <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 1rem;">
                            {% for i in "12345" %}
-                           <span class="rating-star-edit" data-value="{{ i }}" onclick="setEditRating({{ i }})">★</span>
+                           <span class="rating-star-edit" data-value="{{ i }}" onclick="setEditRating({{ i }})" style="cursor: pointer; font-size: 2.5rem; opacity: 0.3; transition: all 0.2s;">⭐</span>
                            {% endfor %}
-                        </div>
+                           </div>
+                           
+                         </div>
                         <input type="hidden" id="editRatingValue" name="rating" value="">
                      </div>
                      

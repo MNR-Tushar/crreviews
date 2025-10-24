@@ -682,6 +682,7 @@
     backdrop-filter: blur(10px);
 }
 
+
 .form-input:focus {
     outline: none;
     background: rgba(255, 255, 255, 0.1);
@@ -719,6 +720,34 @@
     color: #ffeb3b;
     transform: scale(1.2);
     text-shadow: 0 0 10px rgba(255, 235, 59, 0.8);
+}
+
+.review_form-input
+{
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 300;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.review_form-input:focus
+{
+    outline: none;
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+}
+
+.review_form-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
 }
 
 .form-actions {

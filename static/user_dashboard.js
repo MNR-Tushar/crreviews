@@ -105,23 +105,37 @@ document.addEventListener("DOMContentLoaded", function() {
         updateEditStarDisplay(value);
     }
 
-    function updateEditStarDisplay(rating) {
-        const stars = document.querySelectorAll('.rating-star-edit');
-        stars.forEach((star, index) => {
-            if (index < rating) {
-                star.classList.add('active');
-                star.style.color = '#ffeb3b';
-                star.style.textShadow = '0 0 20px rgba(255, 235, 59, 0.8)';
-            } else {
-                star.classList.remove('active');
-                star.style.color = 'rgba(255, 255, 255, 0.3)';
-                star.style.textShadow = 'none';
-            }
-        });
-    }
+   function updateEditStarDisplay(rating) {
+    rating = parseInt(rating) || 0;  // Convert string to number, default 0
+
+    const stars = document.querySelectorAll('.rating-star-edit');
+
+    stars.forEach((star, index) => {
+        if (index < rating) {
+            star.style.opacity = '1';
+            star.style.transform = 'scale(1.2)';
+        } else {
+            star.style.opacity = '0.3';
+            star.style.transform = 'scale(1)';
+        }
+    });
+
+    const ratingTexts = [
+        'Select a rating',
+        '⭐ Poor',
+        '⭐⭐ Fair',
+        '⭐⭐⭐ Good',
+        '⭐⭐⭐⭐ Very Good',
+        '⭐⭐⭐⭐⭐ Excellent'
+    ];
+    const ratingTextElement = document.getElementById('editRatingText');
+    if (ratingTextElement) ratingTextElement.textContent = ratingTexts[rating];
+}
+
 
     window.closeReviewModal = function() {
         const modal = document.getElementById('editReviewModal');
+
         if (modal) {
             modal.classList.remove('show');
             modal.style.display = 'none';

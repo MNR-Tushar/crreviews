@@ -41,8 +41,8 @@ def home(request):
     reverse=True
     )
 
-    universities = University.objects.all()
-    departments = Department.objects.all()
+    universities = University.objects.all().order_by('title')
+    departments = Department.objects.all().order_by('title')
 
     rating_distribution = {
         5: 0,
@@ -149,8 +149,8 @@ def all_cr(request):
     except EmptyPage:
         crs = paginator.page(1)
 
-    universities = University.objects.all()
-    departments = Department.objects.all()
+    universities = University.objects.all().order_by('title')
+    departments = Department.objects.all().order_by('title')
 
     context={
         'cr':crs,

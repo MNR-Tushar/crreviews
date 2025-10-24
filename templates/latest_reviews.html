@@ -20,7 +20,7 @@
                                 <span class="star">☆</span>
                                 {% endif %}
                                 {% endfor %}
-                                <span class="review_cr">(CR - {{review.cr_profile.name}})</span>
+                                <span class="review_cr">(CR - <strong><a href="{% url 'cr_profile' review.cr_profile.slug %}" style="text-decoration: none; color: inherit;">👤 {{review.cr_profile.name}}</a> </strong>)</span>
                               
                             </div>
                             
