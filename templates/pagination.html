@@ -5,18 +5,18 @@
         {% if cr.has_previous %}
             <a href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.university %}&university={{ request.GET.university }}{% endif %}{% if request.GET.department %}&department={{ request.GET.department }}{% endif %}{% if request.GET.rating %}&rating={{ request.GET.rating }}{% endif %}" 
                class="pagination-btn pagination-first">
-                <span>⏮️ First</span>
+                <span class='center'>First</span>
             </a>
             <a href="?page={{ cr.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.university %}&university={{ request.GET.university }}{% endif %}{% if request.GET.department %}&department={{ request.GET.department }}{% endif %}{% if request.GET.rating %}&rating={{ request.GET.rating }}{% endif %}" 
                class="pagination-btn pagination-prev">
-                <span>◀️ Previous</span>
+                <span class='center'>Previous</span>
             </a>
         {% else %}
             <span class="pagination-btn pagination-disabled">
-                <span>⏮️ First</span>
+                <span class='center'>First</span>
             </span>
             <span class="pagination-btn pagination-disabled">
-                <span>◀️ Previous</span>
+                <span class='center'>Previous</span>
             </span>
         {% endif %}
 
@@ -34,18 +34,18 @@
         {% if cr.has_next %}
             <a href="?page={{ cr.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.university %}&university={{ request.GET.university }}{% endif %}{% if request.GET.department %}&department={{ request.GET.department }}{% endif %}{% if request.GET.rating %}&rating={{ request.GET.rating }}{% endif %}" 
                class="pagination-btn pagination-next">
-                <span>Next ▶️</span>
+                <span class='center'>Next</span>
             </a>
             <a href="?page={{ cr.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.university %}&university={{ request.GET.university }}{% endif %}{% if request.GET.department %}&department={{ request.GET.department }}{% endif %}{% if request.GET.rating %}&rating={{ request.GET.rating }}{% endif %}" 
                class="pagination-btn pagination-last">
-                <span>Last ⏭️</span>
+                <span class='center'>Last</span>
             </a>
         {% else %}
             <span class="pagination-btn pagination-disabled">
-                <span>Next ▶️</span>
+                <span class='center'>Next</span>
             </span>
             <span class="pagination-btn pagination-disabled">
-                <span>Last ⏭️</span>
+                <span class='center'>Last</span>
             </span>
         {% endif %}
     </div>
