@@ -123,6 +123,11 @@
             {% endif %}
             {% else %}
             <div class="empty-state">
+               {% if user.is_authenticated %}
+                    <button class="btn" onclick="window.location.href='{% url 'add_cr'%}'" style="font-size: 1.2rem; padding: 1rem 2rem;">
+                        ➕ Add New CR
+                    </button>
+                    {% endif %}
                <div class="empty-state-icon">😴</div>
                <h3>No CRs Added Yet</h3>
                <p>You haven't added any CRs. Start by adding your first CR!</p>
