@@ -59,7 +59,7 @@
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 1.2rem 0;
+            padding: 1rem 0;
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -74,29 +74,10 @@
             align-items: center;
             padding: 0 2rem;
         }
-
-        .logo {
-            font-size: 2.2rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-decoration: none;
-            text-shadow: 0 0 30px rgba(255, 107, 107, 0.5);
-            animation: logoGlow 3s ease-in-out infinite alternate;
-            position: relative;
-        }
-
-        @keyframes logoGlow {
-            0% { filter: hue-rotate(0deg); }
-            100% { filter: hue-rotate(45deg); }
-        }
-
         .nav-links {
             display: flex;
             list-style: none;
-            gap: 1rem;
+            gap: 0.5rem;
         }
 
         .nav-links a {
@@ -146,9 +127,10 @@
     gap: 1rem;
     padding: 0rem 0rem !important;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06)) !important;
-    /* border: 10px solid rgba(255, 255, 255, 0.18); */
+    border: 2px solid rgba(255, 255, 255, 0.18); 
     position: relative;
     overflow: hidden;
+    
 }
 
 .user-profile-btn::before {
@@ -228,7 +210,7 @@
 .dropdown-arrow {
     font-size: 0.65rem;
     transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    margin-left: 0.2rem;
+    margin-left: 0rem;
 }
 
 .user-dropdown:hover .dropdown-arrow {
