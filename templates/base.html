@@ -20,13 +20,25 @@
             <a href="{% url 'home' %}" style="display: flex; align-items: center; text-decoration: none;">
             <img src="{% static 'logo.svg' %}" alt="CR Reviews" style="height: 50px; margin-right: 10px;">
             </a>
-
-     
-            
             <ul class="nav-links">
-                <li><a href="{% url 'home' %}" class="nav-link">⌂ Home</a></li>
-                <li><a href="{% url 'all_cr' %}" class="nav-link" >👥 All CRS</a></li>
-                <li><a href="{% url 'latest_reviews' %}" class="nav-link" >✩ Latest Reviews</a></li>
+                <li>
+                <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                Home
+                </a>
+                </li>
+
+                <li>
+                <a href="{% url 'all_cr' %}" class="nav-link {% if request.resolver_match.url_name == 'all_cr' %}active{% endif %}">
+                All CRS
+                </a>
+                </li>
+
+                <li>
+                <a href="{% url 'latest_reviews' %}" class="nav-link {% if request.resolver_match.url_name == 'latest_reviews' %}active{% endif %}">
+                Latest Reviews
+                 </a>
+                </li>
+
                 {% if user.is_authenticated %}
                 <!-- User Profile Dropdown -->
                 <li class="user-dropdown">
