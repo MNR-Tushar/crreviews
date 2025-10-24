@@ -899,3 +899,56 @@ if (window.innerWidth <= 768) {
 }
 
 console.log('🔍 Search and Filter functionality loaded successfully!');
+
+
+// Notice Banner Functions
+function closeNotice(noticeId) {
+    const noticeBanner = document.getElementById(`notice-${noticeId}`);
+    if (noticeBanner) {
+        noticeBanner.style.animation = 'slideUp 0.5s ease-out forwards';
+        setTimeout(() => {
+            noticeBanner.remove();
+        }, 500);
+        
+        // Store closed notice in session storage to prevent showing again
+        const closedNotices = JSON.parse(sessionStorage.getItem('closedNotices') || '[]');
+        closedNotices.push(noticeId);
+        sessionStorage.setItem('closedNotices', JSON.stringify(closedNotices));
+    }
+}
+
+// Add slide up animation
+const noticeStyle = document.createElement('style');
+noticeStyle.textContent = `
+    @keyframes slideUp {
+        from {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+    }
+`;
+document.head.appendChild(noticeStyle);
+
+// Check for previously closed notices and hide them
+document.addEventListener('DOMContentLoaded', () => {
+    const closedNotices = JSON.parse(sessionStorage.getItem('closedNotices') || '[]');
+    closedNotices.forEach(noticeId => {
+        const noticeBanner = document.getElementById(`notice-${noticeId}`);
+        if (noticeBanner) {
+            noticeBanner.style.display = 'none';
+        }
+    });
+});
+
+// Optional: Add running text effect for long messages
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.notice-message').forEach(message => {
+        if (message.textContent.length > 100) {
+            message.classList.add('running');
+        }
+    });
+});

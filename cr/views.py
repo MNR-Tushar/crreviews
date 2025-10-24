@@ -44,6 +44,8 @@ def home(request):
     universities = University.objects.all().order_by('title')
     departments = Department.objects.all().order_by('title')
 
+    active_notices = Notice.objects.filter(is_active=True)
+
     rating_distribution = {
         5: 0,
         4: 0,
@@ -90,6 +92,7 @@ def home(request):
         'department_filter':department_filter,
         'rating_distribution': rating_distribution,
         'rating_percentages': rating_percentages,
+        'active_notices':active_notices,
 
         
     }

@@ -83,8 +83,30 @@ class SavedCR(models.Model):
         return f"{self.user.get_full_name()} saved {self.cr_profile.name}"
     
     
-        
+class Notice(models.Model):
+    title = models.CharField(max_length=200)
+    message = models.TextField()
+    is_active = models.BooleanField(default=True)
+    link = models.URLField(blank=True, null=True, help_text="Optional link for the notice")
     
+    NOTICE_TYPES = [
+        ('info', 'Information'),
+        ('warning', 'Warning'),
+        ('success', 'Success'),
+        ('urgent', 'Urgent'),
+    ]
+    notice_type = models.CharField(max_length=20, choices=NOTICE_TYPES, default='info')
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Notice'
+        verbose_name_plural = 'Notices'
+    
+    def __str__(self):
+        return self.title
 
 
     

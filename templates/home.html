@@ -3,9 +3,44 @@
 {% block title %} BD University CR Reviews {% endblock title %}
 
 {% block content %}
+
+
+
     <div id="home" class="page active">
         <div class="container">
-            <h1 class="title">CR Reviews</h1>
+           
+
+{% if active_notices %}
+    {% for notice in active_notices %}
+        <div class="notice-banner {{ notice.notice_type }}" id="notice-{{ notice.id }}">
+            <div class="notice-content">
+                <div class="notice-icon">
+                    {% if notice.notice_type == 'info' %}
+                        📢
+                    {% elif notice.notice_type == 'success' %}
+                        ✔️
+                    {% elif notice.notice_type == 'warning' %}
+                        ⚠️
+                    {% elif notice.notice_type == 'urgent' %}
+                        🚨
+                    {% endif %}
+                </div>
+                <div class="notice-info">
+                    {% comment %} <div class="notice-title">{{ notice.title }}</div> {% endcomment %}
+                    <div class="notice-message">{{ notice.message }}</div>
+                    {% if notice.link %}
+                        <a href="{{ notice.link }}" class="notice-link" target="_blank">
+                            Learn More →
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            <button class="notice-close" onclick="closeNotice({{ notice.id }})" aria-label="Close notice">
+                ✕
+            </button>
+        </div>
+    {% endfor %}
+{% endif %}
             
             <div class="search-section">
                 <form method="GET" action="{% url 'home' %}">
