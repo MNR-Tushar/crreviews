@@ -66,6 +66,31 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
+        .navbar a img {
+        width: 22px;
+        height: 22px;
+        vertical-align: middle;
+        margin-right: 6px;
+        }
+        .navbar a {
+        color: black;
+        text-decoration: none;
+        font-weight: 500;
+        }
+
+        .navbar a:hover {
+        color: #ffeb3b;
+        }
+
+        .navbar a.active {
+        color: #ffeb3b;
+        }
+
+
+
+       
+
+
         .nav-container {
             max-width: 1400px;
             margin: 0 auto;
@@ -83,7 +108,7 @@
         .nav-links a {
             color: rgba(255, 255, 255, 0.9);
             text-decoration: none;
-            padding: 1rem 1.5rem;
+            padding: 0.5rem 1rem;
             border-radius: 50px;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             font-weight: 500;
@@ -119,6 +144,10 @@
 /* Modern User Dropdown Styles */
 .user-dropdown {
     position: relative;
+    
+
+    
+    
 }
 
 .user-profile-btn {
