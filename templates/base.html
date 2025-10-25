@@ -27,20 +27,20 @@
             <ul class="nav-links">
                 <li>
                 <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
-                     <img class="h" src="{% static 'icons/home.png' %}" alt="Home" width="22" height="22">Home
+                    Home
                 </a>
                 </li>
 
                 <li>
                 <a href="{% url 'all_cr' %}" class="nav-link {% if request.resolver_match.url_name == 'all_cr' %}active{% endif %}">
-                    <img src="{% static 'icons/audience.png' %}" alt="All_CR" width="24" height="24">
+               
                     All CRS
                 </a>
                 </li>
 
                 <li>
                 <a href="{% url 'latest_reviews' %}" class="nav-link {% if request.resolver_match.url_name == 'latest_reviews' %}active{% endif %}">
-                <img src="{% static 'icons/feedback.png' %}" alt="All_CR" width="24" height="24">Latest Reviews
+                Latest Reviews
                  </a>
                 </li>
 
@@ -99,8 +99,8 @@
                 </div>
                 </li>
                 {% else %}
-                <li><a href="{% url 'login'%}" class="nav-link" ><img src="{% static 'icons/user.png' %}" alt="All_CR" width="24" height="24">Login</a></li>
-                <li><a href="{%url 'registration'%}" class="nav-link"><img src="{% static 'icons/add-user.png' %}" alt="All_CR" width="24" height="24"> Registration</a></li>
+                <li><a href="{% url 'login'%}" class="nav-link" >Login</a></li>
+                <li><a href="{%url 'registration'%}" class="nav-link">Registration</a></li>
                 {% endif %}
                 
             </ul>
