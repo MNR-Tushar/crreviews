@@ -948,6 +948,7 @@
             cursor: pointer;
             text-shadow: 0 0 10px rgba(255, 235, 59, 0.5);
             color: #ccc;
+            cursor: default;
         }
 
 
@@ -1123,9 +1124,23 @@
         }
 
        
-        @media (max-width: 768px) {
+ @media (max-width: 768px) {
     .search-bar {
         grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .filter-section {
+        padding: 1.5rem;
+    }
+    
+    .filter-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .filter-select {
+        width: 100%;
     }
 }
 
