@@ -38,9 +38,9 @@ document.getElementById('footerContactForm')?.addEventListener('submit', functio
         // Show message
         if (messageDiv) {
             messageDiv.style.display = 'block';
-            messageDiv.textContent = data.message || data.error || 'Message sent successfully!';
             
             if (data.success) {
+                messageDiv.textContent = data.message || 'Message sent successfully!';
                 messageDiv.className = 'footer-message success';
                 form.reset(); // Clear form on success
                 
@@ -49,10 +49,10 @@ document.getElementById('footerContactForm')?.addEventListener('submit', functio
                     messageDiv.style.display = 'none';
                 }, 5000);
             } else {
+                messageDiv.textContent = data.error || data.message || 'An error occurred. Please try again.';
                 messageDiv.className = 'footer-message error';
             }
-        }
-    })
+        }    })
     .catch(error => {
         if (messageDiv) {
             messageDiv.style.display = 'block';
