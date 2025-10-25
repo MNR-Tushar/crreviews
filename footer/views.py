@@ -1,4 +1,6 @@
-from django.shortcuts import render
+
+from django.contrib import messages
+from django.shortcuts import redirect, render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -51,30 +53,22 @@ def contact_message(request):
             
             # Validate required fields
             if not email or not message:
-                return JsonResponse({
-                    'success': False, 
-                    'error': 'Email and message are required'
-                })
+                messages.error(request, 'Please fill in all required fields.')
+                return redirect('home')  
             
             # Validate email format (basic check)
             if '@' not in email or '.' not in email:
-                return JsonResponse({
-                    'success': False, 
-                    'error': 'Please provide a valid email address'
-                })
+                messages.error(request, 'Please enter a valid email address.')
+                return redirect('home')
             
             # Validate message length
             if len(message.strip()) < 10:
-                return JsonResponse({
-                    'success': False, 
-                    'error': 'Message must be at least 10 characters long'
-                })
+                messages.error(request, 'Message must be at least 10 characters long.')
+                return redirect('home')
             
             if len(message) > 1000:
-                return JsonResponse({
-                    'success': False, 
-                    'error': 'Message is too long (max 1000 characters)'
-                })
+                messages.error(request, 'Message must be less than 1000 characters long.')
+                return redirect('home')
             
             # Create contact message
             contact = ContactMessage.objects.create(
@@ -83,18 +77,12 @@ def contact_message(request):
                 message=message
             )
             
-            return JsonResponse({
-                'success': True, 
-                'message': 'Thank you! Your message has been sent successfully. We\'ll get back to you soon.'
-            })
+            messages.success(request, 'Your message has been sent successfully!')
+            return redirect('home')
             
         except Exception as e:
-            return JsonResponse({
-                'success': False, 
-                'error': f'An error occurred: {str(e)}'
-            })
+            messages.error(request, 'An error occurred while processing your request.')
+            return redirect('home')
     
-    return JsonResponse({
-        'success': False, 
-        'error': 'Invalid request method'
-    })
+    messages.error(request, 'Invalid request method.')
+    return redirect('home')
