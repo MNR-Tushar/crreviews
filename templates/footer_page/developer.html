@@ -18,25 +18,21 @@
             <!-- Add developer photo here or use initials -->
             👨‍💻
         </div>
-        
-        <h2 class="dev-name1">Your Name</h2>
-        <p class="dev-title1">Full Stack Developer & Founder</p>
+        {% for dp in dp %}
+        <h2 class="dev-name1">{{dp.name}}</h2>
+        <p class="dev-title1">{{dp.degisnation}}</p>
         
         <p class="dev-bio1">
-            Passionate about creating solutions that make a difference in students' lives. 
-            CR Reviews was born from personal experience and the desire to bring transparency 
-            and accountability to university leadership. With expertise in web development and 
-            a deep understanding of student challenges, I built this platform to empower voices 
-            and foster positive change.
+           {{dp.about}}
         </p>
 
         <div class="stats-grid1">
             <div class="stat-item1">
-                <div class="stat-number1">2+</div>
+                <div class="stat-number1">{{dp.years_of_experience}}+</div>
                 <div class="stat-label1">Years Experience</div>
             </div>
             <div class="stat-item1">
-                <div class="stat-number1">10+</div>
+                <div class="stat-number1">{{dp.projects_built}}+</div>
                 <div class="stat-label1">Projects Built</div>
             </div>
             <div class="stat-item1">
@@ -47,35 +43,31 @@
 
         <div class="section-heading" style="margin: 2rem 0 1rem;">Tech Stack</div>
         <div class="tech-stack1">
-            <span class="tech-badge1">🐍 Python</span>
-            <span class="tech-badge1">🎯 Django</span>
-            <span class="tech-badge1">🎨 HTML/CSS</span>
-            <span class="tech-badge1">⚡ JavaScript</span>
-            <span class="tech-badge1">🗄️ PostgreSQL</span>
-            <span class="tech-badge1">🐳 Docker</span>
-            <span class="tech-badge1">☁️ AWS</span>
-            <span class="tech-badge1">🔧 Git</span>
+            {% for d in dp.tack_stack.all %}
+            <span class="tech-badge1">{{d.title}}</span>
+           {% endfor %}
         </div>
 
         <div class="section-heading" style="margin: 2rem 0 1rem;">Connect With Me</div>
         <div class="dev-social1">
-            <a href="https://github.com/yourusername" target="_blank" class="social-link" title="GitHub">
-                🐙
+            <a href="{{dp.github_url}} target="_blank" class="tech-badge1" title="GitHub">
+                GitHub
             </a>
-            <a href="https://linkedin.com/in/yourusername" target="_blank" class="social-link" title="LinkedIn">
-                💼
+            <a href="{{dp.linkedin_url}}" target="_blank" class="tech-badge1" title="LinkedIn">
+                LinkedIn
             </a>
-            <a href="https://twitter.com/yourusername" target="_blank" class="social-link" title="Twitter">
-                🐦
+            <a href="{{dp.twitter_url}}" target="_blank" class="tech-badge1" title="Twitter">
+                Twitter
             </a>
-            <a href="mailto:developer@crreviews.com" class="social-link" title="Email">
-                📧
+            <a href="mailto:{{dp.email}}" class="tech-badge1" title="Email">
+                Email
             </a>
-            <a href="https://facebook.com/yourusername" target="_blank" class="social-link" title="Facebook">
-                📘
+            <a href="{{dp.facebook.url}}" target="_blank" class="tech-badge1" title="Facebook">
+                Facebook
             </a>
         </div>
     </div>
+    {% endfor %}
 
     <div class="content-card">
         <div class="section-icon">💭</div>

@@ -19,10 +19,10 @@ class Teck_Stack(models.Model):
     is_read = models.BooleanField(default=False)
     
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['title']
     
     def __str__(self):
-        return f"Teck Stack from {self.title} at {self.created_at}"
+        return self.title
 
 class Developer_Profile(models.Model):
     tack_stack = models.ManyToManyField(Teck_Stack, related_name='developer_profiles', blank=True, null=True)

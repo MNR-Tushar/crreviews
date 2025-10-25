@@ -36,8 +36,16 @@ def help_support(request):
 
 # Developer Page
 def developer(request):
+
+    
+    
+    developer_profiles = Developer_Profile.objects.all()
+
+
+
     context = {
-        'page_title': 'Developer - CR Reviews'
+        'page_title': 'Developer - CR Reviews',
+        'dp': developer_profiles,
     }
     return render(request, 'footer_page/developer.html', context)
 
