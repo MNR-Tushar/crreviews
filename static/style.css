@@ -748,41 +748,66 @@
             gap: 2.5rem;
         }
 
-        .card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-            backdrop-filter: blur(30px);
-            border-radius: 25px;
-            padding: 1.5rem;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            
-        }
+.card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border-radius: 25px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: visible; /* ✅ FIXED - was 'hidden' */
+    cursor: pointer;
+    
+    /* Smooth transitions */
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                box-shadow 0.4s ease,
+                border-color 0.4s ease;
+    
+    /* Initial shadow */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    
+    /* Performance optimization */
+    will-change: transform;
+    transform: translateZ(0); /* Hardware acceleration */
+}
 
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(78, 205, 196, 0.1));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            
-        }
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(78, 205, 196, 0.1));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    border-radius: 25px;
+    z-index: 0;
+    pointer-events: none; /* Don't block clicks */
+}
 
-        .card:hover::before {
-            opacity: 1;
-        }
+.card:hover::before {
+    opacity: 1;
+}
 
-        .card:hover {
-            transform: translateY(-15px) scale(1.03);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
-            
-        }
+.card:hover {
+    transform: translateY(-15px) scale(1.03) translateZ(0);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3),
+                0 15px 30px rgba(255, 107, 107, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Ensure all children are above ::before */
+.card > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Fix for card with badge */
+.card:has(.cr-status-badge) {
+    overflow: visible !important;
+}
 
 
 
@@ -1297,13 +1322,6 @@
             word-break: break-all;
         }
 
-        /* .card1 {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(30px);
-            border-radius: 20px;
-            padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        } */
 
         .card-title1 {
             color: white;
@@ -1549,11 +1567,6 @@
   box-shadow: 0 15px 40px rgba(139, 92, 246, 0.5);
 }
 
-/* Card needs position relative for absolute badge positioning */
-.card {
-  position: relative;
-  overflow: hidden;
-}
 
 /* Optional: Add subtle glow to card based on status */
 .card:has(.cr-status-badge.present):hover {
