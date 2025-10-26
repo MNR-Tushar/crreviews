@@ -25,7 +25,7 @@ class Teck_Stack(models.Model):
         return self.title
 
 class Developer_Profile(models.Model):
-    tack_stack = models.ManyToManyField(Teck_Stack, related_name='developer_profiles', blank=True, null=True)
+    tack_stack = models.ManyToManyField(Teck_Stack, related_name='developer_profiles', blank=True)
     profile_picture = models.ImageField(upload_to='developer_profile_pictures/', blank=True, null=True)
     name = models.CharField(max_length=100)
     degisnation = models.CharField(max_length=100, blank=True, null=True)
