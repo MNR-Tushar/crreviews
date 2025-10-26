@@ -16,9 +16,9 @@
          <div class="user-info">
             <h1>{{user.first_name}} {{user.last_name}}</h1>
             <div class="user-meta">
-               <span>{{user.student_id}}</span>
-               <span>🏛️ {{user.university}}</span>
-               <span>📚 {{user.department}}</span>
+               <span>Student Id: {{user.student_id}}</span>
+               {% comment %} <span>🏛️ {{user.university}}</span>
+               <span>📚 {{user.department}}</span> {% endcomment %}
             </div>
          </div>
       </div>
@@ -80,7 +80,7 @@
                      </div>
                      <div class="cr-info">
                         <h4><a href="{% url 'cr_profile' add.slug %}" style="text-decoration: none; color: inherit;">{{add.name}}</a></h4>
-                        <p>{{add.university}} • {{add.department}}</p>
+                        <p>Id: {{add.st_id}} • {{add.university}}</p>
                      </div>
                   </div>
                   <div class="rating">
@@ -166,7 +166,7 @@
                      </div>
                      <div class="cr-info">
                         <h4><a href="{% url 'cr_profile' review.cr_profile.slug %}" style="text-decoration: none; color: inherit;">{{review.cr_profile.name}}</a></h4>
-                        <p>{{review.cr_profile.university}} • {{review.cr_profile.department}}</p>
+                        <p>Id: {{review.cr_profile.st_id}} • {{review.cr_profile.university}}  </p>
                      </div>
                   </div>
                   <div class="rating">

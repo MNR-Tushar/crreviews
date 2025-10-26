@@ -143,11 +143,7 @@
         
 /* Modern User Dropdown Styles */
 .user-dropdown {
-    position: relative;
-    
-
-    
-    
+    position: relative;  
 }
 
 .user-profile-btn {
@@ -186,8 +182,7 @@
 }
 
 .user-avatar {
-    width: 35px;
-    height: 35px;
+  
     border-radius: 50%;
     background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
     display: flex;

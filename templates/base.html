@@ -47,7 +47,7 @@
                 {% if user.is_authenticated %}
                 <!-- User Profile Dropdown -->
                 <li class="user-dropdown">
-                <a href="#" class="nav-link user-profile-btn">
+                <a href="{% url 'user_dashboard' user.slug %}" class="nav-link user-profile-btn">
                     <span class="user-avatar">
                     {% if user.profile_picture %}
                         <img src="{{ user.profile_picture.url }}" alt="{{ user.name }}" />
@@ -100,7 +100,7 @@
                 </li>
                 {% else %}
                 <li><a href="{% url 'login'%}" class="nav-link" >Login</a></li>
-                <li><a href="{%url 'registration'%}" class="nav-link">Registration</a></li>
+                <li><a href="{%url 'registration'%}" class="nav-link">Register</a></li>
                 {% endif %}
                 
             </ul>

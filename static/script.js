@@ -400,7 +400,7 @@ document.querySelectorAll('.card, .stat-card, .review-card').forEach(card => {
         const rotateX = (y - centerY) / 10;
         const rotateY = (centerX - x) / 10;
         
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px) scale(1.02)`;
+       
     });
     
     card.addEventListener('mouseleave', () => {
