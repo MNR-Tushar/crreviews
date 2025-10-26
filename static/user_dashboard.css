@@ -171,12 +171,12 @@
             transform: translateX(5px);
         }
 
-        .review-header {
+        /* .review-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1rem;
-        }
+        } */
 
         .review-cr {
             display: flex;
