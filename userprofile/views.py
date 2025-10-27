@@ -111,7 +111,7 @@ def user_dasboard(request,slug):
     last_cr_saved= saved_crs.last()
     add_crs = CrProfile.objects.filter(user=request.user)
  
-    items_per_page = 5
+    items_per_page = 3
     add_crs_paginator = Paginator(add_crs, items_per_page)
     add_crs_page = request.GET.get('add_crs_page', 1)
     add_crs = add_crs_paginator.get_page(add_crs_page)

@@ -340,12 +340,13 @@ def delete_cr_profile(request, slug):
 
 
 
-from django.contrib import messages
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import CrProfile, Review
 
 def submit_review(request, cr_slug):
     cr_profile = get_object_or_404(CrProfile, slug=cr_slug)
+
+    if not request.user.is_authenticated:
+        messages.error(request, "You must be logged in to submit a review!")
+        return redirect('cr_profile', slug=cr_profile.slug)
 
     if request.method == "POST":
         rating = request.POST.get('rating')
@@ -381,7 +382,7 @@ def submit_review(request, cr_slug):
       
             try:
                 Review.objects.create(
-                    user=request.user if not is_anonymous else None,
+                    user=request.user,
                     cr_profile=cr_profile,
                     rating=rating,
                     description=description,

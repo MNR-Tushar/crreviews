@@ -770,11 +770,6 @@
 #anonymous-checkbox {
     accent-color: #4facfe;
 }
-
-#anonymous-checkbox:checked {
-    background-color: #4facfe;
-}
-
 /* Modal responsive */
 @media (max-width: 768px) {
     .modal-content {
