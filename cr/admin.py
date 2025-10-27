@@ -25,7 +25,7 @@ class CrProfileAdmin(admin.ModelAdmin):
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('user', 'cr_profile', 'rating', 'created_at')
+    list_display = ('get_reviewer_name', 'cr_profile', 'rating', 'is_anonymous', 'created_at')
     search_fields = ('user__email', 'cr_profile__name')
     list_filter = ('rating', 'created_at')
     ordering = ('-created_at',)
