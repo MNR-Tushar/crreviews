@@ -8,24 +8,68 @@ from .models import *
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.password_validation import validate_password
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.conf import settings
+from django.utils import timezone
+import uuid
 
-def login(request):
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        
-        user = authenticate(request, email=email, password=password)
-        
-        if user is not None:
-            auth_login(request, user)
-            messages.success(request, 'Successfully logged in!')
-            return redirect('home')
-        else:
-            messages.error(request, 'Invalid email or password!')
-            return redirect('login')
-    
-    return render(request, 'user_profile/login.html')
 
+def send_verification_email(user, request):
+    """Send verification email to user"""
+    try:
+        verification_url = request.build_absolute_uri(
+            f'/user/verify-email/{user.email_verification_token}/'
+        )
+        
+        subject = 'Verify Your Email - CR Review'
+        html_message = render_to_string('user_profile/emails/verification_email.html', {
+            'user': user,
+            'verification_url': verification_url,
+        })
+        plain_message = strip_tags(html_message)
+        
+        send_mail(
+            subject,
+            plain_message,
+            settings.DEFAULT_FROM_EMAIL,
+            [user.email],
+            html_message=html_message,
+            fail_silently=False,
+        )
+        return True
+    except Exception as e:
+        print(f"Error sending email: {e}")
+        return False
+
+
+def send_password_reset_email(user, request):
+    """Send password reset email"""
+    try:
+        reset_url = request.build_absolute_uri(
+            f'/user/reset-password/{user.password_reset_token}/'
+        )
+        
+        subject = 'Reset Your Password - CR Review'
+        html_message = render_to_string('user_profile/emails/password_reset_email.html', {
+            'user': user,
+            'reset_url': reset_url,
+        })
+        plain_message = strip_tags(html_message)
+        
+        send_mail(
+            subject,
+            plain_message,
+            settings.DEFAULT_FROM_EMAIL,
+            [user.email],
+            html_message=html_message,
+            fail_silently=False,
+        )
+        return True
+    except Exception as e:
+        print(f"Error sending email: {e}")
+        return False
 
 def registration(request):
 
@@ -78,9 +122,13 @@ def registration(request):
                 university=university,
                 department=department
             )
-            
-            messages.success(request, 'Registration successful! Please login.')
-            return redirect('login')
+
+            if send_verification_email(user, request):
+                messages.success(request, 'Registration successful! Please check your email to verify your account.')
+                return redirect('verification_pending')
+            else:
+                messages.warning(request, 'Account created but failed to send verification email. Please contact support.')
+                return redirect('login')
             
         except Exception as e:
             messages.error(request, f'Registration failed: {str(e)}')
@@ -96,6 +144,180 @@ def registration(request):
     }
     
     return render(request, 'user_profile/registration.html', context)
+
+
+def verify_email(request, token):
+    """Verify user email with token"""
+    try:
+        user = User.objects.get(email_verification_token=token)
+        
+        if user.is_email_verified:
+            messages.info(request, 'Your email is already verified. Please login.')
+            return redirect('login')
+        
+        if not user.is_email_verification_token_valid():
+            messages.error(request, 'Verification link has expired. Please request a new one.')
+            return redirect('resend_verification')
+        
+        user.is_email_verified = True
+        user.is_active = True
+        user.save()
+        
+        messages.success(request, 'Email verified successfully! You can now login.')
+        return redirect('login')
+        
+    except User.DoesNotExist:
+        messages.error(request, 'Invalid verification link.')
+        return redirect('login')
+
+
+def verification_pending(request):
+    """Show verification pending page"""
+    return render(request, 'user_profile/verification_pending.html')
+
+
+def resend_verification_email(request):
+    """Resend verification email"""
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        
+        try:
+            user = User.objects.get(email=email)
+            
+            if user.is_email_verified:
+                messages.info(request, 'Your email is already verified. Please login.')
+                return redirect('login')
+            
+            # Generate new token
+            user.email_verification_token = uuid.uuid4()
+            user.email_verification_token_created = timezone.now()
+            user.save()
+            
+            if send_verification_email(user, request):
+                messages.success(request, 'Verification email sent! Please check your inbox.')
+            else:
+                messages.error(request, 'Failed to send email. Please try again later.')
+                
+        except User.DoesNotExist:
+            messages.error(request, 'No account found with this email.')
+        
+        return redirect('resend_verification')
+    
+    return render(request, 'user_profile/resend_verification.html')
+
+def login(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        
+        try:
+            user = User.objects.get(email=email)
+            
+            if not user.is_email_verified:
+                messages.warning(request, 'Please verify your email first. Check your inbox.')
+                return redirect('verification_pending')
+            
+        except User.DoesNotExist:
+            messages.error(request, 'Invalid email or password!')
+            return redirect('login')
+        
+        user = authenticate(request, email=email, password=password)
+        
+        if user is not None:
+            auth_login(request, user)
+            messages.success(request, 'Successfully logged in!')
+            return redirect('home')
+        else:
+            messages.error(request, 'Invalid email or password!')
+            return redirect('login')
+    
+    return render(request, 'user_profile/login.html')
+
+
+
+def forgot_password(request):
+    """Handle forgot password request"""
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        
+        try:
+            user = User.objects.get(email=email)
+            
+            if not user.is_email_verified:
+                messages.error(request, 'Please verify your email first.')
+                return redirect('resend_verification')
+            
+            # Generate password reset token
+            user.generate_password_reset_token()
+            
+            if send_password_reset_email(user, request):
+                messages.success(request, 'Password reset link sent to your email!')
+                return redirect('password_reset_done')
+            else:
+                messages.error(request, 'Failed to send email. Please try again.')
+                
+        except User.DoesNotExist:
+            # Don't reveal if email exists
+            messages.success(request, 'If this email exists, you will receive a password reset link.')
+            return redirect('password_reset_done')
+        
+        return redirect('forgot_password')
+    
+    return render(request, 'user_profile/forgot_password.html')
+
+
+def reset_password(request, token):
+    """Reset password with token"""
+    try:
+        user = User.objects.get(password_reset_token=token)
+        
+        if not user.is_password_reset_token_valid():
+            messages.error(request, 'Password reset link has expired. Please request a new one.')
+            return redirect('forgot_password')
+        
+        if request.method == 'POST':
+            new_password = request.POST.get('new_password')
+            confirm_password = request.POST.get('confirm_password')
+            
+            if new_password != confirm_password:
+                messages.error(request, 'Passwords do not match!')
+                return redirect('reset_password', token=token)
+            
+            if len(new_password) < 8:
+                messages.error(request, 'Password must be at least 8 characters long!')
+                return redirect('reset_password', token=token)
+            
+            if new_password.isdigit():
+                messages.error(request, 'Password cannot be entirely numeric!')
+                return redirect('reset_password', token=token)
+            
+            try:
+                validate_password(new_password)
+            except ValidationError as e:
+                messages.error(request, ' '.join(e.messages))
+                return redirect('reset_password', token=token)
+            
+            user.set_password(new_password)
+            user.password_reset_token = None
+            user.password_reset_token_created = None
+            user.save()
+            
+            messages.success(request, 'Password reset successfully! You can now login.')
+            return redirect('login')
+        
+        return render(request, 'user_profile/reset_password.html', {'token': token})
+        
+    except User.DoesNotExist:
+        messages.error(request, 'Invalid password reset link.')
+        return redirect('forgot_password')
+
+
+def password_reset_done(request):
+    """Show password reset done page"""
+    return render(request, 'user_profile/password_reset_done.html')
+
+
+
 
 @login_required
 def logout(request):
