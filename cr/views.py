@@ -346,7 +346,8 @@ def submit_review(request, cr_slug):
 
     if not request.user.is_authenticated:
         messages.error(request, "You must be logged in to submit a review!")
-        return redirect('cr_profile', slug=cr_profile.slug)
+        return redirect('login')
+        
 
     if request.method == "POST":
         rating = request.POST.get('rating')
@@ -389,7 +390,10 @@ def submit_review(request, cr_slug):
                     is_anonymous=is_anonymous,
                     anonymous_name=request.user.get_full_name() if is_anonymous else None
                 )
-                messages.success(request, "Your review has been submitted successfully!")
+                if is_anonymous:
+                    messages.success(request, "Your anonymous review has been submitted!")
+                else:
+                    messages.success(request, "Your review has been submitted successfully!")
             except Exception as e:
                 messages.error(request, f"Error submitting review: {str(e)}")
         
