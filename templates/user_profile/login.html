@@ -9,11 +9,26 @@
                     <h2 style="color: white; text-align: center; margin-bottom: 2rem; font-size: 2.5rem; font-weight: 800;">Login</h2>
                     <form method='POST' action="{% url 'login' %}">
                         {% csrf_token %}
-                        <input type="email" name="email" class="form-input" placeholder="Email" style="width: 100%; margin-bottom: 1.5rem;">
-                        <input type="password" name="password" class="form-input" placeholder="Password" style="width: 100%; margin-bottom: 1.5rem;">
+                        <input type="email" name="email" class="search-input" placeholder="Email" style="width: 100%; margin-bottom: 1.5rem;" required>
+                        <input type="password" name="password" class="search-input" placeholder="Password" style="width: 100%; margin-bottom: 1rem;" required>
+                        
+                        <p style="text-align: right; margin-bottom: 1.5rem;">
+                            <a href="{% url 'forgot_password' %}" style="color: #ffeb3b; font-weight: 600; text-decoration: none; font-size: 0.95rem;">
+                                Forgot Password?
+                            </a>
+                        </p>
+                        
                         <button type="submit" class="btn" style="width: 100%; margin-bottom: 1.5rem; font-size: 1.2rem;">Login</button>
+                        
                         <p style="color: white; text-align: center; font-size: 1.1rem;">
                             New Account? <a href="{% url 'registration' %}" style="color: #ffeb3b; font-weight: 700; text-decoration: none;">Register</a>
+                        </p>
+                        
+                        <p style="color: rgba(255,255,255,0.7); text-align: center; font-size: 0.95rem; margin-top: 1rem;">
+                            Haven't verified your email? 
+                            <a href="{% url 'resend_verification' %}" style="color: #4facfe; font-weight: 600; text-decoration: none;">
+                                Resend Link
+                            </a>
                         </p>
                     </form>
                     

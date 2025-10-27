@@ -5,6 +5,8 @@ from cr.models import *
 from .manager import CustomUserManager
 from django.utils.text import slugify
 import os
+import uuid
+from django.utils import timezone as django_timezone
 # Create your models here.
 
 def user_profile_picture_path(instance, filename):
@@ -35,6 +37,18 @@ class User(AbstractBaseUser,PermissionsMixin):
     role=models.CharField(max_length=20, default='student')
     slug=models.SlugField(blank=True,unique=True)
 
+
+    is_email_verified = models.BooleanField(default=False)
+    email_verification_token = models.UUIDField(blank=True, null=True, editable=False)
+    email_verification_token_created = models.DateTimeField(blank=True, null=True)
+
+
+    password_reset_token = models.UUIDField(null=True, blank=True, editable=False)
+    password_reset_token_created = models.DateTimeField(null=True, blank=True)
+
+
+
+
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     #date_joined = models.DateTimeField(default=timezone.now)
@@ -61,6 +75,9 @@ class User(AbstractBaseUser,PermissionsMixin):
                 slug = f"{base_slug}-{counter}"
                 counter += 1
             self.slug = slug
+            if not self.email_verification_token:
+                self.email_verification_token = uuid.uuid4()
+                self.email_verification_token_created = django_timezone.now()
         super().save(*args, **kwargs)
     
     def get_full_name(self):
@@ -70,6 +87,27 @@ class User(AbstractBaseUser,PermissionsMixin):
         if self.profile_picture and hasattr(self.profile_picture, 'url'):
             return self.profile_picture.url
         return '/media/users/default_profile.png'
+    
+    def generate_password_reset_token(self):
+        """Generate new password reset token"""
+        self.password_reset_token = uuid.uuid4()
+        self.password_reset_token_created = django_timezone.now()
+        self.save()
+        return self.password_reset_token
+    
+    def is_password_reset_token_valid(self):
+        """Check if password reset token is still valid (1 hour)"""
+        if not self.password_reset_token_created:
+            return False
+        time_diff = django_timezone.now() - self.password_reset_token_created
+        return time_diff.total_seconds() < 3600  # 1 hour
+    
+    def is_email_verification_token_valid(self):
+        """Check if email verification token is still valid (24 hours)"""
+        if not self.email_verification_token_created:
+            return False
+        time_diff = django_timezone.now() - self.email_verification_token_created
+        return time_diff.total_seconds() < 86400  # 24 hours
     
 class SavedCR(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='saved_crs')
