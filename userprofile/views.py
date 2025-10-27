@@ -20,7 +20,7 @@ def send_verification_email(user, request):
     """Send verification email to user"""
     try:
         verification_url = request.build_absolute_uri(
-            f'/user/verify-email/{user.email_verification_token}/'
+            f'/verify-email/{user.email_verification_token}/'
         )
         
         subject = 'Verify Your Email - CR Review'
@@ -48,7 +48,7 @@ def send_password_reset_email(user, request):
     """Send password reset email"""
     try:
         reset_url = request.build_absolute_uri(
-            f'/user/reset-password/{user.password_reset_token}/'
+            f'/reset-password/{user.password_reset_token}/'
         )
         
         subject = 'Reset Your Password - CR Review'
@@ -460,7 +460,7 @@ def edit_user(request,slug):
     return render(request,'user_profile/edit_user.html',context)
 
 @login_required
-def settings(request):
+def user_settings(request):
 
     return render(request,'user_profile/settings.html')
 

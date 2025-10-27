@@ -149,7 +149,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'infocrreviews@gmail.com'  
-EMAIL_HOST_PASSWORD = 'slpesedgicecjtwf'  
+EMAIL_HOST_PASSWORD = 'vptuhfjgkpugqzlc'  
 DEFAULT_FROM_EMAIL = 'CR Reviews <infocrreviews@gmail.com>'
 
 # Password Reset Token Validity (1 hour)
