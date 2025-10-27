@@ -339,37 +339,76 @@ def delete_cr_profile(request, slug):
     return redirect('user_dashboard')
 
 
-@login_required
+
+from django.contrib import messages
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import CrProfile, Review
+
 def submit_review(request, cr_slug):
     cr_profile = get_object_or_404(CrProfile, slug=cr_slug)
-    user = request.user
-
-    if user.is_anonymous:
-        messages.error(request, "You must be logged in to submit a review.")
-        return redirect('cr_profile', slug=cr_profile.slug)
-
-    # Check if the user already submitted a review
-    existing_review = Review.objects.filter(user=user).first()
-    if existing_review:
-        messages.warning(request, "You have already reviewed a CR. You can only review once!")
-        return redirect('cr_profile', slug=cr_profile.slug)
 
     if request.method == "POST":
         rating = request.POST.get('rating')
-        description = request.POST.get('description', '')
+        description = request.POST.get('description', '').strip()
+        is_anonymous = request.POST.get('is_anonymous') == 'on'
+
+   
+        if not rating:
+            messages.error(request, "Please select a rating!")
+            return redirect('cr_profile', slug=cr_profile.slug)
 
         try:
-            review = Review.objects.create(
-                user=user,
-                cr_profile=cr_profile,
-                rating=int(rating),
-                description=description
-            )
-            messages.success(request, "Your review has been submitted successfully!")
+            rating = int(rating)
+            if rating < 1 or rating > 5:
+                messages.error(request, "Invalid rating value!")
+                return redirect('cr_profile', slug=cr_profile.slug)
+        except ValueError:
+            messages.error(request, "Invalid rating value!")
             return redirect('cr_profile', slug=cr_profile.slug)
-        except Exception as e:
-            messages.error(request, "Error submitting review. Please try again.")
-            return redirect('cr_profile', slug=cr_profile.slug)
+
+    
+        if request.user.is_authenticated:
+          
+            existing_review = Review.objects.filter(
+                user=request.user,
+                cr_profile=cr_profile
+            ).first()
+
+            if existing_review:
+                messages.warning(request, "You have already reviewed this CR!")
+                return redirect('cr_profile', slug=cr_profile.slug)
+
+      
+            try:
+                Review.objects.create(
+                    user=request.user if not is_anonymous else None,
+                    cr_profile=cr_profile,
+                    rating=rating,
+                    description=description,
+                    is_anonymous=is_anonymous,
+                    anonymous_name=request.user.get_full_name() if is_anonymous else None
+                )
+                messages.success(request, "Your review has been submitted successfully!")
+            except Exception as e:
+                messages.error(request, f"Error submitting review: {str(e)}")
+        
+        else:
+          
+            try:
+                Review.objects.create(
+                    user=None,
+                    cr_profile=cr_profile,
+                    rating=rating,
+                    description=description,
+                    is_anonymous=True,
+                    anonymous_name="Anonymous User"
+                )
+                messages.success(request, "Your anonymous review has been submitted!")
+            except Exception as e:
+                messages.error(request, f"Error submitting review: {str(e)}")
+
+        return redirect('cr_profile', slug=cr_profile.slug)
+
 
     return redirect('cr_profile', slug=cr_profile.slug)
 

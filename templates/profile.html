@@ -175,39 +175,94 @@
     </h2>
 
     <div id="reviews-container">
-        {% for review in review %}
-        <div class="review-card">
-            <div class="review-header">
-                <div>
-                    <strong>
+    {% for review in review %}
+    <div class="review-card">
+        <div class="review-header">
+            <div>
+                <strong>
+                    {% if review.is_anonymous %}
+                        <!-- Anonymous Review -->
+                        <span style="color: rgba(255,255,255,0.9);">
+                            🕶️ {{ review.get_reviewer_name }}
+                        </span>
+                    {% elif review.user %}
+                        <!-- Authenticated User Review -->
                         <a href="{% url 'user_view' review.user.slug %}" style="text-decoration: none; color: inherit;">
                             👤 {{ review.user.get_full_name }}
                         </a>
-                    </strong>
-                    - {{ review.user.university }} - {{ review.user.department }}
-                </div>
-
-                <div class="rating">
-                    {% for i in "12345" %}
-                        {% if forloop.counter <= review.rating %}
-                            <span class="star filled">★</span>
-                        {% else %}
-                            <span class="star">☆</span>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-
-                <div style="color: rgba(255,255,255,0.7); font-weight: 400;">
-                    🕒 {{ review.created_at }}
-                </div>
+                    {% else %}
+                        <!-- Fallback for old data -->
+                        <span style="color: rgba(255,255,255,0.9);">
+                            🕶️ Anonymous User
+                        </span>
+                    {% endif %}
+                </strong>
+                
+                <!-- Show university & department only for non-anonymous reviews -->
+                {% if not review.is_anonymous and review.user %}
+                    {% if review.user.university or review.user.department %}
+                        <span style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+                            - 
+                            {% if review.user.university %}
+                                {{ review.user.university }}
+                            {% endif %}
+                            {% if review.user.department %}
+                                {% if review.user.university %} - {% endif %}
+                                {{ review.user.department }}
+                            {% endif %}
+                        </span>
+                    {% endif %}
+                {% else %}
+                    <!-- Anonymous badge -->
+                    <span style="display: inline-block; margin-left: 0.5rem; padding: 0.25rem 0.75rem; background: rgba(255, 235, 59, 0.2); border: 1px solid rgba(255, 235, 59, 0.4); border-radius: 20px; font-size: 0.75rem; font-weight: 600; color: #ffeb3b;">
+                        ANONYMOUS
+                    </span>
+                {% endif %}
             </div>
 
-            <div class="review-text">
-                "{{ review.description }}"
+            <div class="rating">
+                {% for i in "12345" %}
+                    {% if forloop.counter <= review.rating %}
+                        <span class="star filled">★</span>
+                    {% else %}
+                        <span class="star">☆</span>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div style="color: rgba(255,255,255,0.7); font-weight: 400;">
+                🕒 {{ review.created_at|timesince }} ago
             </div>
         </div>
-        {% endfor %}
+
+        <div class="review-text">
+            "{{ review.description|default:"No comment provided." }}"
+        </div>
+
+        <!-- Edit/Delete buttons (only for review owner) -->
+        {% if user.is_authenticated and review.user == user and not review.is_anonymous %}
+        <div style="display: flex; gap: 0.5rem; margin-top: 1rem; justify-content: flex-end;">
+            <button onclick="openEditReviewModal('{{ review.cr_profile.slug }}', {{ review.rating }}, '{{ review.description|escapejs }}')" 
+                    class="btn" 
+                    style="padding: 0.6rem 1.2rem; font-size: 0.85rem; background: linear-gradient(135deg, #667eea, #764ba2);">
+                ✏️ Edit
+            </button>
+            <button onclick="openDeleteReviewModal('{{ review.cr_profile.slug }}')" 
+                    class="btn" 
+                    style="padding: 0.6rem 1.2rem; font-size: 0.85rem; background: linear-gradient(135deg, #ff6b6b, #ee5a24);">
+                🗑️ Delete
+            </button>
+        </div>
+        {% endif %}
     </div>
+    {% empty %}
+    <div style="text-align: center; padding: 3rem; color: rgba(255,255,255,0.7);">
+        <p style="font-size: 1.2rem; margin-bottom: 1rem;">📝 No reviews yet</p>
+        <p style="font-size: 0.95rem;">Be the first to review this CR!</p>
+    </div>
+    {% endfor %}
+</div>
+
 </div>
 
 

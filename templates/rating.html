@@ -1,11 +1,11 @@
-<!-- Rating Modal -->
+<!-- Rating Modal with Anonymous Option -->
 <div id="rating-modal" class="modal">
     <div class="modal-content">
         <div style="text-align: center;">
             <h2 style="color: white; font-size: 2rem; font-weight: 700; margin-bottom: 2rem;">⭐ Give Rating</h2>
             <p style="color: rgba(255,255,255,0.8); margin-bottom: 2rem;" id="rating-cr-name">{{ cr_profile.name }}</p>
             
-            <form id="rating-form" method='POST'">
+            <form id="rating-form" method='POST'>
                 {% csrf_token %}
                 
                 <!-- Star Rating Input -->
@@ -23,14 +23,36 @@
                 <!-- Hidden input for rating value -->
                 <input type="hidden" name="rating" id="rating-value" required>
 
+                <!-- ✅ Anonymous Review Checkbox -->
+                {% if user.is_authenticated %}
+                <div style="margin: 1.5rem 0; background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 15px;">
+                    <label style="display: flex; align-items: center; gap: 0.8rem; cursor: pointer; color: white; font-weight: 500;">
+                        <input type="checkbox" name="is_anonymous" id="anonymous-checkbox" style="width: 20px; height: 20px; cursor: pointer;">
+                        <span style="font-size: 1rem;">🕶️ Submit as Anonymous</span>
+                    </label>
+                    <p style="color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-top: 0.5rem; margin-left: 28px;">
+                        Your name will be hidden from public view
+                    </p>
+                </div>
+                {% else %}
+                <div style="margin: 1.5rem 0; background: rgba(255, 235, 59, 0.15); padding: 1rem; border-radius: 15px; border: 1px solid rgba(255, 235, 59, 0.3);">
+                    <p style="color: rgba(255,255,255,0.9); font-size: 0.95rem; margin: 0; text-align: center;">
+                        🕶️ You are submitting as <strong>Anonymous User</strong>
+                    </p>
+                    <p style="color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-top: 0.5rem; text-align: center;">
+                        <a href="{% url 'login' %}" style="color: #ffeb3b; text-decoration: underline;">Login</a> to submit with your name
+                    </p>
+                </div>
+                {% endif %}
+
                 <!-- Comment Section -->
                 <div style="margin: 2rem 0;">
                     <label style="color: white; font-weight: 600; display: block; margin-bottom: 1rem;">💬 Your opinion (optional)</label>
-                    <textarea name="description" id="review-comment" class="review_form-input" placeholder="Share your experience about this CR..." style="height: 100px;"></textarea>
+                    <textarea name="description" id="review-comment" class="search-input" placeholder="Share your experience about this CR..." style="width: 100%; min-height: 100px; padding: 1rem; resize: vertical;"></textarea>
                 </div>
 
                 <div style="display: flex; gap: 1rem; justify-content: center;">
-                    <button type="submit" id="submit-rating" class="btn btn-success" style="flex: 1; opacity: 0.5; pointer-events: none;" disabled>
+                    <button type="submit" id="submit-rating" class="btn" style="flex: 1; opacity: 0.5; pointer-events: none; background: linear-gradient(135deg, #11998e, #38ef7d);" disabled>
                         🎉 Submit Rating
                     </button>
                     <button type="button" id="cancel-rating" class="btn btn-secondary" style="flex: 1;">
@@ -41,4 +63,3 @@
         </div>
     </div>
 </div>
-
