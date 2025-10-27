@@ -144,11 +144,9 @@ class Review(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            import uuid
             base_slug = f"review-{self.cr_profile.id}-{uuid.uuid4().hex[:8]}"
             self.slug = slugify(base_slug)
-        super().save(*args, **kwargs)
-    
+        super().save(*args, **kwargs)    
     def get_reviewer_name(self):
         if self.is_anonymous:
             return self.anonymous_name or "Anonymous User"
