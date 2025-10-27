@@ -115,11 +115,16 @@ class CrProfile(models.Model):
  
 
 class Review(models.Model):
-    user=models.OneToOneField('userprofile.User', on_delete=models.CASCADE,related_name='userreviews')
+    user=models.ForeignKey('userprofile.User', on_delete=models.CASCADE,related_name='userreviews')
     cr_profile=models.ForeignKey(CrProfile, on_delete=models.CASCADE,related_name='cr_reviews')
 
     rating = models.PositiveSmallIntegerField() 
     description = models.TextField(blank=True, null=True)
+    is_anonymous = models.BooleanField(default=False)
+    anonymous_name = models.CharField(max_length=100, blank=True, null=True)
+
+
+
     slug = models.SlugField(unique=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -127,10 +132,24 @@ class Review(models.Model):
     deleted_at = models.DateTimeField(blank=True, null=True)
 
 
+    class Meta:
+        unique_together = [['user', 'cr_profile']]
+        ordering = ['-created_at']
+
+
     def __str__(self):
-        return f"Review by {self.user.first_name} on {self.cr_profile.name}"
+        if self.is_anonymous:
+            return f"Anonymous Review by {self.anonymous_name} on {self.cr_profile.name}"
+        return f"Review by {self.user.get_full_name()} on {self.cr_profile.name}"
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(f"{self.user.id}-{self.cr_profile.id}-{self.rating}")
+            import uuid
+            base_slug = f"review-{self.cr_profile.id}-{uuid.uuid4().hex[:8]}"
+            self.slug = slugify(base_slug)
         super().save(*args, **kwargs)
+    
+    def get_reviewer_name(self):
+        if self.is_anonymous:
+            return self.anonymous_name or "Anonymous User"
+        return self.user.get_full_name() if self.user else "Anonymous User"

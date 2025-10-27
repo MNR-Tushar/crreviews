@@ -688,7 +688,7 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.05);
-    color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
     font-family: inherit;
     font-size: 1rem;
     font-weight: 300;
@@ -763,4 +763,22 @@
 
 .review_form-input::placeholder {
     color: rgba(255, 255, 255, 0.5);
+}
+
+
+/* Checkbox styling */
+#anonymous-checkbox {
+    accent-color: #4facfe;
+}
+
+#anonymous-checkbox:checked {
+    background-color: #4facfe;
+}
+
+/* Modal responsive */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        padding: 2rem 1.5rem;
+    }
 }

@@ -2094,3 +2094,32 @@
         font-size: 1rem;
     }
 }
+
+
+/* Anonymous badge animation */
+@keyframes badgePulse {
+    0%, 100% {
+        box-shadow: 0 0 5px rgba(255, 235, 59, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 15px rgba(255, 235, 59, 0.6);
+    }
+}
+
+.review-card:has([style*="ANONYMOUS"]) {
+    border-left: 3px solid rgba(255, 235, 59, 0.5);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .review-header {
+        flex-direction: column;
+        gap: 0.8rem;
+        align-items: flex-start !important;
+    }
+    
+    .review-header > div:last-child {
+        width: 100%;
+        text-align: left;
+    }
+}
