@@ -18,7 +18,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 
 def send_verification_email(user, request):
-    """Send verification email to user"""
+    
     try:
         verification_url = request.build_absolute_uri(
             f'/verify-email/{user.email_verification_token}/'
@@ -46,7 +46,7 @@ def send_verification_email(user, request):
 
 
 def send_password_reset_email(user, request):
-    """Send password reset email"""
+    
     try:
         reset_url = request.build_absolute_uri(
             f'/reset-password/{user.password_reset_token}/'
@@ -148,7 +148,7 @@ def registration(request):
 
 
 def verify_email(request, token):
-    """Verify user email with token"""
+    
     try:
         user = User.objects.get(email_verification_token=token)
         
@@ -173,12 +173,12 @@ def verify_email(request, token):
 
 
 def verification_pending(request):
-    """Show verification pending page"""
+    
     return render(request, 'user_profile/verification_pending.html')
 
 
 def resend_verification_email(request):
-    """Resend verification email"""
+  
     if request.method == 'POST':
         email = request.POST.get('email')
         
@@ -237,7 +237,7 @@ def login(request):
 
 
 def forgot_password(request):
-    """Handle forgot password request"""
+    
     if request.method == 'POST':
         email = request.POST.get('email')
         
@@ -268,7 +268,7 @@ def forgot_password(request):
 
 
 def reset_password(request, token):
-    """Reset password with token"""
+    
     try:
         user = User.objects.get(password_reset_token=token)
         
@@ -314,7 +314,7 @@ def reset_password(request, token):
 
 
 def password_reset_done(request):
-    """Show password reset done page"""
+    
     return render(request, 'user_profile/password_reset_done.html')
 
 
@@ -402,7 +402,7 @@ def user_view(request,slug):
 
     return render(request,'user_profile/user_view.html',context)
 
-# userprofile/views.py
+
 
 @staff_member_required
 def admin_dashboard(request):
