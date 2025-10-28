@@ -1,0 +1,163 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Pending Reviews - Admin{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 2rem;">
+    <div class="section">
+        <h1 class="section-title" style="color: white;">
+            ⏳ Pending Anonymous Reviews 
+            <span style="font-size: 1.2rem; opacity: 0.8;">({{ pending_reviews.paginator.count }})</span>
+        </h1>
+
+        {% if pending_reviews %}
+            <div style="display: grid; gap: 2rem;">
+                {% for review in pending_reviews %}
+                    <div class="review-card pending-review-card">
+                        <!-- Review Header -->
+                        <div class="review-header">
+                            <div>
+                                <strong style="font-size: 1.2rem;">
+                                    👤 {{ review.get_reviewer_name }}
+                                </strong>
+                                <div style="color: rgba(255, 255, 255, 0.7); margin-top: 0.5rem;">
+                                    For: <strong>{{ review.cr_profile.name }}</strong> 
+                                    ({{ review.cr_profile.university.title }})
+                                </div>
+                                <div class="rating" style="margin-top: 1rem;">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= review.rating %}
+                                            <span class="star filled">★</span>
+                                        {% else %}
+                                            <span class="star">☆</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="color: rgba(255, 255, 255, 0.7);">
+                                    🕒 {{ review.created_at|date:"M d, Y" }}
+                                </div>
+                                <div style="color: rgba(255, 235, 59, 0.9); margin-top: 0.5rem; font-weight: 600;">
+                                    ⏳ PENDING APPROVAL
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Review Text -->
+                        {% if review.description %}
+                            <div class="review-text">
+                                "{{ review.description }}"
+                            </div>
+                        {% else %}
+                            <div class="review-text" style="opacity: 0.6; font-style: italic;">
+                                No comment provided.
+                            </div>
+                        {% endif %}
+
+                        <!-- Action Buttons -->
+                        <div style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
+                            <!-- Approve Button -->
+                            <form method="POST" action="{% url 'approve_review' review.slug %}" style="flex: 1; min-width: 150px;">
+                                {% csrf_token %}
+                                <button type="submit" 
+                                        class="btn button_save" 
+                                        style="width: 100%; margin: 0;"
+                                        onclick="return confirm('Approve this review?');">
+                                    ✅ Approve
+                                </button>
+                            </form>
+
+                            <!-- Reject Button -->
+                            <form method="POST" action="{% url 'reject_review' review.slug %}" style="flex: 1; min-width: 150px;">
+                                {% csrf_token %}
+                                <button type="submit" 
+                                        class="btn button_remove" 
+                                        style="width: 100%; margin: 0;"
+                                        onclick="return confirm('Are you sure you want to reject and delete this review? This cannot be undone.');">
+                                    ❌ Reject
+                                </button>
+                            </form>
+
+                            <!-- View CR Profile -->
+                            <a href="{% url 'cr_profile' review.cr_profile.slug %}" 
+                               class="btn btn-secondary" 
+                               style="flex: 1; min-width: 150px; margin: 0; text-align: center;">
+                                👁️ View CR Profile
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if pending_reviews.paginator.num_pages > 1 %}
+                <div class="pagination-section">
+                    <div class="pagination">
+                        <div class="pagination-numbers">
+                            {% if pending_reviews.has_previous %}
+                                <a href="?page=1" class="pagination-btn pagination-first">First</a>
+                                <a href="?page={{ pending_reviews.previous_page_number }}" class="pagination-btn pagination-prev">← Prev</a>
+                            {% endif %}
+
+                            {% for num in pending_reviews.paginator.page_range %}
+                                {% if pending_reviews.number == num %}
+                                    <span class="pagination-btn pagination-active">{{ num }}</span>
+                                {% elif num > pending_reviews.number|add:'-3' and num < pending_reviews.number|add:'3' %}
+                                    <a href="?page={{ num }}" class="pagination-btn">{{ num }}</a>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if pending_reviews.has_next %}
+                                <a href="?page={{ pending_reviews.next_page_number }}" class="pagination-btn pagination-next">Next →</a>
+                                <a href="?page={{ pending_reviews.paginator.num_pages }}" class="pagination-btn pagination-last">Last</a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="pagination-info">
+                        <p>Showing {{ pending_reviews.start_index }} - {{ pending_reviews.end_index }} of {{ pending_reviews.paginator.count }} pending reviews</p>
+                    </div>
+                </div>
+            {% endif %}
+
+        {% else %}
+            <div style="text-align: center; color: white; padding: 5rem 2rem; background: linear-gradient(135deg, rgba(78, 205, 196, 0.2), rgba(17, 153, 142, 0.15)); backdrop-filter: blur(30px); border-radius: 25px; border: 1px solid rgba(255, 255, 255, 0.2);">
+                <div style="font-size: 4rem; margin-bottom: 1rem;">✅</div>
+                <h3 style="font-size: 2rem; margin-bottom: 1rem;">All Caught Up!</h3>
+                <p style="font-size: 1.2rem; opacity: 0.8;">No pending anonymous reviews at the moment.</p>
+            </div>
+        {% endif %}
+
+        <!-- Back Button -->
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary" style="display: inline-block;">
+                ← Back to Admin Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+.pending-review-card {
+    border-left: 4px solid rgba(255, 235, 59, 0.8);
+    animation: pendingPulse 2s ease-in-out infinite;
+}
+
+@keyframes pendingPulse {
+    0%, 100% {
+        box-shadow: 0 10px 30px rgba(255, 235, 59, 0.2);
+    }
+    50% {
+        box-shadow: 0 10px 40px rgba(255, 235, 59, 0.4);
+    }
+}
+
+.pending-review-card:hover {
+    transform: translateY(-5px);
+    border-left-color: rgba(255, 235, 59, 1);
+}
+</style>
+{% endblock %}
