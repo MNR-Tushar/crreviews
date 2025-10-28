@@ -7,7 +7,7 @@ class UserAdmin(admin.ModelAdmin):
     list_display=['email','first_name','last_name' ,'student_id']
     search_fields=['email','first_name','last_name','student_id','batch','section']
     list_filter=['email','first_name','last_name','student_id','batch','section']
-    ordering=['first_name','last_name','batch']
+    ordering = ['-created_at']
 
 @admin.register(SavedCR)
 class SavedCRAdmin(admin.ModelAdmin):
