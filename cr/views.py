@@ -34,7 +34,12 @@ def home(request):
     cr=cr.order_by('-created_at')
     total_university=University.objects.count()
     total_department=Department.objects.count()
+    total_user=User.objects.count()
     total_review=Review.objects.count()
+    total_anonymous_reviews = Review.objects.filter(is_anonymous=True).count()
+    approved_reviews = total_review
+    pending_reviews = 0
+
     crs = sorted(
     CrProfile.objects.all(),
     key=lambda x: x.average_rating,
@@ -43,7 +48,6 @@ def home(request):
 
     universities = University.objects.all().order_by('title')
     departments = Department.objects.all().order_by('title')
-
     active_notices = Notice.objects.filter(is_active=True)
 
     rating_distribution = {
@@ -93,6 +97,10 @@ def home(request):
         'rating_distribution': rating_distribution,
         'rating_percentages': rating_percentages,
         'active_notices':active_notices,
+        'approved_reviews':approved_reviews,
+        'pending_reviews':pending_reviews,
+        'total_anonymous_reviews':total_anonymous_reviews,
+        'total_user':total_user,
 
         
     }
