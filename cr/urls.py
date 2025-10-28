@@ -12,4 +12,9 @@ urlpatterns = [
     path('submit_review/<str:cr_slug>/',submit_review,name='submit_review'),
     path('edit_review/<str:slug>/',edit_review,name='edit_review'),
     path('delete_review/<str:slug>/',delete_review,name='delete_review'),
+
+
+    path('review_status/pending-reviews/', pending_reviews, name='pending_reviews'),
+    path('review_status/approve-review/<str:slug>/', approve_review, name='approve_review'),
+    path('review_status/reject-review/<str:slug>/', reject_review, name='reject_review'),
 ]

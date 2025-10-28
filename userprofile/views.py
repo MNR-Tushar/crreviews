@@ -14,6 +14,7 @@ from django.utils.html import strip_tags
 from django.conf import settings
 from django.utils import timezone
 import uuid
+from django.contrib.admin.views.decorators import staff_member_required
 
 
 def send_verification_email(user, request):
@@ -401,9 +402,35 @@ def user_view(request,slug):
 
     return render(request,'user_profile/user_view.html',context)
 
-@login_required
+# userprofile/views.py
+
+@staff_member_required
 def admin_dashboard(request):
-    return render(request,'user_profile/admin_dashboard.html')
+
+    if not request.user.is_staff:
+        messages.error(request, "You don't have permission to access this page.")
+        return redirect('home')
+    
+   
+    pending_count = Review.objects.filter(is_anonymous=True, is_approved=False).count()
+    
+   
+    total_users = User.objects.count()
+    total_crs = CrProfile.objects.count()
+    total_reviews = Review.objects.count()
+    total_universities = University.objects.count()
+    total_departments = Department.objects.count()
+    
+    context = {
+        'pending_count': pending_count,
+        'total_users': total_users,
+        'total_crs': total_crs,
+        'total_reviews': total_reviews,
+        'total_universities': total_universities,
+        'total_departments': total_departments,
+    }
+    
+    return render(request, 'user_profile/admin_dashboard.html', context)
 
 @login_required
 def edit_user(request,slug):

@@ -1,4 +1,3 @@
-
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -7,6 +6,8 @@ from .models import *
 from userprofile.models import *
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.utils import timezone
+from django.contrib.admin.views.decorators import staff_member_required
 
 def home(request):
 
@@ -35,10 +36,11 @@ def home(request):
     total_university=University.objects.count()
     total_department=Department.objects.count()
     total_user=User.objects.count()
-    total_review=Review.objects.count()
-    total_anonymous_reviews = Review.objects.filter(is_anonymous=True).count()
+    total_review = Review.objects.filter(is_approved=True).count()
+    total_anonymous_reviews = Review.objects.filter(is_anonymous=True, is_approved=True).count()
+    pending_anonymous_reviews = Review.objects.filter(is_anonymous=True, is_approved=False).count()
     approved_reviews = total_review
-    pending_reviews = 0
+    pending_reviews = pending_anonymous_reviews
 
     crs = sorted(
     CrProfile.objects.all(),
@@ -177,7 +179,7 @@ def all_cr(request):
     return render(request,'all_cr.html',context)
 
 def latest_reviews(request):
-    reviews=Review.objects.all().order_by('-created_at')
+    reviews = Review.objects.filter(is_approved=True).order_by('-created_at')
     paginator = Paginator(reviews,10)
     page_number = request.GET.get('page',1)
 
@@ -197,7 +199,8 @@ def latest_reviews(request):
 def cr_profile(request,slug):
   
     cr_profile=get_object_or_404(CrProfile,slug=slug)
-    review=Review.objects.filter(cr_profile=cr_profile).order_by('-created_at')
+    review = Review.objects.filter(cr_profile=cr_profile, is_approved=True).order_by('-created_at')
+
 
     paginator = Paginator(review,5)
     page_number = request.GET.get('page',1)
@@ -390,36 +393,27 @@ def submit_review(request, cr_slug):
 
       
             try:
+           
+                is_approved = not is_anonymous  
+            
                 Review.objects.create(
-                    user=request.user,
-                    cr_profile=cr_profile,
-                    rating=rating,
-                    description=description,
-                    is_anonymous=is_anonymous,
-                    anonymous_name=request.user.get_full_name() if is_anonymous else None
-                )
+                user=request.user,
+                cr_profile=cr_profile,
+                rating=rating,
+                description=description,
+                is_anonymous=is_anonymous,
+                anonymous_name=request.user.get_full_name() if is_anonymous else None,
+                is_approved=is_approved,
+            )
+            
                 if is_anonymous:
-                    messages.success(request, "Your anonymous review has been submitted!")
+                    messages.success(request, "Your anonymous review has been submitted and is pending admin approval!")
                 else:
                     messages.success(request, "Your review has been submitted successfully!")
             except Exception as e:
                 messages.error(request, f"Error submitting review: {str(e)}")
-        
-        else:
-          
-            try:
-                Review.objects.create(
-                    user=None,
-                    cr_profile=cr_profile,
-                    rating=rating,
-                    description=description,
-                    is_anonymous=True,
-                    anonymous_name="Anonymous User"
-                )
-                messages.success(request, "Your anonymous review has been submitted!")
-            except Exception as e:
-                messages.error(request, f"Error submitting review: {str(e)}")
 
+        
         return redirect('cr_profile', slug=cr_profile.slug)
 
 
@@ -461,3 +455,56 @@ def delete_review(request,slug):
     review.delete()
     messages.success(request, "Your review has been deleted successfully!")
     return redirect('user_dashboard',slug=request.user.slug)
+
+
+
+@staff_member_required
+def pending_reviews(request):
+   
+    pending = Review.objects.filter(is_anonymous=True, is_approved=False).order_by('-created_at')
+    
+    paginator = Paginator(pending, 10)
+    page_number = request.GET.get('page', 1)
+    
+    try:
+        pending = paginator.page(page_number)
+    except PageNotAnInteger:
+        pending = paginator.page(1)
+    except EmptyPage:
+        pending = paginator.page(1)
+    
+    context = {
+        'pending_reviews': pending,
+        'paginator': paginator,
+    }
+    return render(request, 'review_status/pending_reviews.html', context)
+
+@staff_member_required
+def approve_review(request, slug):
+    
+    review = get_object_or_404(Review, slug=slug, is_anonymous=True)
+    
+    if request.method == 'POST':
+        review.is_approved = True
+        review.reviewed_by = request.user
+        review.reviewed_at = timezone.now()
+        review.save()
+        
+        messages.success(request, f"Review approved successfully!")
+        return redirect('pending_reviews')
+    
+    return redirect('pending_reviews')
+
+@staff_member_required
+def reject_review(request, slug):
+    
+    review = get_object_or_404(Review, slug=slug, is_anonymous=True)
+    
+    if request.method == 'POST':
+        cr_name = review.cr_profile.name
+        review.delete()
+        
+        messages.success(request, f"Review for {cr_name} has been rejected and deleted!")
+        return redirect('pending_reviews')
+    
+    return redirect('pending_reviews')

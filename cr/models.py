@@ -113,16 +113,27 @@ class CrProfile(models.Model):
         return round(avg,1) if avg else 0
  
 
+
 class Review(models.Model):
-    user=models.ForeignKey('userprofile.User', on_delete=models.CASCADE,related_name='userreviews')
-    cr_profile=models.ForeignKey(CrProfile, on_delete=models.CASCADE,related_name='cr_reviews')
+    user = models.ForeignKey('userprofile.User', on_delete=models.CASCADE, related_name='userreviews')
+    cr_profile = models.ForeignKey(CrProfile, on_delete=models.CASCADE, related_name='cr_reviews')
 
     rating = models.PositiveSmallIntegerField() 
     description = models.TextField(blank=True, null=True)
     is_anonymous = models.BooleanField(default=False)
     anonymous_name = models.CharField(max_length=100, blank=True, null=True)
-
-
+    
+    #  Approval system for anonymous reviews
+    is_approved = models.BooleanField(default=True)  # Auto-approve non-anonymous
+    reviewed_by = models.ForeignKey(
+        'userprofile.User', 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True, 
+        related_name='reviewed_reviews',
+        help_text="Admin who approved/rejected this review"
+    )
+    reviewed_at = models.DateTimeField(null=True, blank=True)
 
     slug = models.SlugField(unique=True, blank=True)
 
@@ -130,22 +141,30 @@ class Review(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(blank=True, null=True)
 
-
     class Meta:
         unique_together = [['user', 'cr_profile']]
         ordering = ['-created_at']
 
-
     def __str__(self):
         if self.is_anonymous:
-            return f"Anonymous Review by {self.anonymous_name} on {self.cr_profile.name}"
+            status = "Approved" if self.is_approved else "⏳ Pending"
+            return f"Anonymous Review ({status}) on {self.cr_profile.name}"
         return f"Review by {self.user.get_full_name()} on {self.cr_profile.name}"
 
     def save(self, *args, **kwargs):
+
+        if not self.is_anonymous and self.is_approved is None:
+            self.is_approved = True
+  
+        if self.is_anonymous and self.is_approved is None:
+            self.is_approved = False
+        
         if not self.slug:
             base_slug = f"review-{self.cr_profile.id}-{uuid.uuid4().hex[:8]}"
             self.slug = slugify(base_slug)
-        super().save(*args, **kwargs)    
+        
+        super().save(*args, **kwargs)
+    
     def get_reviewer_name(self):
         if self.is_anonymous:
             return self.anonymous_name or "Anonymous User"
