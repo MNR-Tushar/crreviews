@@ -4,194 +4,216 @@
 
 {% block content %}
 
-
-
-    <div id="home" class="page active">
-        <div class="container">
-           
-
-{% if active_notices %}
-    {% for notice in active_notices %}
-        <div class="notice-banner {{ notice.notice_type }}" id="notice-{{ notice.id }}">
-            <div class="notice-content">
-                <div class="notice-icon">
-                    {% if notice.notice_type == 'info' %}
-                        📢
-                    {% elif notice.notice_type == 'success' %}
-                        ✔️
-                    {% elif notice.notice_type == 'warning' %}
-                        ⚠️
-                    {% elif notice.notice_type == 'urgent' %}
-                        🚨
-                    {% endif %}
-                </div>
-                <div class="notice-info">
-                    {% comment %} <div class="notice-title">{{ notice.title }}</div> {% endcomment %}
-                    <div class="notice-message">{{ notice.message }}</div>
-                    {% if notice.link %}
-                        <a href="{{ notice.link }}" class="notice-link" target="_blank">
-                            Learn More →
-                        </a>
-                    {% endif %}
-                </div>
-            </div>
-            <button class="notice-close" onclick="closeNotice({{ notice.id }})" aria-label="Close notice">
-                ✕
-            </button>
-        </div>
-    {% endfor %}
-{% endif %}
-            
-            <div class="search-section">
-                <form method="GET" action="{% url 'home' %}">
-                    <div class="search-bar">
-                        <input type="text" 
-                               name="search" 
-                               class="search-input" 
-                               placeholder="Search by Name or ID..." 
-                               value="{{ search_query }}">
-                        
-                        <select name="university" class="search-input">
-                            <option value="">All Universities</option>
-                            {% for uni in universities %}
-                                <option value="{{ uni.id }}" {% if university_filter == uni.id|stringformat:"s" %}selected{% endif %}>
-                                    {{ uni.title }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                        
-                        <select name="department" class="search-input">
-                            <option value="">All Departments</option>
-                            {% for dept in departments %}
-                                <option value="{{ dept.id }}" {% if department_filter == dept.id|stringformat:"s" %}selected{% endif %}>
-                                    {{ dept.title }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                        
-                        <button type="submit" class="search-btn">🔍 Search</button>
+<div id="home" class="page active">
+    <div class="container">
+       
+        {% if active_notices %}
+            {% for notice in active_notices %}
+                <div class="notice-banner {{ notice.notice_type }}" id="notice-{{ notice.id }}">
+                    <div class="notice-content">
+                        <div class="notice-icon">
+                            {% if notice.notice_type == 'info' %}
+                                📢
+                            {% elif notice.notice_type == 'success' %}
+                                ✔️
+                            {% elif notice.notice_type == 'warning' %}
+                                ⚠️
+                            {% elif notice.notice_type == 'urgent' %}
+                                🚨
+                            {% endif %}
+                        </div>
+                        <div class="notice-info">
+                            <div class="notice-message">{{ notice.message }}</div>
+                            {% if notice.link %}
+                                <a href="{{ notice.link }}" class="notice-link" target="_blank">
+                                    Learn More →
+                                </a>
+                            {% endif %}
+                        </div>
                     </div>
-                </form>
+                    <button class="notice-close" onclick="closeNotice({{ notice.id }})" aria-label="Close notice">
+                        ✕
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <div class="search-section">
+            <form method="GET" action="{% url 'home' %}">
+                <div class="search-bar">
+                    <input type="text" 
+                           name="search" 
+                           class="search-input" 
+                           placeholder="Search by Name or ID..." 
+                           value="{{ search_query }}">
+                    
+                    <select name="university" class="search-input">
+                        <option value="">All Universities</option>
+                        {% for uni in universities %}
+                            <option value="{{ uni.id }}" {% if university_filter == uni.id|stringformat:"s" %}selected{% endif %}>
+                                {{ uni.title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    
+                    <select name="department" class="search-input">
+                        <option value="">All Departments</option>
+                        {% for dept in departments %}
+                            <option value="{{ dept.id }}" {% if department_filter == dept.id|stringformat:"s" %}selected{% endif %}>
+                                {{ dept.title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    
+                    <button type="submit" class="search-btn">🔍 Search</button>
+                </div>
+            </form>
+            
+            {% if search_query or university_filter or department_filter %}
+                <div style="text-align: center; margin-top: 1rem;">
+                    <a href="{% url 'home' %}" class="btn btn-secondary" style="display: inline-block;">
+                        ✖ Clear Filters
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">{{ cr.count }}</div>
+                <div class="stat-label">Total CRS</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ total_university }}</div>
+                <div class="stat-label">Total Universities</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ total_department }}</div>
+                <div class="stat-label">Total Departments</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ total_user }}</div>
+                <div class="stat-label">Total Students</div>
+            </div>
+        </div>
+
+        {% if search_query or university_filter or department_filter %}
+            <div class="section">
+                <h2 class="section-title">Search Results ({{ cr.count }} found)</h2>
+                <div class="grid">
+                    {% for cr_item in cr|slice:12 %}
+                        {% with cr=cr_item %}
+                            {% include 'cr_card.html' %}
+                        {% endwith %}
+                    {% empty %}
+                        <div style="text-align: center; color: white; padding: 3rem; grid-column: 1/-1;">
+                            <h3 style="font-size: 2rem; margin-bottom: 1rem;">😔 No CRs Found</h3>
+                            <p style="font-size: 1.2rem; opacity: 0.8;">Try adjusting your search criteria</p>
+                        </div>
+                    {% endfor %}
+                </div>
                 
-                {% if search_query or university_filter or department_filter %}
-                    <div style="text-align: center; margin-top: 1rem;">
-                        <a href="{% url 'home' %}" class="btn btn-secondary" style="display: inline-block;">
-                            ✖ Clear Filters
+                {% if cr.count > 9 %}
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <a href="{% url 'all_cr' %}?search={{ search_query }}&university={{ university_filter }}&department={{ department_filter }}" 
+                           class="btn" style="display: inline-block; font-size: 1.1rem;">
+                            View All Results ({{ cr.count }})
                         </a>
                     </div>
                 {% endif %}
             </div>
-
-            <div class="stats">
-                <div class="stat-card">
-                    <div class="stat-number">{{ cr.count }}</div>
-                    <div class="stat-label">Total CRS</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">{{ total_university }}</div>
-                    <div class="stat-label">Total Universities</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">{{ total_department }}</div>
-                    <div class="stat-label">Total Departments</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">{{ total_review }}</div>
-                    <div class="stat-label">Total Reviews</div>
+        {% else %}
+            <div class="section">
+                <h2 class="section-title">Top Rated CRS</h2>
+                <div class="grid">
+                    {% for cr_item in crs|slice:6 %}
+                        {% with cr=cr_item %}
+                            {% include 'cr_card.html' %}
+                        {% endwith %}
+                    {% endfor %}
                 </div>
             </div>
 
-            {% if search_query or university_filter or department_filter %}
-                <div class="section">
-                    <h2 class="section-title">Search Results ({{ cr.count }} found)</h2>
-                    <div class="grid">
-                        {% for cr_item in cr|slice:12 %}
-                            {% with cr=cr_item %}
-                                {% include 'cr_card.html' %}
-                            {% endwith %}
-                        {% empty %}
-                            <div style="text-align: center; color: white; padding: 3rem; grid-column: 1/-1;">
-                                <h3 style="font-size: 2rem; margin-bottom: 1rem;">😔 No CRs Found</h3>
-                                <p style="font-size: 1.2rem; opacity: 0.8;">Try adjusting your search criteria</p>
-                            </div>
-                            {% comment %} {% include 'no_results.html' %} {% endcomment %}
-                        {% endfor %}
+            <div class="section">
+                <h2 class="section-title">Recently Added CRS</h2>
+                <div class="grid">
+                    {% for cr_item in cr|slice:6 %}
+                        {% with cr=cr_item %}
+                            {% include "cr_card.html" %}
+                        {% endwith %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- ✅ NEW: Review Statistics Section -->
+            <div class="section">
+                <h2 class="section-title">Review Statistics</h2>
+                <div class="stats">
+                    <div class="stat-card stat-card-review">
+                        <div class="stat-icon"></div>
+                        <div class="stat-number">{{ total_review }}</div>
+                        <div class="stat-label">Total Reviews</div>
                     </div>
-                    
-                    {% if cr.count > 9 %}
-                        <div style="text-align: center; margin-top: 2rem;">
-                            <a href="{% url 'all_cr' %}?search={{ search_query }}&university={{ university_filter }}&department={{ department_filter }}" 
-                               class="btn" style="display: inline-block; font-size: 1.1rem;">
-                                View All Results ({{ cr.count }})
-                            </a>
+                    <div class="stat-card stat-card-anonymous">
+                        <div class="stat-icon"></div>
+                        <div class="stat-number">{{ total_anonymous_reviews }}</div>
+                        <div class="stat-label">Anonymous Reviews</div>
+                    </div>
+                    <div class="stat-card stat-card-approved">
+                        <div class="stat-icon"></div>
+                        <div class="stat-number">{{ approved_reviews }}</div>
+                        <div class="stat-label">Approved Reviews</div>
+                    </div>
+                    <div class="stat-card stat-card-pending">
+                        <div class="stat-icon"></div>
+                        <div class="stat-number">{{ pending_reviews }}</div>
+                        <div class="stat-label">Pending Reviews</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Rating Distribution</h2>
+                <div class="rating-chart">
+                    <div class="chart-bar">
+                        <div class="chart-label">⭐⭐⭐⭐⭐</div>
+                        <div class="chart-progress">
+                            <div class="chart-fill" style="width: {{ rating_percentages.5 }}%;"></div>
                         </div>
-                    {% endif %}
-                </div>
-            {% else %}
-                <div class="section">
-                    <h2 class="section-title">Top Rated CRS</h2>
-                    <div class="grid">
-                        {% for cr_item in crs|slice:6 %}
-                            {% with cr=cr_item %}
-                                {% include 'cr_card.html' %}
-                            {% endwith %}
-                        {% endfor %}
+                        <div>{{ rating_percentages.5 }}% ({{ rating_distribution.5 }})</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="chart-label">⭐⭐⭐⭐</div>
+                        <div class="chart-progress">
+                            <div class="chart-fill" style="width: {{ rating_percentages.4 }}%;"></div>
+                        </div>
+                        <div>{{ rating_percentages.4 }}% ({{ rating_distribution.4 }})</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="chart-label">⭐⭐⭐</div>
+                        <div class="chart-progress">
+                            <div class="chart-fill" style="width: {{ rating_percentages.3 }}%;"></div>
+                        </div>
+                        <div>{{ rating_percentages.3 }}% ({{ rating_distribution.3 }})</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="chart-label">⭐⭐</div>
+                        <div class="chart-progress">
+                            <div class="chart-fill" style="width: {{ rating_percentages.2 }}%;"></div>
+                        </div>
+                        <div>{{ rating_percentages.2 }}% ({{ rating_distribution.2 }})</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="chart-label">⭐</div>
+                        <div class="chart-progress">
+                            <div class="chart-fill" style="width: {{ rating_percentages.1 }}%;"></div>
+                        </div>
+                        <div>{{ rating_percentages.1 }}% ({{ rating_distribution.1 }})</div>
                     </div>
                 </div>
-
-                <div class="section">
-                    <h2 class="section-title">Recently Added CRS</h2>
-                    <div class="grid">
-                        {% for cr_item in cr|slice:6 %}
-                            {% with cr=cr_item %}
-                                {% include "cr_card.html" %}
-                            {% endwith %}
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <div class="section">
-    <h2 class="section-title">Rating Distribution</h2>
-    <div class="rating-chart">
-        <div class="chart-bar">
-            <div class="chart-label">⭐⭐⭐⭐⭐</div>
-            <div class="chart-progress">
-                <div class="chart-fill" style="width: {{ rating_percentages.5 }}%;"></div>
             </div>
-            <div>{{ rating_percentages.5 }}% ({{ rating_distribution.5 }})</div>
-        </div>
-        <div class="chart-bar">
-            <div class="chart-label">⭐⭐⭐⭐</div>
-            <div class="chart-progress">
-                <div class="chart-fill" style="width: {{ rating_percentages.4 }}%;"></div>
-            </div>
-            <div>{{ rating_percentages.4 }}% ({{ rating_distribution.4 }})</div>
-        </div>
-        <div class="chart-bar">
-            <div class="chart-label">⭐⭐⭐</div>
-            <div class="chart-progress">
-                <div class="chart-fill" style="width: {{ rating_percentages.3 }}%;"></div>
-            </div>
-            <div>{{ rating_percentages.3 }}% ({{ rating_distribution.3 }})</div>
-        </div>
-        <div class="chart-bar">
-            <div class="chart-label">⭐⭐</div>
-            <div class="chart-progress">
-                <div class="chart-fill" style="width: {{ rating_percentages.2 }}%;"></div>
-            </div>
-            <div>{{ rating_percentages.2 }}% ({{ rating_distribution.2 }})</div>
-        </div>
-        <div class="chart-bar">
-            <div class="chart-label">⭐</div>
-            <div class="chart-progress">
-                <div class="chart-fill" style="width: {{ rating_percentages.1 }}%;"></div>
-            </div>
-            <div>{{ rating_percentages.1 }}% ({{ rating_distribution.1 }})</div>
-        </div>
+        {% endif %}
     </div>
 </div>
-            {% endif %}
-        </div>
-    </div>
-    {% include 'rating.html' %}
+{% include 'rating.html' %}
 {% endblock content %}
