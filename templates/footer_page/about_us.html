@@ -9,43 +9,43 @@
     </div>
 
     <div class="content-card">
-        <div class="section-icon"></div>
+        {% comment %} <div class="section-icon"></div> {% endcomment %}
         <h2 class="section-heading">Our Mission</h2>
         <p class="section-text">
             CR Reviews is Bangladesh's first student-driven platform dedicated to promoting transparency 
             and accountability in university leadership. We believe that every student deserves to have 
-            their voice heard, and every Course Representative (CR) deserves honest feedback to grow and improve.
+            their voice heard and every Course Representative (CR) deserves honest feedback to grow and improve.
         </p>
     </div>
 
     <div class="content-card">
-        <div class="section-icon"></div>
+        {% comment %} <div class="section-icon"></div> {% endcomment %}
         <h2 class="section-heading">What We Do</h2>
         <p class="section-text">
             We provide a safe, anonymous platform where university students across Bangladesh can:
         </p>
         <ul class="feature-list">
-            <li>✅ Share their experiences with Course Representatives</li>
-            <li>✅ Rate CRs based on communication, responsibility, and leadership</li>
-            <li>✅ Help fellow students make informed decisions</li>
-            <li>✅ Encourage constructive feedback and positive change</li>
-            <li>✅ Build a culture of transparency in academic institutions</li>
+            <li>Share their experiences with Course Representatives</li>
+            <li>Rate CRs based on communication, responsibility and leadership</li>
+            <li>Help fellow students make informed decisions</li>
+            <li>Encourage constructive feedback and positive change</li>
+            <li>Build a culture of transparency in academic institutions</li>
         </ul>
     </div>
 
     <div class="content-card">
-        <div class="section-icon"></div>
+        {% comment %} <div class="section-icon"></div> {% endcomment %}
         <h2 class="section-heading">Why We Started</h2>
         <p class="section-text">
             As students ourselves, we noticed a gap in communication and feedback systems within universities. 
-            Many students felt unheard, and CRs often lacked constructive feedback to improve their performance. 
+            Many students felt unheard and CRs often lacked constructive feedback to improve their performance. 
             CR Reviews was born from the desire to bridge this gap and create a supportive community where 
             everyone can contribute to a better academic environment.
         </p>
     </div>
 
     <div class="content-card">
-        <div class="section-icon"></div>
+        {% comment %} <div class="section-icon"></div> {% endcomment %}
         <h2 class="section-heading">Our Values</h2>
         <div class="values-grid">
             <div class="value-item">
@@ -73,9 +73,11 @@
             Be part of a movement that's changing how students and CRs communicate. 
             Together, we can build a better academic future for everyone.
         </p>
+        {% if not user.is_authenticated %}
         <div style="text-align: center; margin-top: 2rem;">
             <a href="{% url 'registration' %}" class="btn">Get Started Today</a>
         </div>
+        {% endif %}
     </div>
 </div>
 
