@@ -135,8 +135,8 @@ def registration(request):
             return redirect('registration')
     
     
-    universitys = University.objects.all()
-    departments = Department.objects.all()
+    universitys = University.objects.all().order_by('title')
+    departments = Department.objects.all().order_by('title')
     
     context = {
         'universitys': universitys,
@@ -409,8 +409,8 @@ def admin_dashboard(request):
 def edit_user(request,slug):
 
     user = get_object_or_404(User,slug=slug)
-    university = University.objects.all()
-    department = Department.objects.all()
+    university = University.objects.all().order_by('title')
+    department = Department.objects.all().order_by('title')
 
     if request.user != user:
         messages.error(request, "You are not authorized to edit this profile.")

@@ -220,8 +220,8 @@ def cr_profile(request,slug):
 @login_required
 def add_cr(request):
 
-    university = University.objects.all()
-    department = Department.objects.all()
+    university = University.objects.all().order_by('title')
+    department = Department.objects.all().order_by('title')
 
     if request.method == 'POST':
 
@@ -280,8 +280,8 @@ def add_cr(request):
 def edit_cr_profile(request,slug):
 
     cr=get_object_or_404(CrProfile,slug=slug,user=request.user)
-    university = University.objects.all()
-    department = Department.objects.all()
+    university = University.objects.all().order_by('title')
+    department = Department.objects.all().order_by('title')
 
     if request.method == 'POST':
         cr.name = request.POST.get('name')

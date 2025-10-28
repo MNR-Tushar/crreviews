@@ -34,7 +34,6 @@ class University(models.Model):
     
 class Department(models.Model):
 
-    university=models.ForeignKey(University, on_delete=models.CASCADE,related_name='departments')
     title=models.CharField(max_length=50,unique=True,blank=False,null=False)
     code=models.CharField(max_length=50,unique=True,blank=True,null=True)
     slug=models.SlugField(blank=True,unique=True)

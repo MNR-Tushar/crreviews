@@ -11,10 +11,9 @@ class UniversityAdmin(admin.ModelAdmin):
 
 @admin.register(Department)
 class DepartmentAdmin(admin.ModelAdmin):
-    list_display = ('university', 'title', 'code',)
-    search_fields = ('university', 'title', 'code')
-    list_filter = ('university',)
-    ordering = ('university',)
+    list_display = ('title', 'code',)
+    search_fields = ('title', 'code')
+    ordering = ('title',)
 
 @admin.register(CrProfile)
 class CrProfileAdmin(admin.ModelAdmin):
