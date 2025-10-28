@@ -1,11 +1,11 @@
 
 from django.contrib import messages
 from django.shortcuts import redirect, render
-from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-import json
-
+from django.contrib.auth.decorators import login_required
 from .models import *
+from userprofile.models import *
+
 
 # About Us Page
 def about_us(request):
@@ -50,14 +50,18 @@ def developer(request):
     return render(request, 'footer_page/developer.html', context)
 
 # Contact Message Handler
+@login_required(login_url='login')
 @csrf_exempt
 def contact_message(request):
+    
     if request.method == 'POST':
         try:
             # Get form data
             name = request.POST.get('name', 'Anonymous')
             email = request.POST.get('email')
             message = request.POST.get('message')
+
+            
             
             # Validate required fields
             if not email or not message:
@@ -76,6 +80,10 @@ def contact_message(request):
             
             if len(message) > 1000:
                 messages.error(request, 'Message must be less than 1000 characters long.')
+                return redirect('home')
+            
+            if not User.is_authenticated:
+                messages.error(request, 'You must be logged in to send a contact message.')
                 return redirect('home')
             
             # Create contact message
