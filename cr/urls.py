@@ -14,7 +14,7 @@ urlpatterns = [
     path('delete_review/<str:slug>/',delete_review,name='delete_review'),
 
 
-    path('review_status/pending-reviews/', pending_reviews, name='pending_reviews'),
+    # path('review_status/pending-reviews/', pending_reviews, name='pending_reviews'),
     path('review_status/approve-review/<str:slug>/', approve_review, name='approve_review'),
     path('review_status/reject-review/<str:slug>/', reject_review, name='reject_review'),
 ]

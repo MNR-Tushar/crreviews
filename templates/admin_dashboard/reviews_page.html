@@ -1,13 +1,17 @@
 
 <!-- Reviews Page -->
 <div class="page-content1" id="reviews1-page">
+
+
+
+
     <div class="stats-grid1">
         <div class="stat-card1">
             <div class="stat-header1">
                 <div>
                     <div class="stat-label1">Total Reviews</div>
-                    <div class="stat-value1">15,789</div>
-                    <div class="stat-change1">↗ 8% this month</div>
+                    <div class="stat-value1">{{total_reviews}}</div>
+                    {% comment %} <div class="stat-change1">↗ 8% this month</div> {% endcomment %}
                 </div>
                 <div class="stat-icon1 green">📝</div>
             </div>
@@ -16,8 +20,8 @@
             <div class="stat-header1">
                 <div>
                     <div class="stat-label1">Pending Reviews</div>
-                    <div class="stat-value1">247</div>
-                    <div class="stat-change1">↘ 5% this week</div>
+                    <div class="stat-value1">{{pending_count}}</div>
+                    {% comment %} <div class="stat-change1">↘ 5% this week</div> {% endcomment %}
                 </div>
                 <div class="stat-icon1 orange">⏳</div>
             </div>
@@ -25,30 +29,175 @@
         <div class="stat-card1">
             <div class="stat-header1">
                 <div>
-                    <div class="stat-label1">Flagged Reviews</div>
-                    <div class="stat-value1">12</div>
-                    <div class="stat-change1">Needs attention</div>
+                    <div class="stat-label1">Anonymous Reviews</div>
+                    <div class="stat-value1">{{anonymous_reviews}}</div>
+                    {% comment %} <div class="stat-change1">Needs attention</div> {% endcomment %}
                 </div>
                 <div class="stat-icon1 purple">🚩</div>
             </div>
         </div>
     </div>
 
+    <div class="dashboard-card1" style="padding-top: 2rem;">
+    <div class="section">
+        <h1 class="section-title" style="color: white;">
+            ⏳ Pending Anonymous Reviews 
+            <span style="font-size: 1rem; ">({{ pending_reviews.paginator.count }})</span>
+        </h1>
+
+        {% if pending_reviews %}
+            <div style="display: grid; gap: 2rem;">
+                {% for review in pending_reviews %}
+                    <div class="review-card pending-review-card">
+                        <!-- Review Header -->
+                        <div class="review-header1">
+                            <div>
+                                <strong style="font-size: 1.2rem;">
+                                    👤 {{ review.get_reviewer_name }}
+                                </strong>
+                                <div style="color: rgba(255, 255, 255, 0.7); margin-top: 0.5rem;">
+                                    For: <strong>{{ review.cr_profile.name }}</strong> 
+                                    ({{ review.cr_profile.university.title }})
+                                </div>
+                                <div class="rating" style="margin-top: 1rem;">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= review.rating %}
+                                            <span class="star filled">★</span>
+                                        {% else %}
+                                            <span class="star">☆</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="color: rgba(255, 255, 255, 0.7);">
+                                    🕒 {{ review.created_at|date:"M d, Y" }}
+                                </div>
+                                <div style="color: rgba(255, 235, 59, 0.9); margin-top: 0.5rem; font-weight: 600;">
+                                    ⏳ PENDING APPROVAL
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Review Text -->
+                        {% if review.description %}
+                            <div class="review-text">
+                                "{{ review.description }}"
+                            </div>
+                        {% else %}
+                            <div class="review-text" style="opacity: 0.6; font-style: italic;">
+                                No comment provided.
+                            </div>
+                        {% endif %}
+
+                        <!-- Action Buttons -->
+                        <div style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
+                            <!-- Approve Button -->
+                            <form method="POST" action="{% url 'approve_review' review.slug %}" style="flex: 1; min-width: 150px;">
+                                {% csrf_token %}
+                                <button type="submit" 
+                                        class="btn button_save" 
+                                        style="width: 100%; margin: 0;"
+                                        onclick="return confirm('Approve this review?');">
+                                    ✅ Approve
+                                </button>
+                            </form>
+
+                            <!-- Reject Button -->
+                            <form method="POST" action="{% url 'reject_review' review.slug %}" style="flex: 1; min-width: 150px;">
+                                {% csrf_token %}
+                                <button type="submit" 
+                                        class="btn button_remove" 
+                                        style="width: 100%; margin: 0;"
+                                        onclick="return confirm('Are you sure you want to reject and delete this review? This cannot be undone.');">
+                                    ❌ Reject
+                                </button>
+                            </form>
+
+                            <!-- View CR Profile -->
+                            <a href="{% url 'cr_profile' review.cr_profile.slug %}" 
+                               class="btn btn-secondary" 
+                               style="flex: 1; min-width: 150px; margin: 0; text-align: center;">
+                                👁️ View CR Profile
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if pending_reviews.paginator.num_pages > 1 %}
+                <div class="pagination-section">
+                    <div class="pagination">
+                        <div class="pagination-numbers">
+                            {% if pending_reviews.has_previous %}
+                                <a href="?page=1" class="pagination-btn pagination-first">First</a>
+                                <a href="?page={{ pending_reviews.previous_page_number }}" class="pagination-btn pagination-prev">← Prev</a>
+                            {% endif %}
+
+                            {% for num in pending_reviews.paginator.page_range %}
+                                {% if pending_reviews.number == num %}
+                                    <span class="pagination-btn pagination-active">{{ num }}</span>
+                                {% elif num > pending_reviews.number|add:'-3' and num < pending_reviews.number|add:'3' %}
+                                    <a href="?page={{ num }}" class="pagination-btn">{{ num }}</a>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if pending_reviews.has_next %}
+                                <a href="?page={{ pending_reviews.next_page_number }}" class="pagination-btn pagination-next">Next →</a>
+                                <a href="?page={{ pending_reviews.paginator.num_pages }}" class="pagination-btn pagination-last">Last</a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="pagination-info">
+                        <p>Showing {{ pending_reviews.start_index }} - {{ pending_reviews.end_index }} of {{ pending_reviews.paginator.count }} pending reviews</p>
+                    </div>
+                </div>
+            {% endif %}
+
+        {% else %}
+            <div style="text-align: center; color: white; padding: 5rem 2rem; background: linear-gradient(135deg, rgba(78, 205, 196, 0.2), rgba(17, 153, 142, 0.15)); backdrop-filter: blur(30px); border-radius: 25px; border: 1px solid rgba(255, 255, 255, 0.2);">
+                <div style="font-size: 4rem; margin-bottom: 1rem;">✅</div>
+                <h3 style="font-size: 2rem; margin-bottom: 1rem;">All Caught Up!</h3>
+                <p style="font-size: 1.2rem; opacity: 0.8;">No pending anonymous reviews at the moment.</p>
+            </div>
+        {% endif %}
+    </div>
+    </div>
+
+
     <div class="dashboard-card1">
         <div class="card-header1">
             <h2 class="card-title1">Recent Reviews</h2>
         </div>
+        {% for review in reviews %}
         <div class="review-card1">
             <div class="review-header1">
                 <div>
-                    <strong style="color: white;">Ahmed Hasan</strong>
+                    <strong style="color: white;">{{review.cr_profile.name}}</strong>
                     <span style="color: rgba(255,255,255,0.6);"> reviewed by </span>
-                    <strong style="color: white;">Student XYZ</strong>
+                    <strong style="color: white;">{{review.get_reviewer_name}}</strong>
+                    {% if review.is_anonymous%}
+                    <span style="color: rgba(221, 255, 0, 1);">
+                            🕶️ Anonymous User
+                    </span>
+                    {% endif %}
                 </div>
-                <div class="review-rating1">⭐⭐⭐⭐⭐</div>
+                <div class="rating">
+                                {% for i in "12345" %} {% if forloop.counter <= review.rating %}
+                                <span class="star filled">★</span>
+                                {% else %}
+                                <span class="star">☆</span>
+                                {% endif %}
+                                {% endfor %}
+                                
+                              
+                </div>
+                            
             </div>
             <p style="color: rgba(255,255,255,0.8); line-height: 1.6; margin-bottom: 1rem;">
-                "Ahmed is a very responsible and helpful CR. He always keeps everyone updated about class matters."
+                {{review.description}}
             </p>
             <div style="display: flex; gap: 0.5rem;">
                 <button class="action-btn1 view">View</button>
@@ -56,23 +205,13 @@
                 <button class="action-btn1 delete">Delete</button>
             </div>
         </div>
-        <div class="review-card1">
-            <div class="review-header1">
-                <div>
-                    <strong style="color: white;">Fatima Khatun</strong>
-                    <span style="color: rgba(255,255,255,0.6);"> reviewed by </span>
-                    <strong style="color: white;">Student ABC</strong>
-                </div>
-                <div class="review-rating1">⭐⭐⭐⭐☆</div>
-            </div>
-            <p style="color: rgba(255,255,255,0.8); line-height: 1.6; margin-bottom: 1rem;">
-                "Fatima is a very good CR. However, sometimes there's a slight delay in communication."
-            </p>
-            <div style="display: flex; gap: 0.5rem;">
-                <button class="action-btn1 view">View</button>
-                <button class="action-btn1 edit">Approve</button>
-                <button class="action-btn1 delete">Delete</button>
-            </div>
-        </div>
+        {% endfor %}  
     </div>
+
+   
+
+
+
+    
+
 </div>

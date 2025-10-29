@@ -2,6 +2,7 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.db.models import Count
 from django.contrib.admin.views.decorators import staff_member_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from cr.models import *
 from userprofile.models import *
 
@@ -14,15 +15,11 @@ def admin_dashboard(request):
     
    
     pending_count = Review.objects.filter(is_anonymous=True, is_approved=False).count()
+    anonymous_reviews = Review.objects.filter(is_anonymous=True, is_approved=True).count()
     
    
     total_users = User.objects.count()
     users=User.objects.all().order_by('-created_at')
-
-    
-    
-    
-    
 
 
     total_crs = CrProfile.objects.count()
@@ -31,7 +28,6 @@ def admin_dashboard(request):
 
     total_reviews = Review.objects.count()
     reviews=Review.objects.all().order_by('-created_at')
-
 
 
     univercities=University.objects.all().order_by('-created_at')
@@ -45,10 +41,23 @@ def admin_dashboard(request):
     total_departments = Department.objects.count()
     departments = Department.objects.annotate(total_cr=Count('department_crs',distinct=True),total_review=Count('department_crs__cr_reviews',distinct=True),total_users=Count('department_user',distinct=True))
 
+
+    pending = Review.objects.filter(is_anonymous=True, is_approved=False).order_by('-created_at')
+    
+    paginator = Paginator(pending, 10)
+    page_number = request.GET.get('page', 1)
+    
+    try:
+        pending = paginator.page(page_number)
+    except PageNotAnInteger:
+        pending = paginator.page(1)
+    except EmptyPage:
+        pending = paginator.page(1)
  
     
     context = {
         'pending_count': pending_count,
+        'anonymous_reviews': anonymous_reviews,
         'total_users': total_users,
         'total_crs': total_crs,
         'total_reviews': total_reviews,
@@ -61,6 +70,8 @@ def admin_dashboard(request):
         'departments':departments,
         'private_universities':private_universities,
         'public_universities':public_universities,
+        'pending_reviews': pending,
+        'paginator': paginator,
        
     }
     

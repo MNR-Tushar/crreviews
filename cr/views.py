@@ -458,26 +458,7 @@ def delete_review(request,slug):
 
 
 
-@staff_member_required
-def pending_reviews(request):
-   
-    pending = Review.objects.filter(is_anonymous=True, is_approved=False).order_by('-created_at')
-    
-    paginator = Paginator(pending, 10)
-    page_number = request.GET.get('page', 1)
-    
-    try:
-        pending = paginator.page(page_number)
-    except PageNotAnInteger:
-        pending = paginator.page(1)
-    except EmptyPage:
-        pending = paginator.page(1)
-    
-    context = {
-        'pending_reviews': pending,
-        'paginator': paginator,
-    }
-    return render(request, 'review_status/pending_reviews.html', context)
+
 
 @staff_member_required
 def approve_review(request, slug):
@@ -491,9 +472,9 @@ def approve_review(request, slug):
         review.save()
         
         messages.success(request, f"Review approved successfully!")
-        return redirect('pending_reviews')
+        return redirect('admin_dashboard')
     
-    return redirect('pending_reviews')
+    return redirect('admin_dashboard')
 
 @staff_member_required
 def reject_review(request, slug):
@@ -505,6 +486,6 @@ def reject_review(request, slug):
         review.delete()
         
         messages.success(request, f"Review for {cr_name} has been rejected and deleted!")
-        return redirect('pending_reviews')
+        return redirect('admin_dashboard')
     
-    return redirect('pending_reviews')
+    return redirect('admin_dashboard')
