@@ -6,7 +6,7 @@
             <div class="stat-header1">
                 <div>
                     <div class="stat-label1">Total Universities</div>
-                    <div class="stat-value1">125</div>
+                    <div class="stat-value1">{{total_universities}}</div>
                 </div>
                 <div class="stat-icon1 blue">🏛️</div>
             </div>
@@ -15,7 +15,7 @@
             <div class="stat-header1">
                 <div>
                     <div class="stat-label1">Public Universities</div>
-                    <div class="stat-value1">52</div>
+                    <div class="stat-value1">{{public_universities}}</div>
                 </div>
                 <div class="stat-icon1 green">🎓</div>
             </div>
@@ -24,7 +24,7 @@
             <div class="stat-header1">
                 <div>
                     <div class="stat-label1">Private Universities</div>
-                    <div class="stat-value1">73</div>
+                    <div class="stat-value1">{{private_universities}}</div>
                 </div>
                 <div class="stat-icon1 purple">🏢</div>
             </div>
@@ -32,44 +32,22 @@
     </div>
 
     <div class="university-grid1">
+        {% for uni in univercities %}
         <div class="dashboard-card1">
-            <h3 style="color: white; font-size: 1.3rem; margin-bottom: 1rem;">🏛️ Dhaka University</h3>
-            <p style="color: rgba(255,255,255,0.7); margin-bottom: 1rem;">Public University</p>
+            <h3 style="color: white; font-size: 1.3rem; margin-bottom: 1rem;">🏛️ {{uni.title}}</h3>
+            <p style="color: rgba(255,255,255,0.7); margin-bottom: 1rem;">{{uni.type}}</p>
             <div style="color: rgba(255,255,255,0.8); margin-bottom: 1rem;">
-                <div>📍 Dhaka, Bangladesh</div>
-                <div>👥 245 CRs</div>
-                <div>⭐ 4.7 Average Rating</div>
+                <div>📍 {{uni.address}}</div>
+                <div>👥 {{uni.total_cr}} CRs</div>
+                 <div>👥 {{uni.total_users}} Users</div>
+                <div>⭐ {{uni.total_review}} Reviews</div>
             </div>
             <div style="display: flex; gap: 0.5rem;">
                 <button class="action-btn1 view">View</button>
                 <button class="action-btn1 edit">Edit</button>
             </div>
         </div>
-        <div class="dashboard-card1">
-            <h3 style="color: white; font-size: 1.3rem; margin-bottom: 1rem;">🏛️ BUET</h3>
-            <p style="color: rgba(255,255,255,0.7); margin-bottom: 1rem;">Public University</p>
-            <div style="color: rgba(255,255,255,0.8); margin-bottom: 1rem;">
-                <div>📍 Dhaka, Bangladesh</div>
-                <div>👥 189 CRs</div>
-                <div>⭐ 4.8 Average Rating</div>
-            </div>
-            <div style="display: flex; gap: 0.5rem;">
-                <button class="action-btn1 view">View</button>
-                <button class="action-btn1 edit">Edit</button>
-            </div>
-        </div>
-        <div class="dashboard-card1">
-            <h3 style="color: white; font-size: 1.3rem; margin-bottom: 1rem;">🏛️ Jahangirnagar University</h3>
-            <p style="color: rgba(255,255,255,0.7); margin-bottom: 1rem;">Public University</p>
-            <div style="color: rgba(255,255,255,0.8); margin-bottom: 1rem;">
-                <div>📍 Savar, Dhaka</div>
-                <div>👥 156 CRs</div>
-                <div>⭐ 4.6 Average Rating</div>
-            </div>
-            <div style="display: flex; gap: 0.5rem;">
-                <button class="action-btn1 view">View</button>
-                <button class="action-btn1 edit">Edit</button>
-            </div>
-        </div>
+        {% endfor %}
+        
     </div>
 </div>

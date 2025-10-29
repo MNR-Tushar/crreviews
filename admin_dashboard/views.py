@@ -17,15 +17,28 @@ def admin_dashboard(request):
     
    
     total_users = User.objects.count()
-    total_crs = CrProfile.objects.count()
-    total_reviews = Review.objects.count()
-    total_universities = University.objects.count()
+    users=User.objects.all().order_by('-created_at')
+
+    
+    
+    
     
 
 
+    total_crs = CrProfile.objects.count()
     crs=CrProfile.objects.all().order_by('-created_at')
+
+
+    total_reviews = Review.objects.count()
     reviews=Review.objects.all().order_by('-created_at')
+
+
+
     univercities=University.objects.all().order_by('-created_at')
+    total_universities = University.objects.count()
+    private_universities = University.objects.filter(type='Private').count()
+    public_universities = University.objects.filter(type='Public').count()
+    univercities = University.objects.annotate(total_cr=Count('university_crs',distinct=True),total_review=Count('university_crs__cr_reviews',distinct=True),total_users=Count('university_user',distinct=True))
 
 
     departments=Department.objects.all().order_by('-created_at')
@@ -41,10 +54,13 @@ def admin_dashboard(request):
         'total_reviews': total_reviews,
         'total_universities': total_universities,
         'total_departments': total_departments,
+        'users':users,
         'crs':crs,
         'reviews':reviews,
         'univercities':univercities,
         'departments':departments,
+        'private_universities':private_universities,
+        'public_universities':public_universities,
        
     }
     
