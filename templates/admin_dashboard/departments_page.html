@@ -6,7 +6,7 @@
             <div class="stat-header1">
                 <div>
                     <div class="stat-label1">Total Departments</div>
-                    <div class="stat-value1">895</div>
+                    <div class="stat-value1">{{total_departments}}</div>
                 </div>
                 <div class="stat-icon1 blue">📚</div>
             </div>
@@ -14,8 +14,8 @@
         <div class="stat-card1">
             <div class="stat-header1">
                 <div>
-                    <div class="stat-label1">Engineering</div>
-                    <div class="stat-value1">145</div>
+                    <div class="stat-label1">Total CRs</div>
+                    <div class="stat-value1">{{total_crs}}</div>
                 </div>
                 <div class="stat-icon1 green">⚙️</div>
             </div>
@@ -23,8 +23,8 @@
         <div class="stat-card1">
             <div class="stat-header1">
                 <div>
-                    <div class="stat-label1">Science</div>
-                    <div class="stat-value1">234</div>
+                    <div class="stat-label1">Total Rating</div>
+                    <div class="stat-value1">{{total_reviews}}</div>
                 </div>
                 <div class="stat-icon1 purple">🔬</div>
             </div>
@@ -39,43 +39,28 @@
             <thead>
                 <tr>
                     <th>Department</th>
-                    <th>University</th>
-                    <th>Category</th>
-                    <th>CRs</th>
+                    <th>Total CRs</th>
+                    <th>Total Users</th>
+                    <th>Total Rating</th>
+                    {% comment %} <th>Average Rating</th> {% endcomment %}
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
+                {% for dp in departments%}
                 <tr>
-                    <td>💻 Computer Science</td>
-                    <td>Dhaka University</td>
-                    <td>Engineering</td>
-                    <td>45</td>
+                    <td>{{dp.title}}</td>
+                    <td>{{dp.total_cr}}</td>
+                    <td>{{dp.total_users}}</td>
+                    <td>{{dp.total_review}}</td>
+                    {% comment %} <td>{{dp.total_review}}</td> {% endcomment %}
                     <td>
                         <button class="action-btn1 view">View</button>
                         <button class="action-btn1 edit">Edit</button>
                     </td>
                 </tr>
-                <tr>
-                    <td>⚡ Electrical Engineering</td>
-                    <td>BUET</td>
-                    <td>Engineering</td>
-                    <td>38</td>
-                    <td>
-                        <button class="action-btn1 view">View</button>
-                        <button class="action-btn1 edit">Edit</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>🔬 Physics</td>
-                    <td>Jahangirnagar</td>
-                    <td>Science</td>
-                    <td>28</td>
-                    <td>
-                        <button class="action-btn1 view">View</button>
-                        <button class="action-btn1 edit">Edit</button>
-                    </td>
-                </tr>
+                {%endfor%}
+                
             </tbody>
         </table>
     </div>
