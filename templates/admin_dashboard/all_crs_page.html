@@ -25,7 +25,7 @@
 
     <div class="dashboard-card1">
         <div class="card-header1">
-            <h2 class="card-title1">All CRs (2,545)</h2>
+            <h2 class="card-title1">All CRs ({{total_crs}})</h2>
         </div>
         <table class="data-table1">
             <thead>
@@ -39,16 +39,17 @@
                 </tr>
             </thead>
             <tbody>
+                {% for cr in crs%}
                 <tr>
                     <td>
                         <div class="user-cell1">
                             <div class="user-avatar1">A</div>
-                            <span>Ahmed Hasan</span>
+                            <span>{{cr.name}}</span>
                         </div>
                     </td>
-                    <td>Dhaka University</td>
-                    <td>Computer Science</td>
-                    <td>⭐ 4.8</td>
+                    <td>{{cr.university}}</td>
+                    <td>{{cr.department}}</td>
+                    <td>⭐ {{cr.average_rating}}</td>
                     <td><span class="badge1 approved">Approved</span></td>
                     <td>
                         <button class="action-btn1 view">View</button>
@@ -56,40 +57,8 @@
                         <button class="action-btn1 delete">Delete</button>
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        <div class="user-cell1">
-                            <div class="user-avatar1">F</div>
-                            <span>Fatima Khatun</span>
-                        </div>
-                    </td>
-                    <td>BUET</td>
-                    <td>Electrical Eng.</td>
-                    <td>⭐ 4.5</td>
-                    <td><span class="badge1 approved">Approved</span></td>
-                    <td>
-                        <button class="action-btn1 view">View</button>
-                        <button class="action-btn1 edit">Edit</button>
-                        <button class="action-btn1 delete">Delete</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="user-cell1">
-                            <div class="user-avatar1">R</div>
-                            <span>Rahim Uddin</span>
-                        </div>
-                    </td>
-                    <td>Jahangirnagar</td>
-                    <td>Physics</td>
-                    <td>⭐ 4.6</td>
-                    <td><span class="badge1 pending">Pending</span></td>
-                    <td>
-                        <button class="action-btn1 view">View</button>
-                        <button class="action-btn1 edit">Edit</button>
-                        <button class="action-btn1 delete">Delete</button>
-                    </td>
-                </tr>
+                {%endfor%}
+               
             </tbody>
         </table>
     </div>

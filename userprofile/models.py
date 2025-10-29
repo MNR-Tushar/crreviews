@@ -17,8 +17,8 @@ def user_profile_picture_path(instance, filename):
 
 class User(AbstractBaseUser,PermissionsMixin):
 
-    university=models.ForeignKey(University, on_delete=models.SET_NULL,related_name='university',null=True,blank=True)
-    department=models.ForeignKey(Department, on_delete=models.SET_NULL,related_name='department',null=True,blank=True)
+    university=models.ForeignKey(University, on_delete=models.SET_NULL,related_name='university_user',null=True,blank=True)
+    department=models.ForeignKey(Department, on_delete=models.SET_NULL,related_name='department_user',null=True,blank=True)
     profile_picture=models.ImageField(upload_to=user_profile_picture_path,null=True,blank=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
