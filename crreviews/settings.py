@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'cr',
     'userprofile',
     'footer',
+    'admin_dashboard',
 ]
 
 MIDDLEWARE = [
