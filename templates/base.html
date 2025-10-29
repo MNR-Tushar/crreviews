@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{% static 'footer/about.css' %}">
     <link rel="stylesheet" href="{% static 'footer/developer.css' %}">
     <link rel="stylesheet" href="{% static 'footer/footer.css' %}">
-    <link rel="stylesheet" href="{% static 'admin_dashboard/admin_dashboard.css' %}">
+    
 
 </head>
 <body>
@@ -76,10 +76,18 @@
                     </div>
                     <div class="dropdown-divider"></div>
 
-                    <a href="{% url 'user_dashboard' user.slug %}" class="dropdown-item">
-                        <span class="dropdown-icon">🧭</span>
-                        Dashboard
+                   {% if user.is_staff %}
+                    <a href="{% url 'admin_dashboard' %}" class="dropdown-item">
+                    <span class="dropdown-icon">🧭</span>
+                    Admin Dashboard
                     </a>
+                    {% else %}
+                    <a href="{% url 'user_dashboard' user.slug %}" class="dropdown-item">
+                    <span class="dropdown-icon">🧭</span>
+                    Dashboard
+                    </a>
+                    {% endif %}
+
                     
                     <a href="{% url 'view_profile' user.slug %}" class="dropdown-item">
                         <span class="dropdown-icon">👤</span>
@@ -124,7 +132,7 @@
      <script src="{% static 'edit_user.js' %}"></script>
      <script src="{% static 'user_dashboard.js' %}"></script>
     <script src="{% static 'footer/footer.js' %}"></script>
-    <script src="{% static 'admin_dashboard/admin_dashboard.js' %}"></script>   
+    
      
 
     

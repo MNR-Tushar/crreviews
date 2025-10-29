@@ -1,15 +1,18 @@
-{% extends 'base.html' %}
+
 {% load static %}
 {% block title %} Admin {% endblock title %}
 {% block content %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'admin_dashboard/admin_dashboard.css' %}">
+    
     <div class="dashboard-container1">
         <!-- Sidebar -->
         <aside class="sidebar1" id="sidebar1">
             <div class="sidebar-header1">
-                <a href="#" class="logo1">
+                {% comment %} <a href="#" class="logo1">
                     <span>🎓</span>
                     <span class="logo-text1">CR Reviews</span>
-                </a>
+                </a> {% endcomment %}
                 <button class="toggle-btn1" id="toggleBtn1">☰</button>
             </div>
 
@@ -89,20 +92,22 @@
             <!-- All CRs Page -->
             {% include 'admin_dashboard/all_crs_page.html' %}
 
-            <!-- reviews Pgae-->
+            <!-- Reviews Page-->
             {% include 'admin_dashboard/reviews_page.html' %}
 
-            <!-- users -->
+            <!-- Users -->
             {% include 'admin_dashboard/users_page.html' %}
 
-            <!-- universities -->
+            <!-- Universities -->
             {% include 'admin_dashboard/universities_page.html' %}
 
-            <!--departments -->
+            <!-- Departments -->
             {% include 'admin_dashboard/departments_page.html' %}
 
-            <!-- settings -->
+            <!-- Settings -->
             {% include 'admin_dashboard/settings_page.html' %}
         </main>
     </div>
+
+    <script src="{% static 'admin_dashboard/admin_dashboard.js' %}"></script>
 {% endblock content %}
