@@ -30,4 +30,4 @@ def admin_dashboard(request):
         'total_departments': total_departments,
     }
     
-    return render(request, 'user_profile/admin_dashboard.html', context)
+    return render(request, 'admin_dashboard/admin_dashboard.html', context)

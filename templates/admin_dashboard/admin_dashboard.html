@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Admin Dashboard - CR Reviews{% endblock title %}
+
+{% block content %}
+ 
+    <div class="dashboard-container1">
+        <aside class="sidebar1" id="sidebar">
+            <div class="sidebar-header1">
+                <a href="#" class="logo1">
+                    <span>🎓</span>
+                    <span class="logo-text1">CR Reviews</span>
+                </a>
+                <button class="toggle-btn1" id="toggleBtn">☰</button>
+            </div>
+
+            <div class="admin-info1">
+                <div class="admin-avatar1">A</div>
+                <div class="admin-details1">
+                    <h3>Admin User</h3>
+                    <p>admin@crreviews.com</p>
+                </div>
+            </div>
+
+            <ul class="nav-menu1">
+                <li class="nav-item1">
+                    <a class="nav-link active1" data-page="dashboard">
+                        <span class="nav-icon1">📊</span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a class="nav-link1" data-page="all-crs">
+                        <span class="nav-icon1">👥</span>
+                        <span>All CRs</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a class="nav-link1" data-page="reviews">
+                        <span class="nav-icon1">📝</span>
+                        <span>Reviews</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a class="nav-link1" data-page="users">
+                        <span class="nav-icon1">👤</span>
+                        <span>Users</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a class="nav-link1" data-page="universities">
+                        <span class="nav-icon1">🏛️</span>
+                        <span>Universities</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a class="nav-link1" data-page="departments">
+                        <span class="nav-icon1">📚</span>
+                        <span>Departments</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a class="nav-link1" data-page="settings">
+                        <span class="nav-icon1">⚙️</span>
+                        <span>Settings</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a class="nav-link1" id="logoutBtn">
+                        <span class="nav-icon1">🚪</span>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="main-content1" id="mainContent">
+            <div class="top-bar1">
+                <h1 class="page-title1" id="pageTitle">📊 Admin Dashboard</h1>
+                <button class="btn1 btn-primary1" id="topActionBtn">
+                    <span>➕</span>
+                    <span>Add New CR</span>
+                </button>
+            </div>
+
+            <!-- Dashboard Page -->
+            {% include "admin_dashboard/dashboard_page.html" %}
+
+            <!-- All CRs Page -->
+             {% include "admin_dashboard/all_crs_page.html" %}
+
+            <!-- Reviews Page -->
+             {% include "admin_dashboard/reviews_page.html" %}
+
+            <!-- Users Page -->
+             {% include "admin_dashboard/users_page.html" %}
+
+            <!-- Universities Page -->
+             {% include "admin_dashboard/universities_page.html" %}
+
+            <!-- Departments Page -->
+             {% include "admin_dashboard/departments_page.html" %}
+
+            <!-- Settings Page -->
+             {% include "admin_dashboard/settings_page.html" %}
+        </main>
+    </div>
+
+{% include 'rating.html' %}
+{% endblock content %}
+
+                
