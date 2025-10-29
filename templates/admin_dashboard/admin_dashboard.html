@@ -17,10 +17,16 @@
             </div>
 
             <div class="admin-info1">
-                <div class="admin-avatar1">A</div>
+                <div class="admin-avatar1">
+                    {% if user.profile_picture %}
+                        <img src="{{ user.profile_picture.url }}" alt="{{ user.name }}" />
+                    {% else %}
+                        {{ user.first_name|first|upper }}
+                    {% endif %}
+                </div>
                 <div class="admin-details1">
-                    <h3>Admin User</h3>
-                    <p>admin@crreviews.com</p>
+                    <h3>{{user.first_name}}</h3>
+                    <p>{{user.email}}</p>
                 </div>
             </div>
 
