@@ -6,8 +6,8 @@
             <div class="stat-header1">
                 <div>
                     <div class="stat-label1">Total Users</div>
-                    <div class="stat-value1">8,432</div>
-                    <div class="stat-change1">↗ 15% this month</div>
+                    <div class="stat-value1">{{total_users}}</div>
+                    {% comment %} <div class="stat-change1">↗ 15% this month</div> {% endcomment %}
                 </div>
                 <div class="stat-icon1 blue">👥</div>
             </div>
@@ -16,8 +16,8 @@
             <div class="stat-header1">
                 <div>
                     <div class="stat-label1">Active Today</div>
-                    <div class="stat-value1">1,234</div>
-                    <div class="stat-change1">Real-time</div>
+                    <div class="stat-value1">#</div>
+                    {% comment %} <div class="stat-change1">Real-time</div> {% endcomment %}
                 </div>
                 <div class="stat-icon1 green">🔥</div>
             </div>
@@ -26,8 +26,8 @@
             <div class="stat-header1">
                 <div>
                     <div class="stat-label1">New This Week</div>
-                    <div class="stat-value1">156</div>
-                    <div class="stat-change1">↗ 12%</div>
+                    <div class="stat-value1">#</div>
+                    {% comment %} <div class="stat-change1">↗ 12%</div> {% endcomment %}
                 </div>
                 <div class="stat-icon1 purple">✨</div>
             </div>
@@ -45,59 +45,30 @@
                     <th>Email</th>
                     <th>University</th>
                     <th>Joined</th>
-                    <th>Status</th>
+                    {% comment %} <th>Status</th> {% endcomment %}
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
+                {% for user in users %}
                 <tr>
                     <td>
                         <div class="user-cell1">
                             <div class="user-avatar1">M</div>
-                            <span>Mahmud Rahman</span>
+                            <span>{{user.get_full_name}}</span>
                         </div>
                     </td>
-                    <td>mahmud@email.com</td>
-                    <td>Dhaka University</td>
-                    <td>Jan 15, 2024</td>
-                    <td><span class="badge1 approved">Active</span></td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.university}}</td>
+                    <td>{{user.created_at}}</td>
+                    {% comment %} <td><span class="badge1 approved">Active</span></td> {% endcomment %}
                     <td>
                         <button class="action-btn1 view">View</button>
                         <button class="action-btn1 edit">Edit</button>
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        <div class="user-cell1">
-                            <div class="user-avatar1">N</div>
-                            <span>Nusrat Jahan</span>
-                        </div>
-                    </td>
-                    <td>nusrat@email.com</td>
-                    <td>BUET</td>
-                    <td>Feb 10, 2024</td>
-                    <td><span class="badge1 approved">Active</span></td>
-                    <td>
-                        <button class="action-btn1 view">View</button>
-                        <button class="action-btn1 edit">Edit</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="user-cell1">
-                            <div class="user-avatar1">K</div>
-                            <span>Kamal Hossain</span>
-                        </div>
-                    </td>
-                    <td>kamal@email.com</td>
-                    <td>Jahangirnagar</td>
-                    <td>Mar 05, 2024</td>
-                    <td><span class="badge1 approved">Active</span></td>
-                    <td>
-                        <button class="action-btn1 view">View</button>
-                        <button class="action-btn1 edit">Edit</button>
-                    </td>
-                </tr>
+                {% endfor %}
+               
             </tbody>
         </table>
     </div>
