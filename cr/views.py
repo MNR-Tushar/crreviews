@@ -33,6 +33,7 @@ def home(request):
         cr = cr.filter(department__id=department_filter)
 
     cr=cr.order_by('-created_at')
+    total_crs=CrProfile.objects.count()
     total_university=University.objects.count()
     total_department=Department.objects.count()
     total_user=User.objects.count()
@@ -88,6 +89,7 @@ def home(request):
 
     context={
         'cr':cr,
+        'total_crs':total_crs,
         'total_university':total_university,
         'total_department':total_department,
         'total_review':total_review,
