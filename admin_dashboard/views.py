@@ -1,10 +1,11 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.db.models import Count
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from cr.models import *
 from userprofile.models import *
+from .forms import UniversityForm, DepartmentForm
 
 @staff_member_required
 def admin_dashboard(request):
@@ -122,3 +123,122 @@ def admin_dashboard(request):
     }
     
     return render(request, 'admin_dashboard/admin_dashboard.html', context)
+
+
+@staff_member_required
+def add_university(request):
+    """View to add a new university"""
+    if request.method == 'POST':
+        form = UniversityForm(request.POST)
+        if form.is_valid():
+            university = form.save()
+            messages.success(request, f'University "{university.title}" has been added successfully!')
+            return redirect('admin_dashboard')  # Redirect to dashboard
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = UniversityForm()
+    
+    context = {
+        'form': form,
+        'title': 'Add New University',
+        'submit_text': 'Add University'
+    }
+    return render(request, 'admin_dashboard/add_university.html', context)
+
+
+@staff_member_required
+def edit_university(request, slug):
+    """View to edit an existing university"""
+    university = get_object_or_404(University, slug=slug)
+    
+    if request.method == 'POST':
+        form = UniversityForm(request.POST, instance=university)
+        if form.is_valid():
+            university = form.save()
+            messages.success(request, f'University "{university.title}" has been updated successfully!')
+            return redirect('admin_dashboard')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = UniversityForm(instance=university)
+    
+    context = {
+        'form': form,
+        'title': f'Edit University: {university.title}',
+        'submit_text': 'Update University',
+        'university': university
+    }
+    return render(request, 'admin_dashboard/add_university.html', context)
+
+
+@staff_member_required
+def delete_university(request, slug):
+  
+    university = get_object_or_404(University, slug=slug)
+    
+  
+    title = university.title
+    university.delete()
+    messages.success(request, f'University "{title}" has been deleted successfully!')
+    return redirect('/admin_dashboard/')
+
+
+
+@staff_member_required
+def add_department(request):
+    """View to add a new department"""
+    if request.method == 'POST':
+        form = DepartmentForm(request.POST)
+        if form.is_valid():
+            department = form.save()
+            messages.success(request, f'Department "{department.title}" has been added successfully!')
+            return redirect('admin_dashboard')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = DepartmentForm()
+    
+    context = {
+        'form': form,
+        'title': 'Add New Department',
+        'submit_text': 'Add Department'
+    }
+    return render(request, 'admin_dashboard/add_department.html', context)
+
+
+@staff_member_required
+def edit_department(request, slug):
+    """View to edit an existing department"""
+    department = get_object_or_404(Department, slug=slug)
+    
+    if request.method == 'POST':
+        form = DepartmentForm(request.POST, instance=department)
+        if form.is_valid():
+            department = form.save()
+            messages.success(request, f'Department "{department.title}" has been updated successfully!')
+            return redirect('admin_dashboard')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = DepartmentForm(instance=department)
+    
+    context = {
+        'form': form,
+        'title': f'Edit Department: {department.title}',
+        'submit_text': 'Update Department',
+        'department': department
+    }
+    return render(request, 'admin_dashboard/add_department.html', context)
+
+
+@staff_member_required
+def delete_department(request, slug):
+
+    department = get_object_or_404(Department, slug=slug)
+   
+    title = department.title
+    department.delete()
+    messages.success(request, f'Department "{title}" has been deleted successfully!')
+    return redirect('/admin_dashboard/')
+   

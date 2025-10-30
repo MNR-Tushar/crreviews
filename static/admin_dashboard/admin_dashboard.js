@@ -17,27 +17,33 @@ let currentActivePage = 'dashboard1';
 const pageConfigs = {
     'dashboard1': {
         title: '📊 Admin Dashboard',
-        button: '<span>➕</span><span>Add New CR</span>'
+        button: '<span>➕</span><span>Add New CR</span>',
+        action: '/admin/cr/add/'
     },
     'all-crs1': {
         title: '👥 All CRs Management',
-        button: '<span>➕</span><span>Add New CR</span>'
+        button: '<span>➕</span><span>Add New CR</span>',
+        action: '/admin/cr/add/'
     },
     'reviews1': {
         title: '📝 Reviews Management',
-        button: '<span>📊</span><span>Export Reviews</span>'
+        button: '<span>📊</span><span>Export Reviews</span>',
+        action: 'export_reviews'
     },
     'users1': {
         title: '👤 Users Management',
-        button: '<span>➕</span><span>Add User</span>'
+        button: '<span>➕</span><span>Add User</span>',
+        action: '/admin/user/add/'
     },
     'universities1': {
         title: '🏛️ Universities Management',
-        button: '<span>➕</span><span>Add University</span>'
+        button: '<span>➕</span><span>Add University</span>',
+        action: '/admin_dashboard/university/add/'
     },
     'departments1': {
         title: '📚 Departments Management',
-        button: '<span>➕</span><span>Add Department</span>'
+        button: '<span>➕</span><span>Add Department</span>',
+        action: '/admin_dashboard/department/add/'
     },
     'settings1': {
         title: '⚙️ Settings',
@@ -85,6 +91,7 @@ navLinks.forEach(link => {
                 if (topActionBtn) {
                     topActionBtn.innerHTML = config.button;
                     topActionBtn.style.display = config.button ? 'inline-flex' : 'none';
+                    topActionBtn.setAttribute('data-action', config.action || '');
                 }
             }
             
@@ -224,6 +231,9 @@ function fetchPageData(pageParam, pageNumber, pageElement) {
             // Re-initialize pagination for the updated content
             initializePaginationForPage(currentActivePage);
             
+            // Re-attach action button handlers
+            attachActionButtonHandlers();
+            
             // Update URL without reloading
             window.history.pushState({}, '', currentUrl.toString());
             
@@ -267,33 +277,108 @@ if (logoutBtn) {
     logoutBtn.addEventListener('click', function(e) {
         e.preventDefault();
         if (confirm('Are you sure you want to logout?')) {
-            alert('Logging out... Redirecting to login page.');
-            // window.location.href = '/logout/';
+            window.location.href = '/logout/';
         }
     });
 }
 
-// Action Buttons
-document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('action-btn1') || e.target.closest('.action-btn1')) {
-        const btn = e.target.classList.contains('action-btn1') ? e.target : e.target.closest('.action-btn1');
-        const action = btn.textContent.trim();
-        
-        if (action === 'Delete') {
-            if (confirm('Are you sure you want to delete this item?')) {
-                showNotification(action + ' action confirmed!', 'success');
-            }
-        } else {
-            showNotification(action + ' action clicked!', 'info');
-        }
+// === SCROLL POSITION SAVE/RESTORE SYSTEM ===
+
+// Save scroll position before navigation
+function saveScrollPosition() {
+    localStorage.setItem('scrollPos', window.scrollY);
+}
+
+// Restore scroll position after reload
+function restoreScrollPosition() {
+    const scrollPos = localStorage.getItem('scrollPos');
+    if (scrollPos) {
+        window.scrollTo(0, parseInt(scrollPos));
+        localStorage.removeItem('scrollPos'); // clear after restore
     }
-});
+}
+
+// Call restore on load
+document.addEventListener('DOMContentLoaded', restoreScrollPosition);
+
+
+// === EXISTING FUNCTION MODIFIED BELOW ===
+
+// Attach action button handlers
+function attachActionButtonHandlers() {
+    // View buttons
+    document.querySelectorAll('.action-btn1.view').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            showNotification('View action clicked!', 'info');
+        });
+    });
+
+    // Edit buttons
+    document.querySelectorAll('.action-btn1.edit').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const container = this.closest('[data-slug]');
+            const slug = container ? container.getAttribute('data-slug') : null;
+
+            if (!slug) {
+                showNotification('Slug not found for this item!', 'error');
+                return;
+            }
+
+            // ✅ Save scroll before redirect
+            saveScrollPosition();
+
+            if (currentActivePage === 'universities1') {
+                window.location.href = `/admin_dashboard/university/edit/${slug}`;
+            } else if (currentActivePage === 'departments1') {
+                window.location.href = `/admin_dashboard/department/edit/${slug}`;
+            }
+        });
+    });
+
+    // Delete buttons
+    document.querySelectorAll('.action-btn1.delete').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to delete this item?')) {
+                const container = this.closest('[data-slug]');
+                const slug = container ? container.getAttribute('data-slug') : null;
+
+                if (!slug) {
+                    showNotification('Slug not found for this item!', 'error');
+                    return;
+                }
+
+                // ✅ Save scroll before redirect
+                saveScrollPosition();
+
+                if (currentActivePage === 'universities1') {
+                    window.location.href = `/admin_dashboard/university/delete/${slug}`;
+                } else if (currentActivePage === 'departments1') {
+                    window.location.href = `/admin_dashboard/department/delete/${slug}`;
+                }
+            }
+        });
+    });
+}
+
 
 // Top Action Button
 if (topActionBtn) {
     topActionBtn.addEventListener('click', function() {
-        const buttonText = this.textContent.trim();
-        showNotification(buttonText + ' feature coming soon!', 'info');
+        const action = this.getAttribute('data-action');
+        
+        if (action && action.startsWith('/')) {
+            // Navigate to the URL
+            window.location.href = action;
+        } else if (action === 'export_reviews') {
+            showNotification('Export feature coming soon!', 'info');
+        } else {
+            const buttonText = this.textContent.trim();
+            showNotification(buttonText + ' feature coming soon!', 'info');
+        }
     });
 }
 
@@ -431,6 +516,8 @@ window.addEventListener('load', () => {
         animateCounters();
         // Initialize pagination for the default active page
         initializePaginationForPage('dashboard1');
+        // Attach action button handlers
+        attachActionButtonHandlers();
     }, 500);
 });
 
@@ -519,32 +606,3 @@ document.querySelectorAll('.data-table1 tr').forEach(row => {
         this.style.transform = 'scale(1)';
     });
 });
-
-// Form Validation Helper
-function validateForm(formElement) {
-    const inputs = formElement.querySelectorAll('.form-input1[required]');
-    let isValid = true;
-    
-    inputs.forEach(input => {
-        if (!input.value.trim()) {
-            input.style.borderColor = 'rgba(244, 67, 54, 0.5)';
-            isValid = false;
-            
-            setTimeout(() => {
-                input.style.borderColor = '';
-            }, 2000);
-        }
-    });
-    
-    return isValid;
-}
-
-// Print Current Page Statistics
-function printStatistics() {
-    window.print();
-}
-
-// Export Data (Placeholder)
-function exportData(format = 'csv') {
-    showNotification(`Exporting data as ${format.toUpperCase()}...`, 'info');
-}
