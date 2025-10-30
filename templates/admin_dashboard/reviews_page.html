@@ -31,20 +31,18 @@
     </div>
 
     <div class="dashboard-card1" style="padding-top: 2rem;">
-        <div class="section">
-            <h2 class="card-title1" style="color: white;">
-                ⏳ Pending Anonymous Reviews 
-                <span style="font-size: 1rem;">({{ pending_reviews.paginator.count }})</span>
-            </h2>
+         <div class="card-header1">
+            <h2 class="card-title1">Pending Reviews ({{pending_reviews.paginator.count}})</h2>
+        </div>
 
             {% if pending_reviews %}
                 <div style="display: grid; gap: 0.5rem;">
                     {% for review in pending_reviews %}
-                        <div class="review-card pending-review-card">
+                        <div class="review-card1">
                             <!-- Review Header -->
                             <div class="review-header1">
                                 <div>
-                                    <strong style="font-size: 1.2rem;">
+                                    <strong style="color: white;">
                                         👤 {{ review.get_reviewer_name }}
                                     </strong>
                                     <div style="color: rgba(255, 255, 255, 0.7); margin-top: 0.5rem;">
@@ -155,7 +153,7 @@
                     <p style="font-size: 1.2rem; opacity: 0.8;">No pending anonymous reviews at the moment.</p>
                 </div>
             {% endif %}
-        </div>
+  
     </div>
 
     <div class="dashboard-card1">
@@ -231,4 +229,5 @@
         </div>
         {% endif %}
     </div>
+    
 </div>
