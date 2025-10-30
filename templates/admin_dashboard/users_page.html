@@ -1,4 +1,3 @@
-
 <!-- Users Page -->
 <div class="page-content1" id="users1-page">
     <div class="stats-grid1">
@@ -7,7 +6,6 @@
                 <div>
                     <div class="stat-label1">Total Users</div>
                     <div class="stat-value1">{{total_users}}</div>
-                    {% comment %} <div class="stat-change1">↗ 15% this month</div> {% endcomment %}
                 </div>
                 <div class="stat-icon1 blue">👥</div>
             </div>
@@ -17,7 +15,6 @@
                 <div>
                     <div class="stat-label1">Active Today</div>
                     <div class="stat-value1">#</div>
-                    {% comment %} <div class="stat-change1">Real-time</div> {% endcomment %}
                 </div>
                 <div class="stat-icon1 green">🔥</div>
             </div>
@@ -27,7 +24,6 @@
                 <div>
                     <div class="stat-label1">New This Week</div>
                     <div class="stat-value1">#</div>
-                    {% comment %} <div class="stat-change1">↗ 12%</div> {% endcomment %}
                 </div>
                 <div class="stat-icon1 purple">✨</div>
             </div>
@@ -36,7 +32,7 @@
 
     <div class="dashboard-card1">
         <div class="card-header1">
-            <h2 class="card-title1">All Users</h2>
+            <h2 class="card-title1">All Users ({{users.paginator.count}})</h2>
         </div>
         <table class="data-table1">
             <thead>
@@ -45,7 +41,6 @@
                     <th>Email</th>
                     <th>University</th>
                     <th>Joined</th>
-                    {% comment %} <th>Status</th> {% endcomment %}
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -54,22 +49,57 @@
                 <tr>
                     <td>
                         <div class="user-cell1">
-                            <div class="user-avatar1">M</div>
+                            <div class="user-avatar1">{{ user.first_name|first|upper }}</div>
                             <span>{{user.get_full_name}}</span>
                         </div>
                     </td>
                     <td>{{user.email}}</td>
-                    <td>{{user.university}}</td>
-                    <td>{{user.created_at}}</td>
-                    {% comment %} <td><span class="badge1 approved">Active</span></td> {% endcomment %}
+                    <td>{{user.university|default:"N/A"}}</td>
+                    <td>{{user.created_at|date:"M d, Y"}}</td>
                     <td>
                         <button class="action-btn1 view">View</button>
                         <button class="action-btn1 edit">Edit</button>
                     </td>
                 </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.6);">
+                        No users found.
+                    </td>
+                </tr>
                 {% endfor %}
-               
             </tbody>
         </table>
+
+        <!-- Pagination -->
+        {% if users.paginator.num_pages > 1 %}
+        <div class="pagination-section" style="margin-top: 2rem;">
+            <div class="pagination">
+                <div class="pagination-numbers">
+                    {% if users.has_previous %}
+                        <a href="?users_page=1" class="pagination-btn pagination-first">First</a>
+                        <a href="?users_page={{ users.previous_page_number }}" class="pagination-btn pagination-prev">← Prev</a>
+                    {% endif %}
+
+                    {% for num in users.paginator.page_range %}
+                        {% if users.number == num %}
+                            <span class="pagination-btn pagination-active">{{ num }}</span>
+                        {% elif num > users.number|add:'-3' and num < users.number|add:'3' %}
+                            <a href="?users_page={{ num }}" class="pagination-btn">{{ num }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if users.has_next %}
+                        <a href="?users_page={{ users.next_page_number }}" class="pagination-btn pagination-next">Next →</a>
+                        <a href="?users_page={{ users.paginator.num_pages }}" class="pagination-btn pagination-last">Last</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="pagination-info">
+                <p>Showing {{ users.start_index }} - {{ users.end_index }} of {{ users.paginator.count }} users</p>
+            </div>
+        </div>
+        {% endif %}
     </div>
 </div>

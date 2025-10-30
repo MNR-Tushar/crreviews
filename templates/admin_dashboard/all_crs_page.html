@@ -1,4 +1,3 @@
-
 <!-- All CRs Page -->
 <div class="page-content1" id="all-crs1-page">
     <div class="dashboard-card1">
@@ -25,7 +24,7 @@
 
     <div class="dashboard-card1">
         <div class="card-header1">
-            <h2 class="card-title1">All CRs ({{total_crs}})</h2>
+            <h2 class="card-title1">All CRs ({{crs.paginator.count}})</h2>
         </div>
         <table class="data-table1">
             <thead>
@@ -39,17 +38,17 @@
                 </tr>
             </thead>
             <tbody>
-                {% for cr in crs%}
+                {% for cr in crs %}
                 <tr>
                     <td>
                         <div class="user-cell1">
-                            <div class="user-avatar1">A</div>
+                            <div class="user-avatar1">{{ cr.name|first|upper }}</div>
                             <span>{{cr.name}}</span>
                         </div>
                     </td>
                     <td>{{cr.university}}</td>
                     <td>{{cr.department}}</td>
-                    <td>⭐ {{cr.average_rating}}</td>
+                    <td>⭐ {{cr.average_rating|floatformat:1}}</td>
                     <td><span class="badge1 approved">Approved</span></td>
                     <td>
                         <button class="action-btn1 view">View</button>
@@ -57,9 +56,45 @@
                         <button class="action-btn1 delete">Delete</button>
                     </td>
                 </tr>
-                {%endfor%}
-               
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.6);">
+                        No CRs found.
+                    </td>
+                </tr>
+                {% endfor %}
             </tbody>
         </table>
+
+        <!-- Pagination -->
+        {% if crs.paginator.num_pages > 1 %}
+        <div class="pagination-section" style="margin-top: 2rem;">
+            <div class="pagination">
+                <div class="pagination-numbers">
+                    {% if crs.has_previous %}
+                        <a href="?crs_page=1" class="pagination-btn pagination-first">First</a>
+                        <a href="?crs_page={{ crs.previous_page_number }}" class="pagination-btn pagination-prev">← Prev</a>
+                    {% endif %}
+
+                    {% for num in crs.paginator.page_range %}
+                        {% if crs.number == num %}
+                            <span class="pagination-btn pagination-active">{{ num }}</span>
+                        {% elif num > crs.number|add:'-3' and num < crs.number|add:'3' %}
+                            <a href="?crs_page={{ num }}" class="pagination-btn">{{ num }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if crs.has_next %}
+                        <a href="?crs_page={{ crs.next_page_number }}" class="pagination-btn pagination-next">Next →</a>
+                        <a href="?crs_page={{ crs.paginator.num_pages }}" class="pagination-btn pagination-last">Last</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="pagination-info">
+                <p>Showing {{ crs.start_index }} - {{ crs.end_index }} of {{ crs.paginator.count }} CRs</p>
+            </div>
+        </div>
+        {% endif %}
     </div>
 </div>

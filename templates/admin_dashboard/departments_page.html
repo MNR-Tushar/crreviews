@@ -1,4 +1,3 @@
-
 <!-- Departments Page -->
 <div class="page-content1" id="departments1-page">
     <div class="stats-grid1">
@@ -23,7 +22,7 @@
         <div class="stat-card1">
             <div class="stat-header1">
                 <div>
-                    <div class="stat-label1">Total Rating</div>
+                    <div class="stat-label1">Total Reviews</div>
                     <div class="stat-value1">{{total_reviews}}</div>
                 </div>
                 <div class="stat-icon1 purple">🔬</div>
@@ -33,7 +32,7 @@
 
     <div class="dashboard-card1">
         <div class="card-header1">
-            <h2 class="card-title1">All Departments</h2>
+            <h2 class="card-title1">All Departments ({{departments.paginator.count}})</h2>
         </div>
         <table class="data-table1">
             <thead>
@@ -41,27 +40,61 @@
                     <th>Department</th>
                     <th>Total CRs</th>
                     <th>Total Users</th>
-                    <th>Total Rating</th>
-                    {% comment %} <th>Average Rating</th> {% endcomment %}
+                    <th>Total Reviews</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                {% for dp in departments%}
+                {% for dp in departments %}
                 <tr>
                     <td>{{dp.title}}</td>
                     <td>{{dp.total_cr}}</td>
                     <td>{{dp.total_users}}</td>
                     <td>{{dp.total_review}}</td>
-                    {% comment %} <td>{{dp.total_review}}</td> {% endcomment %}
                     <td>
                         <button class="action-btn1 view">View</button>
                         <button class="action-btn1 edit">Edit</button>
                     </td>
                 </tr>
-                {%endfor%}
-                
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.6);">
+                        No departments found.
+                    </td>
+                </tr>
+                {% endfor %}
             </tbody>
         </table>
+
+        <!-- Pagination -->
+        {% if departments.paginator.num_pages > 1 %}
+        <div class="pagination-section" style="margin-top: 2rem;">
+            <div class="pagination">
+                <div class="pagination-numbers">
+                    {% if departments.has_previous %}
+                        <a href="?departments_page=1" class="pagination-btn pagination-first">First</a>
+                        <a href="?departments_page={{ departments.previous_page_number }}" class="pagination-btn pagination-prev">← Prev</a>
+                    {% endif %}
+
+                    {% for num in departments.paginator.page_range %}
+                        {% if departments.number == num %}
+                            <span class="pagination-btn pagination-active">{{ num }}</span>
+                        {% elif num > departments.number|add:'-3' and num < departments.number|add:'3' %}
+                            <a href="?departments_page={{ num }}" class="pagination-btn">{{ num }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if departments.has_next %}
+                        <a href="?departments_page={{ departments.next_page_number }}" class="pagination-btn pagination-next">Next →</a>
+                        <a href="?departments_page={{ departments.paginator.num_pages }}" class="pagination-btn pagination-last">Last</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="pagination-info">
+                <p>Showing {{ departments.start_index }} - {{ departments.end_index }} of {{ departments.paginator.count }} departments</p>
+            </div>
+        </div>
+        {% endif %}
     </div>
 </div>
