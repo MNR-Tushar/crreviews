@@ -151,15 +151,7 @@
         <div class="form-card">
             <h1 class="form-title">{{ title }}</h1>
             
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }}">
-                        <span>{% if message.tags == 'success' %}✓{% else %}⚠{% endif %}</span>
-                        <span>{{ message }}</span>
-                    </div>
-                {% endfor %}
-            {% endif %}
-            
+        
             <form method="POST" action="">
                 {% csrf_token %}
                 
