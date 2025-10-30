@@ -46,16 +46,17 @@
             </thead>
             <tbody>
                 {% for dp in departments %}
-                <tr>
-                    <td>{{dp.title}}</td>
-                    <td>{{dp.total_cr}}</td>
-                    <td>{{dp.total_users}}</td>
-                    <td>{{dp.total_review}}</td>
-                    <td>
-                        <button class="action-btn1 view">View</button>
-                        <button class="action-btn1 edit">Edit</button>
-                    </td>
-                </tr>
+                <tr data-slug="{{dp.slug}}">
+    <td>{{dp.title}}</td>
+    <td>{{dp.total_cr}}</td>
+    <td>{{dp.total_users}}</td>
+    <td>{{dp.total_review}}</td>
+    <td>
+        <button class="action-btn1 view">View</button>
+        <button class="action-btn1 edit">Edit</button>
+        <button class="action-btn1 delete">Delete</button>
+    </td>
+</tr>
                 {% empty %}
                 <tr>
                     <td colspan="5" style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.6);">

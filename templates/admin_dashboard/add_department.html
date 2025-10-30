@@ -1,0 +1,207 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'admin_dashboard/admin_dashboard.css' %}">
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .form-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(30px);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .form-title {
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .form-group1 {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label1 {
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .form-input1 {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input1:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #4facfe;
+            box-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
+        }
+        
+        .form-input1::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .error-message {
+            color: #ff5e62;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: block;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .btn-submit {
+            flex: 1;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4);
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(79, 172, 254, 0.6);
+        }
+        
+        .btn-cancel {
+            flex: 1;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+        
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .alert-success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            color: #4caf50;
+        }
+        
+        .alert-error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            color: #f44336;
+        }
+        
+        .required {
+            color: #ff5e62;
+            margin-left: 0.2rem;
+        }
+        
+        .help-text {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-card">
+            <h1 class="form-title">{{ title }}</h1>
+            
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        <span>{% if message.tags == 'success' %}✓{% else %}⚠{% endif %}</span>
+                        <span>{{ message }}</span>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            <form method="POST" action="">
+                {% csrf_token %}
+                
+                <div class="form-group1">
+                    <label for="id_title" class="form-label1">
+                        Department Name<span class="required">*</span>
+                    </label>
+                    {{ form.title }}
+                    {% if form.title.errors %}
+                        {% for error in form.title.errors %}
+                            <span class="error-message">{{ error }}</span>
+                        {% endfor %}
+                    {% endif %}
+                    <span class="help-text">e.g., Computer Science & Engineering</span>
+                </div>
+                
+                <div class="form-group1">
+                    <label for="id_code" class="form-label1">
+                        Department Code
+                    </label>
+                    {{ form.code }}
+                    {% if form.code.errors %}
+                        {% for error in form.code.errors %}
+                            <span class="error-message">{{ error }}</span>
+                        {% endfor %}
+                    {% endif %}
+                    <span class="help-text">e.g., CSE, EEE, BBA (Optional)</span>
+                </div>
+                
+                <div class="form-actions">
+                    <a href="{% url 'admin_dashboard' %}" class="btn-cancel">Cancel</a>
+                    <button type="submit" class="btn-submit">{{ submit_text }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
