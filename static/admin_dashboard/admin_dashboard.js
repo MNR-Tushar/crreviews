@@ -252,25 +252,7 @@ function fetchPageData(pageParam, pageNumber, pageElement) {
 }
 
 // Notification system
-function showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.innerHTML = `
-        <span class="notification-icon">${type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ'}</span>
-        <span class="notification-message">${message}</span>
-    `;
-    
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-        notification.classList.add('show');
-    }, 100);
-    
-    setTimeout(() => {
-        notification.classList.remove('show');
-        setTimeout(() => notification.remove(), 300);
-    }, 3000);
-}
+
 
 // Logout Functionality
 if (logoutBtn) {
@@ -332,6 +314,7 @@ function attachActionButtonHandlers() {
 
             if (currentActivePage === 'universities1') {
                 window.location.href = `/admin_dashboard/university/edit/${slug}`;
+                
             } else if (currentActivePage === 'departments1') {
                 window.location.href = `/admin_dashboard/department/edit/${slug}`;
             }
@@ -371,6 +354,8 @@ if (topActionBtn) {
         const action = this.getAttribute('data-action');
         
         if (action && action.startsWith('/')) {
+            // Save scroll position before navigation
+            saveScrollPosition();
             // Navigate to the URL
             window.location.href = action;
         } else if (action === 'export_reviews') {
@@ -378,8 +363,7 @@ if (topActionBtn) {
         } else {
             const buttonText = this.textContent.trim();
             showNotification(buttonText + ' feature coming soon!', 'info');
-        }
-    });
+        }    });
 }
 
 // Add CSS for notifications and loading spinner
@@ -394,61 +378,7 @@ style.textContent = `
         to { transform: translateX(100%); opacity: 0; }
     }
     
-    .notification {
-        position: fixed;
-        top: 20px;
-        right: -300px;
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(30px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 1rem 1.5rem;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        z-index: 10000;
-        transition: right 0.3s ease;
-        min-width: 250px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    }
-    
-    .notification.show {
-        right: 20px;
-    }
-    
-    .notification-success {
-        border-left: 4px solid #4caf50;
-    }
-    
-    .notification-error {
-        border-left: 4px solid #f44336;
-    }
-    
-    .notification-info {
-        border-left: 4px solid #2196f3;
-    }
-    
-    .notification-icon {
-        font-size: 1.5rem;
-        font-weight: bold;
-    }
-    
-    .notification-success .notification-icon {
-        color: #4caf50;
-    }
-    
-    .notification-error .notification-icon {
-        color: #f44336;
-    }
-    
-    .notification-info .notification-icon {
-        color: #2196f3;
-    }
-    
-    .notification-message {
-        color: white;
-        font-weight: 500;
-    }
+   
     
     .loading-spinner-overlay {
         position: absolute;

@@ -174,15 +174,14 @@ def edit_university(request, slug):
 
 @staff_member_required
 def delete_university(request, slug):
-  
     university = get_object_or_404(University, slug=slug)
     
-  
+
     title = university.title
     university.delete()
     messages.success(request, f'University "{title}" has been deleted successfully!')
-    return redirect('/admin_dashboard/')
-
+    return redirect('admin_dashboard')
+   
 
 
 @staff_member_required
@@ -240,5 +239,5 @@ def delete_department(request, slug):
     title = department.title
     department.delete()
     messages.success(request, f'Department "{title}" has been deleted successfully!')
-    return redirect('/admin_dashboard/')
+    return redirect('admin_dashboard')
    
