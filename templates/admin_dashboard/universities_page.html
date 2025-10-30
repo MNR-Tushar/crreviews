@@ -1,4 +1,3 @@
-
 <!-- Universities Page -->
 <div class="page-content1" id="universities1-page">
     <div class="stats-grid1">
@@ -39,7 +38,7 @@
             <div style="color: rgba(255,255,255,0.8); margin-bottom: 1rem;">
                 <div>📍 {{uni.address}}</div>
                 <div>👥 {{uni.total_cr}} CRs</div>
-                 <div>👥 {{uni.total_users}} Users</div>
+                <div>👥 {{uni.total_users}} Users</div>
                 <div>⭐ {{uni.total_review}} Reviews</div>
             </div>
             <div style="display: flex; gap: 0.5rem;">
@@ -47,7 +46,43 @@
                 <button class="action-btn1 edit">Edit</button>
             </div>
         </div>
+        {% empty %}
+        <div class="dashboard-card1" style="grid-column: 1/-1;">
+            <p style="text-align: center; color: rgba(255,255,255,0.6); padding: 2rem;">
+                No universities found.
+            </p>
+        </div>
         {% endfor %}
-        
     </div>
+
+    <!-- Pagination -->
+    {% if univercities.paginator.num_pages > 1 %}
+    <div class="pagination-section" style="margin-top: 2rem;">
+        <div class="pagination">
+            <div class="pagination-numbers">
+                {% if univercities.has_previous %}
+                    <a href="?universities_page=1" class="pagination-btn pagination-first">First</a>
+                    <a href="?universities_page={{ univercities.previous_page_number }}" class="pagination-btn pagination-prev">← Prev</a>
+                {% endif %}
+
+                {% for num in univercities.paginator.page_range %}
+                    {% if univercities.number == num %}
+                        <span class="pagination-btn pagination-active">{{ num }}</span>
+                    {% elif num > univercities.number|add:'-3' and num < univercities.number|add:'3' %}
+                        <a href="?universities_page={{ num }}" class="pagination-btn">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if univercities.has_next %}
+                    <a href="?universities_page={{ univercities.next_page_number }}" class="pagination-btn pagination-next">Next →</a>
+                    <a href="?universities_page={{ univercities.paginator.num_pages }}" class="pagination-btn pagination-last">Last</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="pagination-info">
+            <p>Showing {{ univercities.start_index }} - {{ univercities.end_index }} of {{ univercities.paginator.count }} universities</p>
+        </div>
+    </div>
+    {% endif %}
 </div>

@@ -19,40 +19,88 @@ def admin_dashboard(request):
     
    
     total_users = User.objects.count()
-    users=User.objects.all().order_by('-created_at')
-
-
     total_crs = CrProfile.objects.count()
-    crs=CrProfile.objects.all().order_by('-created_at')
-
-
     total_reviews = Review.objects.count()
-    reviews=Review.objects.all().order_by('-created_at')
-
-
-    univercities=University.objects.all().order_by('-created_at')
     total_universities = University.objects.count()
+    total_departments = Department.objects.count()
     private_universities = University.objects.filter(type='Private').count()
     public_universities = University.objects.filter(type='Public').count()
-    univercities = University.objects.annotate(total_cr=Count('university_crs',distinct=True),total_review=Count('university_crs__cr_reviews',distinct=True),total_users=Count('university_user',distinct=True))
 
+    # Get page parameter for different sections
+    users_page = request.GET.get('users_page', 1)
+    crs_page = request.GET.get('crs_page', 1)
+    reviews_page = request.GET.get('reviews_page', 1)
+    universities_page = request.GET.get('universities_page', 1)
+    departments_page = request.GET.get('departments_page', 1)
+    pending_page = request.GET.get('page', 1)
 
-    departments=Department.objects.all().order_by('-created_at')
-    total_departments = Department.objects.count()
-    departments = Department.objects.annotate(total_cr=Count('department_crs',distinct=True),total_review=Count('department_crs__cr_reviews',distinct=True),total_users=Count('department_user',distinct=True))
-
-
-    pending = Review.objects.filter(is_anonymous=True, is_approved=False).order_by('-created_at')
-    
-    paginator = Paginator(pending, 10)
-    page_number = request.GET.get('page', 1)
-    
+    # Users Pagination
+    users_list = User.objects.all().order_by('-created_at')
+    users_paginator = Paginator(users_list, 10)
     try:
-        pending = paginator.page(page_number)
+        users = users_paginator.page(users_page)
     except PageNotAnInteger:
-        pending = paginator.page(1)
+        users = users_paginator.page(1)
     except EmptyPage:
-        pending = paginator.page(1)
+        users = users_paginator.page(users_paginator.num_pages)
+
+    # CRs Pagination
+    crs_list = CrProfile.objects.all().order_by('-created_at')
+    crs_paginator = Paginator(crs_list, 10)
+    try:
+        crs = crs_paginator.page(crs_page)
+    except PageNotAnInteger:
+        crs = crs_paginator.page(1)
+    except EmptyPage:
+        crs = crs_paginator.page(crs_paginator.num_pages)
+
+    # Reviews Pagination
+    reviews_list = Review.objects.all().order_by('-created_at')
+    reviews_paginator = Paginator(reviews_list, 10)
+    try:
+        reviews = reviews_paginator.page(reviews_page)
+    except PageNotAnInteger:
+        reviews = reviews_paginator.page(1)
+    except EmptyPage:
+        reviews = reviews_paginator.page(reviews_paginator.num_pages)
+
+    # Universities Pagination
+    universities_list = University.objects.annotate(
+        total_cr=Count('university_crs', distinct=True),
+        total_review=Count('university_crs__cr_reviews', distinct=True),
+        total_users=Count('university_user', distinct=True)
+    ).order_by('-total_cr')
+    universities_paginator = Paginator(universities_list, 9)  # 9 for grid layout
+    try:
+        univercities = universities_paginator.page(universities_page)
+    except PageNotAnInteger:
+        univercities = universities_paginator.page(1)
+    except EmptyPage:
+        univercities = universities_paginator.page(universities_paginator.num_pages)
+
+    # Departments Pagination
+    departments_list = Department.objects.annotate(
+        total_cr=Count('department_crs', distinct=True),
+        total_review=Count('department_crs__cr_reviews', distinct=True),
+        total_users=Count('department_user', distinct=True)
+    ).order_by('-total_cr')
+    departments_paginator = Paginator(departments_list, 10)
+    try:
+        departments = departments_paginator.page(departments_page)
+    except PageNotAnInteger:
+        departments = departments_paginator.page(1)
+    except EmptyPage:
+        departments = departments_paginator.page(departments_paginator.num_pages)
+
+    # Pending Reviews Pagination
+    pending_list = Review.objects.filter(is_anonymous=True, is_approved=False).order_by('-created_at')
+    pending_paginator = Paginator(pending_list, 10)
+    try:
+        pending = pending_paginator.page(pending_page)
+    except PageNotAnInteger:
+        pending = pending_paginator.page(1)
+    except EmptyPage:
+        pending = pending_paginator.page(pending_paginator.num_pages)
  
     
     context = {
@@ -63,17 +111,14 @@ def admin_dashboard(request):
         'total_reviews': total_reviews,
         'total_universities': total_universities,
         'total_departments': total_departments,
-        'users':users,
-        'crs':crs,
-        'reviews':reviews,
-        'univercities':univercities,
-        'departments':departments,
-        'private_universities':private_universities,
-        'public_universities':public_universities,
+        'private_universities': private_universities,
+        'public_universities': public_universities,
+        'users': users,
+        'crs': crs,
+        'reviews': reviews,
+        'univercities': univercities,
+        'departments': departments,
         'pending_reviews': pending,
-        'paginator': paginator,
-       
     }
     
     return render(request, 'admin_dashboard/admin_dashboard.html', context)
-
