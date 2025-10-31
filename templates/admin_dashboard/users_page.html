@@ -39,7 +39,7 @@
                 <tr>
                     <th>User</th>
                     <th>Email</th>
-                    <th>University</th>
+                    {% comment %} <th>University</th> {% endcomment %}
                     <th>Joined</th>
                     <th>Actions</th>
                 </tr>
@@ -54,11 +54,12 @@
                         </div>
                     </td>
                     <td>{{user.email}}</td>
-                    <td>{{user.university|default:"N/A"}}</td>
+                    {% comment %} <td>{{user.university|default:"N/A"}}</td> {% endcomment %}
                     <td>{{user.created_at|date:"M d, Y"}}</td>
                     <td>
                         <button class="action-btn1 view">View</button>
                         <button class="action-btn1 edit">Edit</button>
+                         <button class="action-btn1 delete">Delete</button>
                     </td>
                 </tr>
                 {% empty %}

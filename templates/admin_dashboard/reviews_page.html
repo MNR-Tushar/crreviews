@@ -167,13 +167,18 @@
                     <strong style="color: white;">{{review.cr_profile.name}}</strong>
                     <span style="color: rgba(255,255,255,0.6);"> reviewed by </span>
                     <strong style="color: white;">{{review.get_reviewer_name}}</strong>
-                    {% if review.is_anonymous %}
-                    <span style="color: rgba(221, 255, 0, 1);">
-                        🕶️ Anonymous User
-                    </span>
-                    {% endif %}
+                    <span style="color: rgba(255,255,255,0.6);">  🕒 {{ review.created_at|date:"M d, Y" }} </span>
+                   
                 </div>
+                 {% if review.is_anonymous %}
+                    <span style="padding: 0.1rem 0.3rem; border-radius: 8px; border: none; background: rgba(234, 255, 0, 0.84); color: rgba(255, 255, 255, 1);">
+                        🕶️ Anonymous Review
+                    </span>
+                {% endif %}
+              
+                
                 <div class="rating">
+                   
                     {% for i in "12345" %}
                         {% if forloop.counter <= review.rating %}
                             <span class="star filled">★</span>
@@ -188,7 +193,7 @@
             </p>
             <div style="display: flex; gap: 0.5rem;">
                 <button class="action-btn1 view">View</button>
-                <button class="action-btn1 edit">Approve</button>
+                <button class="action-btn1 edit">Edit</button>
                 <button class="action-btn1 delete">Delete</button>
             </div>
         </div>
