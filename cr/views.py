@@ -39,10 +39,10 @@ def home(request):
     total_university=CrProfile.objects.values('university').distinct().count()
     total_department=CrProfile.objects.values('department').distinct().count()
     total_user=User.objects.count()
-    total_review = Review.objects.filter(is_approved=True).count()
+    total_review = Review.objects.count()
     total_anonymous_reviews = Review.objects.filter(is_anonymous=True, is_approved=True).count()
     pending_anonymous_reviews = Review.objects.filter(is_anonymous=True, is_approved=False).count()
-    approved_reviews = total_review
+    approved_reviews = total_review-pending_anonymous_reviews
     pending_reviews = pending_anonymous_reviews
 
     crs = sorted(
