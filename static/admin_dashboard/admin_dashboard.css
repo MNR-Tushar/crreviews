@@ -383,8 +383,8 @@
     font-weight: 600;
 }
 
-.badge1.pending { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
-.badge1.approved { background: rgba(76, 175, 80, 0.2); color: #4caf50; }
+.badge1.pending { background: rgba(255, 193, 7, 0.49); color: #ffffff; }
+.badge1.approved { background: rgba(31, 161, 35, 0.635); color: #ffffff; }
 .badge1.rejected { background: rgba(244, 67, 54, 0.2); color: #f44336; }
 
 /* Action Buttons */
@@ -399,9 +399,9 @@
     margin-right: 0.3rem;
 }
 
-.action-btn1.view { background: rgba(33, 150, 243, 0.2); color: #2196f3; }
-.action-btn1.edit { background: rgba(156, 39, 176, 0.2); color: #9c27b0; }
-.action-btn1.delete { background: rgba(244, 67, 54, 0.2); color: #f44336; }
+.action-btn1.view { background: rgba(4, 128, 230, 0.691); color: #ffffff; }
+.action-btn1.edit { background: rgba(26, 236, 3, 0.681); color: #ffffff; }
+.action-btn1.delete { background: rgba(229, 8, 8, 0.688); color: #ffffff; }
 .action-btn1:hover { transform: scale(1.05); }
 
 /* Search & Filters */
