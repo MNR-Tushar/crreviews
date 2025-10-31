@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.utils import timezone
 from django.contrib.admin.views.decorators import staff_member_required
+from django.db.models import Count
+
 
 def home(request):
 
@@ -34,8 +36,8 @@ def home(request):
 
     cr=cr.order_by('-created_at')
     total_crs=CrProfile.objects.count()
-    total_university=University.objects.count()
-    total_department=Department.objects.count()
+    total_university=CrProfile.objects.values('university').distinct().count()
+    total_department=CrProfile.objects.values('department').distinct().count()
     total_user=User.objects.count()
     total_review = Review.objects.filter(is_approved=True).count()
     total_anonymous_reviews = Review.objects.filter(is_anonymous=True, is_approved=True).count()
