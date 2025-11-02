@@ -14,4 +14,9 @@ urlpatterns = [
     path('admin_dashboard/department/edit/<slug:slug>/', edit_department, name='edit_department'),
     path('admin_dashboard/department/delete/<slug:slug>/',delete_department, name='delete_department'),
     
+    # CR URLs
+    path('admin_dashboard/cr/add/', admin_add_cr, name='admin_add_cr'),
+    path('admin_dashboard/cr/view/<slug:slug>/', admin_view_cr, name='admin_view_cr'),
+    path('admin_dashboard/cr/edit/<slug:slug>/', admin_edit_cr, name='admin_edit_cr'),
+    path('admin_dashboard/cr/delete/<slug:slug>/', admin_delete_cr, name='admin_delete_cr'),
 ]

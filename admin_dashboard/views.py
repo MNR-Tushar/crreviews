@@ -8,6 +8,7 @@ from django.urls import reverse
 from cr.models import *
 from userprofile.models import *
 from .forms import UniversityForm, DepartmentForm
+from django.contrib.auth import get_user_model
 
 @staff_member_required
 def admin_dashboard(request):
@@ -238,3 +239,150 @@ def delete_department(request, slug):
     department.delete()
     messages.success(request, f'Department "{title}" has been deleted successfully!')
     return HttpResponseRedirect(reverse('admin_dashboard') + '#departments')
+
+
+
+
+
+
+User = get_user_model()
+
+@staff_member_required
+def admin_add_cr(request):
+    """Admin view to add a new CR"""
+    universities = University.objects.all().order_by('title')
+    departments = Department.objects.all().order_by('title')
+    users = User.objects.filter(user_profile__isnull=True).order_by('email')  # Users without CR profile
+
+    if request.method == 'POST':
+        user_id = request.POST.get('user')
+        name = request.POST.get('name')
+        gender = request.POST.get('gender')
+        st_id = request.POST.get('st_id')
+        university_id = request.POST.get('university')
+        department_id = request.POST.get('department')
+        batch = request.POST.get('batch')
+        dept_batch = request.POST.get('dept_batch')
+        section = request.POST.get('section')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        bio = request.POST.get('bio')
+        cr_status = request.POST.get('cr_status')
+        profile_picture = request.FILES.get('profile_picture')
+        date_of_birth = request.POST.get('date_of_birth') or None
+
+        facebook_url = request.POST.get('facebook_url') or 'https://www.facebook.com/'
+        instagram_url = request.POST.get('instagram_url') or 'https://www.instagram.com/'
+        linkedin_url = request.POST.get('linkedin_url') or 'https://www.linkedin.com/'
+
+        try:
+            user = User.objects.get(id=user_id)
+            university = University.objects.get(id=university_id)
+            department = Department.objects.get(id=department_id)
+
+            cr = CrProfile.objects.create(
+                user=user,
+                name=name,
+                gender=gender,
+                st_id=st_id,
+                university=university,
+                department=department,
+                batch=batch,
+                dept_batch=dept_batch,
+                section=section,
+                email=email,
+                phone=phone,
+                bio=bio,
+                cr_status=cr_status,
+                profile_picture=profile_picture,
+                date_of_birth=date_of_birth,
+                facebook_url=facebook_url,
+                instagram_url=instagram_url,
+                linkedin_url=linkedin_url,
+            )
+            messages.success(request, f'CR Profile "{cr.name}" has been created successfully!')
+            return HttpResponseRedirect(reverse('admin_dashboard') + '#crs')
+        except Exception as e:
+            messages.error(request, f'Error creating CR: {str(e)}')
+
+    context = {
+        'universities': universities,
+        'departments': departments,
+        'users': users,
+        'title': 'Add New CR',
+    }
+    return render(request, 'admin_dashboard/add_cr_admin.html', context)
+
+
+@staff_member_required
+def admin_view_cr(request, slug):
+    """Admin view to see CR details"""
+    cr = get_object_or_404(CrProfile, slug=slug)
+    reviews = Review.objects.filter(cr_profile=cr, is_approved=True).order_by('-created_at')[:5]
+
+    total_reviews_count = Review.objects.filter(cr_profile=cr).count()
+    approved_reviews_count = Review.objects.filter(cr_profile=cr, is_approved=True).count()
+    pending_reviews_count = total_reviews_count - approved_reviews_count
+    
+    context = {
+        'cr': cr,
+        'reviews': reviews,
+        'title': f'View CR: {cr.name}',
+        'approved_reviews_count': approved_reviews_count,
+        'total_reviews_count': total_reviews_count,
+        'pending_reviews_count': pending_reviews_count,
+    }
+    return render(request, 'admin_dashboard/view_cr_admin.html', context)
+
+
+@staff_member_required
+def admin_edit_cr(request, slug):
+    """Admin view to edit an existing CR"""
+    cr = get_object_or_404(CrProfile, slug=slug)
+    universities = University.objects.all().order_by('title')
+    departments = Department.objects.all().order_by('title')
+
+    if request.method == 'POST':
+        cr.name = request.POST.get('name')
+        cr.gender = request.POST.get('gender')
+        cr.st_id = request.POST.get('st_id')
+        cr.university = University.objects.get(id=request.POST.get('university'))
+        cr.department = Department.objects.get(id=request.POST.get('department'))
+        cr.batch = request.POST.get('batch')
+        cr.dept_batch = request.POST.get('dept_batch')
+        cr.section = request.POST.get('section')
+        cr.email = request.POST.get('email')
+        cr.phone = request.POST.get('phone')
+        cr.bio = request.POST.get('bio')
+        cr.cr_status = request.POST.get('cr_status')
+        cr.date_of_birth = request.POST.get('date_of_birth') or None
+
+        cr.facebook_url = request.POST.get('facebook_url') or 'https://www.facebook.com/'
+        cr.instagram_url = request.POST.get('instagram_url') or 'https://www.instagram.com/'
+        cr.linkedin_url = request.POST.get('linkedin_url') or 'https://www.linkedin.com/'
+
+        new_picture = request.FILES.get('profile_picture')
+        if new_picture:
+            cr.profile_picture = new_picture
+
+        cr.save()
+        messages.success(request, f'CR Profile "{cr.name}" has been updated successfully!')
+        return HttpResponseRedirect(reverse('admin_dashboard') + '#crs')
+
+    context = {
+        'cr': cr,
+        'universities': universities,
+        'departments': departments,
+        'title': f'Edit CR: {cr.name}',
+    }
+    return render(request, 'admin_dashboard/add_cr_admin.html', context)
+
+
+@staff_member_required
+def admin_delete_cr(request, slug):
+    """Admin view to delete a CR"""
+    cr = get_object_or_404(CrProfile, slug=slug)
+    cr_name = cr.name
+    cr.delete()
+    messages.success(request, f'CR Profile "{cr_name}" has been deleted successfully!')
+    return HttpResponseRedirect(reverse('admin_dashboard') + '#crs')

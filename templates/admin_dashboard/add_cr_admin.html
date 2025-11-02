@@ -1,0 +1,339 @@
+{% load static %}
+{% block title %} {{ title }} - Admin {% endblock title %}
+{% block content %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'admin_dashboard/admin_dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'add_cr.css' %}">
+    
+    <div class="dashboard-container1">
+        <!-- Sidebar -->
+        <aside class="sidebar1" id="sidebar1">
+            <div class="sidebar-header1">
+                <button class="toggle-btn1" id="toggleBtn1">☰</button>
+            </div>
+
+            <div class="admin-info1">
+                <div class="admin-avatar1">
+                    {{ user.first_name|first|upper }}
+                </div>
+                <div class="admin-details1">
+                    <h3>{{user.first_name}}</h3>
+                    <p>{{user.email}}</p>
+                </div>
+            </div>
+
+            <ul class="nav-menu1">
+                <li class="nav-item1">
+                    <a href="{% url 'admin_dashboard' %}" class="nav-link1">
+                        <span class="nav-icon1">📊</span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a href="{% url 'admin_dashboard' %}#crs" class="nav-link1 active">
+                        <span class="nav-icon1">👥</span>
+                        <span>All CRs</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a href="{% url 'admin_dashboard' %}#reviews" class="nav-link1">
+                        <span class="nav-icon1">📝</span>
+                        <span>Reviews</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a href="{% url 'admin_dashboard' %}#users" class="nav-link1">
+                        <span class="nav-icon1">👤</span>
+                        <span>Users</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a href="{% url 'admin_dashboard' %}#universities" class="nav-link1">
+                        <span class="nav-icon1">🏛️</span>
+                        <span>Universities</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a href="{% url 'admin_dashboard' %}#departments" class="nav-link1">
+                        <span class="nav-icon1">📚</span>
+                        <span>Departments</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a href="/logout/" class="nav-link1">
+                        <span class="nav-icon1">🚪</span>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content1" id="mainContent1">
+            <div class="top-bar1">
+                <h1 class="page-title1">👥 {{ title }}</h1>
+                <a href="{% url 'admin_dashboard' %}#crs" class="btn1 btn-primary1">
+                    <span>←</span>
+                    <span>Back to CRs</span>
+                </a>
+            </div>
+
+            <!-- Form Wrapper -->
+            <div class="form-wrapper">
+                <form method="POST" enctype="multipart/form-data" class="form-main" id="addCrForm">
+                    {% csrf_token %}
+                    
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}" style="margin-bottom: 2rem; padding: 1rem; border-radius: 12px; background: rgba({% if message.tags == 'success' %}76, 175, 80{% else %}244, 67, 54{% endif %}, 0.2); border: 1px solid rgba({% if message.tags == 'success' %}76, 175, 80{% else %}244, 67, 54{% endif %}, 0.3); color: {% if message.tags == 'success' %}#4caf50{% else %}#f44336{% endif %};">
+                                <span>{% if message.tags == 'success' %}✓{% else %}⚠{% endif %}</span>
+                                <span>{{ message }}</span>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <!-- User Selection (Only for Add, not Edit) -->
+                    {% if not cr %}
+                    <div class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon">👤</div>
+                            <h3 style="color: white; font-size: 1.3rem; font-weight: 700;">Select User</h3>
+                        </div>
+                        
+                        <div class="form-row single">
+                            <div class="input-group">
+                                <label class="input-label">
+                                    User Account <span class="required-star">*</span>
+                                </label>
+                                <select name="user" class="select-field" required>
+                                    <option value="">Select a user</option>
+                                    {% for user_obj in users %}
+                                    <option value="{{ user_obj.id }}">{{ user_obj.get_full_name }} ({{ user_obj.email }})</option>
+                                    {% endfor %}
+                                </select>
+                                <span class="input-hint">💡 Only users without existing CR profiles are shown</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Personal Information -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon">📝</div>
+                            <h3 style="color: white; font-size: 1.3rem; font-weight: 700;">Personal Information</h3>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label class="input-label">
+                                    Full Name <span class="required-star">*</span>
+                                </label>
+                                <input type="text" name="name" class="input-field" placeholder="John Doe" value="{% if cr %}{{ cr.name }}{% endif %}" required>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">
+                                    Gender <span class="required-star">*</span>
+                                </label>
+                                <select name="gender" class="select-field" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="M" {% if cr and cr.gender == 'M' %}selected{% endif %}>Male</option>
+                                    <option value="F" {% if cr and cr.gender == 'F' %}selected{% endif %}>Female</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label class="input-label">Email Address</label>
+                                <input type="email" name="email" class="input-field" placeholder="john@example.com" value="{% if cr %}{{ cr.email }}{% endif %}">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">Phone Number</label>
+                                <input type="tel" name="phone" class="input-field" placeholder="+880 1XXX XXXXXX" value="{% if cr %}{{ cr.phone }}{% endif %}">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label class="input-label">Date of Birth</label>
+                                <input type="date" name="date_of_birth" class="input-field" value="{% if cr and cr.date_of_birth %}{{ cr.date_of_birth|date:'Y-m-d' }}{% endif %}">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">
+                                    CR Status <span class="required-star">*</span>
+                                </label>
+                                <select name="cr_status" class="select-field" required>
+                                    <option value="Present" {% if cr and cr.cr_status == 'Present' %}selected{% endif %}>Present CR</option>
+                                    <option value="Former" {% if cr and cr.cr_status == 'Former' %}selected{% endif %}>Former CR</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Academic Information -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon">🎓</div>
+                            <h3 style="color: white; font-size: 1.3rem; font-weight: 700;">Academic Information</h3>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label class="input-label">
+                                    University <span class="required-star">*</span>
+                                </label>
+                                <select name="university" class="select-field" required>
+                                    <option value="">Select University</option>
+                                    {% for university in universities %}
+                                    <option value="{{ university.id }}" {% if cr and cr.university.id == university.id %}selected{% endif %}>{{ university.title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">
+                                    Department <span class="required-star">*</span>
+                                </label>
+                                <select name="department" class="select-field" required>
+                                    <option value="">Select Department</option>
+                                    {% for department in departments %}
+                                    <option value="{{ department.id }}" {% if cr and cr.department.id == department.id %}selected{% endif %}>{{ department.title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label class="input-label">
+                                    Student ID <span class="required-star">*</span>
+                                </label>
+                                <input type="text" name="st_id" class="input-field" placeholder="2023000000" value="{% if cr %}{{ cr.st_id }}{% endif %}" required>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">
+                                    Batch <span class="required-star">*</span>
+                                </label>
+                                <input type="text" name="batch" class="input-field" placeholder="231" value="{% if cr %}{{ cr.batch }}{% endif %}" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label class="input-label">Department Batch</label>
+                                <input type="text" name="dept_batch" class="input-field" placeholder="64" value="{% if cr %}{{ cr.dept_batch }}{% endif %}">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">
+                                    Section <span class="required-star">*</span>
+                                </label>
+                                <input type="text" name="section" class="input-field" placeholder="64_A" value="{% if cr %}{{ cr.section }}{% endif %}" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profile Picture -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon">📷</div>
+                            <h3 style="color: white; font-size: 1.3rem; font-weight: 700;">Profile Picture</h3>
+                        </div>
+                        
+                        {% if cr and cr.profile_picture %}
+                        <div style="text-align: center; margin-bottom: 1.5rem;">
+                            <img src="{{ cr.profile_picture.url }}" alt="{{ cr.name }}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(255,255,255,0.3);">
+                            <p style="color: rgba(255,255,255,0.7); margin-top: 0.5rem; font-size: 0.9rem;">Current Profile Picture</p>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="upload-zone" id="uploadZone">
+                            <div class="upload-icon">📤</div>
+                            <div class="upload-text">Drag & drop or click to upload</div>
+                            <div class="upload-subtext">PNG, JPG (max 5MB)</div>
+                            <input type="file" name="profile_picture" id="profilePicture" class="file-input" accept="image/*">
+                        </div>
+                        
+                        <div class="preview-section" id="previewSection">
+                            <div class="preview-card">
+                                <img id="previewImage" class="preview-img" src="" alt="Preview">
+                                <div class="preview-info">
+                                    <div class="preview-name" id="fileName"></div>
+                                    <div class="preview-size" id="fileSize"></div>
+                                </div>
+                                <button type="button" class="remove-btn" id="removeBtn">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social Media -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon">🔗</div>
+                            <h3 style="color: white; font-size: 1.3rem; font-weight: 700;">Social Media Links</h3>
+                        </div>
+                        
+                        <div class="form-row single">
+                            <div class="input-group">
+                                <label class="input-label">Facebook URL</label>
+                                <input type="url" name="facebook_url" class="input-field" placeholder="https://facebook.com/..." value="{% if cr %}{{ cr.facebook_url }}{% endif %}">
+                            </div>
+                        </div>
+
+                        <div class="form-row single">
+                            <div class="input-group">
+                                <label class="input-label">Instagram URL</label>
+                                <input type="url" name="instagram_url" class="input-field" placeholder="https://instagram.com/..." value="{% if cr %}{{ cr.instagram_url }}{% endif %}">
+                            </div>
+                        </div>
+
+                        <div class="form-row single">
+                            <div class="input-group">
+                                <label class="input-label">LinkedIn URL</label>
+                                <input type="url" name="linkedin_url" class="input-field" placeholder="https://linkedin.com/in/..." value="{% if cr %}{{ cr.linkedin_url }}{% endif %}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bio -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon">✍️</div>
+                            <h3 style="color: white; font-size: 1.3rem; font-weight: 700;">Bio</h3>
+                        </div>
+                        
+                        <div class="form-row single">
+                            <div class="input-group">
+                                <label class="input-label">About</label>
+                                <textarea name="bio" class="input-field" placeholder="Tell us about this CR..." rows="5">{% if cr %}{{ cr.bio }}{% endif %}</textarea>
+                                <span class="input-hint">💡 Keep it professional and concise (max 500 characters)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <a href="{% url 'admin_dashboard' %}#crs" class="cancel-button">Cancel</a>
+                        <button type="submit" class="submit-button">
+                            {% if cr %}💾 Update CR{% else %}➕ Add CR{% endif %}
+                        </button>
+                    </div>
+
+                    <!-- Progress Indicator -->
+                    <div class="progress-indicator" id="progressIndicator">
+                        <div class="spinner-large"></div>
+                        <p class="progress-text">Processing...</p>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="{% static 'add_cr.js' %}"></script>
+    <script src="{% static 'admin_dashboard/admin_dashboard.js' %}"></script>
+{% endblock content %}
