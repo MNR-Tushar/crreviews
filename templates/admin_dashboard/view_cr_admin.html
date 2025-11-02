@@ -1,0 +1,263 @@
+{% load static %}
+{% block title %} {{ title }} - Admin {% endblock title %}
+{% block content %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'admin_dashboard/admin_dashboard.css' %}">
+    
+    <div class="dashboard-container1">
+        <!-- Sidebar -->
+        <aside class="sidebar1" id="sidebar1">
+            <div class="sidebar-header1">
+                <button class="toggle-btn1" id="toggleBtn1">☰</button>
+            </div>
+
+            <div class="admin-info1">
+                <div class="admin-avatar1">
+                    {{ user.first_name|first|upper }}
+                </div>
+                <div class="admin-details1">
+                    <h3>{{user.first_name}}</h3>
+                    <p>{{user.email}}</p>
+                </div>
+            </div>
+
+            <ul class="nav-menu1">
+                <li class="nav-item1">
+                    <a href="{% url 'admin_dashboard' %}" class="nav-link1">
+                        <span class="nav-icon1">📊</span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a href="{% url 'admin_dashboard' %}#crs" class="nav-link1 active">
+                        <span class="nav-icon1">👥</span>
+                        <span>All CRs</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a href="{% url 'admin_dashboard' %}#reviews" class="nav-link1">
+                        <span class="nav-icon1">📝</span>
+                        <span>Reviews</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a href="{% url 'admin_dashboard' %}#users" class="nav-link1">
+                        <span class="nav-icon1">👤</span>
+                        <span>Users</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a href="/logout/" class="nav-link1">
+                        <span class="nav-icon1">🚪</span>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content1" id="mainContent1">
+            <div class="top-bar1">
+                <h1 class="page-title1">👁️ View CR Profile</h1>
+                <div style="display: flex; gap: 1rem;">
+                    <a href="{% url 'admin_edit_cr' cr.slug %}" class="btn1 btn-primary1">
+                        <span>✏️</span>
+                        <span>Edit CR</span>
+                    </a>
+                    <a href="{% url 'admin_dashboard' %}#crs" class="btn1 btn-secondary1">
+                        <span>←</span>
+                        <span>Back</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Profile Header -->
+            <div class="dashboard-card1" style="text-align: center; padding: 3rem;">
+                <div style="width: 150px; height: 150px; margin: 0 auto 2rem; border-radius: 50%; position: relative; display: inline-flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea, #764ba2); font-size: 4rem; color: white; font-weight: 800; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);">
+                    {% if cr.profile_picture %}
+                    <img src="{{ cr.profile_picture.url }}" alt="{{ cr.name }}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                    {% else %}
+                    {{ cr.name|first|upper }}
+                    {% endif %}
+                </div>
+                
+                <h1 style="color: white; font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem;">{{ cr.name }}</h1>
+                <p style="color: rgba(255,255,255,0.9); font-size: 1.3rem; margin-bottom: 1.5rem;">
+                    {{ cr.st_id }} | {{ cr.university.title }}
+                </p>
+
+                <!-- CR Status Badge -->
+                <div style="display: inline-block; padding: 0.6rem 1.5rem; border-radius: 50px; font-weight: 700; font-size: 0.9rem; margin-bottom: 2rem; {% if cr.cr_status == 'Present' %}background: linear-gradient(135deg, rgba(16, 185, 129, 0.95), rgba(6, 182, 212, 0.95));{% else %}background: linear-gradient(135deg, rgba(139, 92, 246, 0.9), rgba(107, 114, 142, 0.9));{% endif %} color: white; border: 2px solid rgba(255, 255, 255, 0.3);">
+                    {% if cr.cr_status == 'Present' %}✨ Present CR{% else %}🏆 Former CR{% endif %}
+                </div>
+
+                <!-- Rating Display -->
+                <div style="margin: 2rem 0;">
+                    <div style="font-size: 3rem; color: #ffeb3b; text-shadow: 0 0 20px rgba(255,235,59,0.5);">
+                        ⭐ {{ cr.average_rating }}
+                    </div>
+                    <div style="color: rgba(255,255,255,0.8); margin-top: 0.5rem;">
+                        (Based on {{ cr.cr_reviews.count }} reviews)
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+                    <a href="{% url 'cr_profile' cr.slug %}" target="_blank" class="btn1 btn-primary1">
+                        🔗 View Public Profile
+                    </a>
+                    <a href="{% url 'admin_edit_cr' cr.slug %}" class="btn1 btn-primary1">
+                        ✏️ Edit Profile
+                    </a>
+                </div>
+            </div>
+
+            <!-- Personal Information -->
+            <div class="dashboard-card1">
+                <h2 class="card-title1">👤 Personal Information</h2>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 1.5rem;">
+                        <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; margin-bottom: 0.5rem;">Gender</div>
+                        <div style="color: white; font-size: 1.1rem;">{% if cr.gender == 'M' %}Male{% else %}Female{% endif %}</div>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 1.5rem;">
+                        <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; margin-bottom: 0.5rem;">Date of Birth</div>
+                        <div style="color: white; font-size: 1.1rem;">{{ cr.date_of_birth|default:"Not provided" }}</div>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 1.5rem;">
+                        <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; margin-bottom: 0.5rem;">Email</div>
+                        <div style="color: white; font-size: 1.1rem; word-break: break-all;">{{ cr.email|default:"Not provided" }}</div>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 1.5rem;">
+                        <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; margin-bottom: 0.5rem;">Phone</div>
+                        <div style="color: white; font-size: 1.1rem;">{{ cr.phone|default:"Not provided" }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Academic Information -->
+            <div class="dashboard-card1">
+                <h2 class="card-title1">🎓 Academic Information</h2>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 1.5rem;">
+                        <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; margin-bottom: 0.5rem;">University</div>
+                        <div style="color: white; font-size: 1.1rem;">{{ cr.university.title }}</div>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 1.5rem;">
+                        <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; margin-bottom: 0.5rem;">Department</div>
+                        <div style="color: white; font-size: 1.1rem;">{{ cr.department.title }}</div>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 1.5rem;">
+                        <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; margin-bottom: 0.5rem;">Student ID</div>
+                        <div style="color: white; font-size: 1.1rem;">{{ cr.st_id }}</div>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 1.5rem;">
+                        <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; margin-bottom: 0.5rem;">Batch</div>
+                        <div style="color: white; font-size: 1.1rem;">{{ cr.batch }}</div>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 1.5rem;">
+                        <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; margin-bottom: 0.5rem;">Department Batch</div>
+                        <div style="color: white; font-size: 1.1rem;">{{ cr.dept_batch|default:"Not provided" }}</div>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 1.5rem;">
+                        <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; margin-bottom: 0.5rem;">Section</div>
+                        <div style="color: white; font-size: 1.1rem;">{{ cr.section }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bio -->
+            <div class="dashboard-card1">
+                <h2 class="card-title1">📝 About</h2>
+                <div style="color: rgba(255, 255, 255, 0.9); line-height: 1.8; font-size: 1rem;">
+                    {{ cr.bio|default:"No bio provided." }}
+                </div>
+            </div>
+
+            <!-- Social Media -->
+            <div class="dashboard-card1">
+                <h2 class="card-title1">🔗 Social Media</h2>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <a href="{{ cr.facebook_url }}" target="_blank" class="btn1" style="background: linear-gradient(135deg, #1877f2, #0c5dbf);">
+                        f Facebook
+                    </a>
+                    <a href="{{ cr.instagram_url }}" target="_blank" class="btn1" style="background: linear-gradient(135deg, #e1306c, #c13584);">
+                        📷 Instagram
+                    </a>
+                    <a href="{{ cr.linkedin_url }}" target="_blank" class="btn1" style="background: linear-gradient(135deg, #0077b5, #005885);">
+                        in LinkedIn
+                    </a>
+                </div>
+            </div>
+
+            <!-- Recent Reviews -->
+            <div class="dashboard-card1">
+                <h2 class="card-title1">💬 Recent Reviews ({{ total_reviews_count }})</h2>
+                {% for review in reviews %}
+                <div class="review-card1">
+                    <div class="review-header1">
+                        <div>
+                            <strong>{{ review.get_reviewer_name }}</strong>
+                            <div class="review-rating1">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= review.rating %}⭐{% else %}☆{% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div style="color: rgba(255,255,255,0.7);">{{ review.created_at|timesince }} ago</div>
+                    </div>
+                    <div style="color: rgba(255, 255, 255, 0.9); margin-top: 1rem; line-height: 1.6;">
+                        {{ review.description|default:"No comment provided." }}
+                    </div>
+                </div>
+                {% empty %}
+                <div style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.6);">
+                    No reviews yet
+                </div>
+                {% endfor %}
+
+              {% if total_reviews_count > 5 %}
+                <a href="{% url 'cr_profile' cr.slug %}" target="_blank" class="btn1 btn-primary1" style="margin-top: 1rem; width: 100%; justify-content: center;">
+                    View All Reviews
+                </a>
+                {% endif %} 
+            </div>
+
+            <!-- System Info -->
+            <div class="dashboard-card1">
+                <h2 class="card-title1">🔧 System Information</h2>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 1.5rem;">
+                        <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; margin-bottom: 0.5rem;">User Account</div>
+                        <div style="color: white; font-size: 1.1rem;">{{ cr.user.get_full_name }} ({{ cr.user.email }})</div>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 1.5rem;">
+                        <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; margin-bottom: 0.5rem;">Profile Slug</div>
+                        <div style="color: white; font-size: 1.1rem; word-break: break-all;">{{ cr.slug }}</div>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 1.5rem;">
+                        <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; margin-bottom: 0.5rem;">Created At</div>
+                        <div style="color: white; font-size: 1.1rem;">{{ cr.created_at|date:"F d, Y - g:i A" }}</div>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 1.5rem;">
+                        <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; margin-bottom: 0.5rem;">Last Updated</div>
+                        <div style="color: white; font-size: 1.1rem;">{{ cr.updated_at|date:"F d, Y - g:i A" }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="dashboard-card1" style="border: 2px solid rgba(255, 107, 107, 0.3); background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(238, 90, 36, 0.05));">
+                <h2 class="card-title1" style="color: #ff6b6b;">⚠️ Danger Zone</h2>
+                <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 1.5rem;">
+                    Once you delete this CR profile, there is no going back. This will permanently delete the profile and all associated reviews.
+                </p>
+                <button onclick="if(confirm('Are you sure you want to delete this CR profile? This action cannot be undone!')) { window.location.href='{% url 'admin_delete_cr' cr.slug %}'; }" class="btn1" style="background: linear-gradient(135deg, #ff6b6b, #ee5a24); box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);">
+                    🗑️ Delete CR Profile
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script src="{% static 'admin_dashboard/admin_dashboard.js' %}"></script>
+{% endblock content %}

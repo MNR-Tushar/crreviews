@@ -103,7 +103,7 @@ const pageConfigs = {
     'all-crs1': {
         title: '👥 All CRs Management',
         button: '<span>➕</span><span>Add New CR</span>',
-        action: '/admin/cr/add/'
+        action: '/admin_dashboard/cr/add/'
     },
     'reviews1': {
         title: '📝 Reviews Management',
@@ -372,7 +372,27 @@ function attachActionButtonHandlers() {
     document.querySelectorAll('.action-btn1.view').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
-            showNotification('View action clicked!', 'info');
+
+            const container = this.closest('[data-slug]');
+            const slug = container ? container.getAttribute('data-slug') : null;
+
+            if (!slug) {
+                showNotification('Slug not found for this item!', 'error');
+                return;
+            }
+
+            // ✅ Save scroll before redirect
+            saveScrollPosition();
+
+            if (currentActivePage === 'universities1') {
+                window.location.href = `/admin_dashboard/university/view/${slug}`;
+            }
+            else if (currentActivePage === 'departments1') {
+                window.location.href = `/admin_dashboard/department/view/${slug}`;
+            }
+            else if (currentActivePage === 'all-crs1') {
+                window.location.href = `/admin_dashboard/cr/view/${slug}`;
+            }
         });
     });
 
@@ -398,6 +418,9 @@ function attachActionButtonHandlers() {
             } else if (currentActivePage === 'departments1') {
                 window.location.href = `/admin_dashboard/department/edit/${slug}`;
             }
+            else if (currentActivePage === 'all-crs1') {
+                window.location.href = `/admin_dashboard/cr/edit/${slug}`;
+            }
         });
     });
 
@@ -421,6 +444,9 @@ function attachActionButtonHandlers() {
                     window.location.href = `/admin_dashboard/university/delete/${slug}`;
                 } else if (currentActivePage === 'departments1') {
                     window.location.href = `/admin_dashboard/department/delete/${slug}`;
+                }
+                else if (currentActivePage === 'all-crs1') {
+                window.location.href = `/admin_dashboard/cr/delete/${slug}`;
                 }
             }
         });

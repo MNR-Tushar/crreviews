@@ -8,15 +8,15 @@
             <input type="text" placeholder="🔍 Search by name..." class="form-input1">
             <select class="form-input1">
                 <option>All Universities</option>
-                <option>Dhaka University</option>
-                <option>BUET</option>
-                <option>Jahangirnagar</option>
+                {% for university in univercities %}
+                <option value="{{ university.id }}">{{ university.title }}</option>
+                {% endfor %}
             </select>
             <select class="form-input1">
-                <option>All Status</option>
-                <option>Approved</option>
-                <option>Pending</option>
-                <option>Rejected</option>
+                <option>All Departments</option>
+                {% for department in departments %}
+                <option value="{{ department.id }}">{{ department.title }}</option>
+                {% endfor %}
             </select>
             <button class="btn1 btn-primary1">Search</button>
         </div>
@@ -30,6 +30,7 @@
             <thead>
                 <tr>
                     <th>CR Name</th>
+                    <th>Student ID</th>
                     <th>University</th>
                     <th>Department</th>
                     <th>Rating</th>
@@ -39,17 +40,28 @@
             </thead>
             <tbody>
                 {% for cr in crs %}
-                <tr>
+                <tr data-slug="{{ cr.slug }}">
                     <td>
                         <div class="user-cell1">
+                            {% if cr.profile_picture %}
+                            <img src="{{ cr.profile_picture.url }}" alt="{{ cr.name }}" class="user-avatar1" style="border-radius: 50%; object-fit: cover;">
+                            {% else %}
                             <div class="user-avatar1">{{ cr.name|first|upper }}</div>
+                            {% endif %}
                             <span>{{cr.name}}</span>
                         </div>
                     </td>
-                    <td>{{cr.university}}</td>
-                    <td>{{cr.department}}</td>
+                    <td>{{cr.st_id}}</td>
+                    <td>{{cr.university.title}}</td>
+                    <td>{{cr.department.title}}</td>
                     <td>⭐ {{cr.average_rating|floatformat:1}}</td>
-                    <td><span class="badge1 approved">Approved</span></td>
+                    <td>
+                        {% if cr.cr_status == 'Present' %}
+                        <span class="badge1 approved">Present CR</span>
+                        {% else %}
+                        <span class="badge1 pending">Former CR</span>
+                        {% endif %}
+                    </td>
                     <td>
                         <button class="action-btn1 view">View</button>
                         <button class="action-btn1 edit">Edit</button>
@@ -58,7 +70,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6" style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.6);">
+                    <td colspan="7" style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.6);">
                         No CRs found.
                     </td>
                 </tr>
