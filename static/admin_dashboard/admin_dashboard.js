@@ -393,6 +393,9 @@ function attachActionButtonHandlers() {
             else if (currentActivePage === 'all-crs1') {
                 window.location.href = `/admin_dashboard/cr/view/${slug}`;
             }
+            else if(currentActivePage === 'reviews1') {
+                window.location.href = `/admin_dashboard/review/view/${slug}`;
+            }
         });
     });
 
@@ -421,6 +424,9 @@ function attachActionButtonHandlers() {
             else if (currentActivePage === 'all-crs1') {
                 window.location.href = `/admin_dashboard/cr/edit/${slug}`;
             }
+            else if(currentActivePage === 'reviews1') {
+                window.location.href = `/admin_dashboard/review/edit/${slug}`;
+            }
         });
     });
 
@@ -447,6 +453,9 @@ function attachActionButtonHandlers() {
                 }
                 else if (currentActivePage === 'all-crs1') {
                 window.location.href = `/admin_dashboard/cr/delete/${slug}`;
+                }
+                else if(currentActivePage === 'reviews1') {
+                window.location.href = `/admin_dashboard/review/delete/${slug}`;
                 }
             }
         });
