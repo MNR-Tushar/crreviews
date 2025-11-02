@@ -1,4 +1,84 @@
-// Admin Dashboard JavaScript with Dynamic Pagination
+
+function handleUrlFragment() {
+    const hash = window.location.hash.substring(1); // Remove # from hash
+    
+    if (hash) {
+        // Map fragments to page names
+        const fragmentToPage = {
+            'departments': 'departments1',
+            'universities': 'universities1',
+            'users': 'users1',
+            'reviews': 'reviews1',
+            'crs': 'all-crs1',
+            'dashboard': 'dashboard1'
+        };
+        
+        const pageName = fragmentToPage[hash];
+        
+        if (pageName) {
+            // Find and click the corresponding nav link
+            const targetNavLink = document.querySelector(`[data-page="${pageName}"]`);
+            
+            if (targetNavLink) {
+                // Remove active from all links
+                navLinks.forEach(l => l.classList.remove('active'));
+                
+                // Add active to target link
+                targetNavLink.classList.add('active');
+                
+                // Hide all pages
+                pageContents.forEach(page => page.classList.remove('active'));
+                
+                // Show target page
+                const targetPage = document.getElementById(pageName + '-page');
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                    
+                    // Update current active page
+                    currentActivePage = pageName;
+                    
+                    // Update page title and action button
+                    const config = pageConfigs[pageName];
+                    if (config) {
+                        if (pageTitle) pageTitle.textContent = config.title;
+                        if (topActionBtn) {
+                            topActionBtn.innerHTML = config.button;
+                            topActionBtn.style.display = config.button ? 'inline-flex' : 'none';
+                            topActionBtn.setAttribute('data-action', config.action || '');
+                        }
+                    }
+                    
+                    // Initialize pagination for this page
+                    initializePaginationForPage(pageName);
+                }
+                
+                // Restore scroll position if saved
+                restoreScrollPosition();
+            }
+        }
+        
+        // Remove hash from URL without triggering page reload
+        history.replaceState(null, null, window.location.pathname);
+    }
+}
+
+// Call this function when page loads
+window.addEventListener('load', () => {
+    // Handle URL fragment first
+    handleUrlFragment();
+    
+    setTimeout(() => {
+        animateCounters();
+        
+        // Only initialize if no fragment was handled
+        if (!window.location.hash) {
+            initializePaginationForPage('dashboard1');
+        }
+        
+        // Attach action button handlers
+        attachActionButtonHandlers();
+    }, 500);
+});
 
 // DOM Elements
 const sidebar = document.getElementById('sidebar1');

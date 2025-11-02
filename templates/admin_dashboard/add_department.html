@@ -1,16 +1,12 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }} - Admin Dashboard</title>
+{% block title %} {{ title }} - Admin {% endblock title %}
+{% block content %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <link rel="stylesheet" href="{% static 'admin_dashboard/admin_dashboard.css' %}">
     <style>
         .form-container {
             max-width: 600px;
-            margin: 0 auto;
+            margin: 2rem auto;
             padding: 2rem;
         }
         
@@ -152,56 +148,132 @@
             display: block;
         }
     </style>
-</head>
-<body>
-    <div class="form-container">
-        <div class="form-card">
-            <h1 class="form-title">{{ title }}</h1>
-            
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }}">
-                        <span>{% if message.tags == 'success' %}✓{% else %}⚠{% endif %}</span>
-                        <span>{{ message }}</span>
-                    </div>
-                {% endfor %}
-            {% endif %}
-            
-            <form method="POST" action="">
-                {% csrf_token %}
-                
-                <div class="form-group1">
-                    <label for="id_title" class="form-label1">
-                        Department Name<span class="required">*</span>
-                    </label>
-                    {{ form.title }}
-                    {% if form.title.errors %}
-                        {% for error in form.title.errors %}
-                            <span class="error-message">{{ error }}</span>
-                        {% endfor %}
+
+    <div class="dashboard-container1">
+        <!-- Sidebar -->
+        <aside class="sidebar1" id="sidebar1">
+            <div class="sidebar-header1">
+                <button class="toggle-btn1" id="toggleBtn1">☰</button>
+            </div>
+
+            <div class="admin-info1">
+                <div class="admin-avatar1">
+                    {% if user.profile_picture %}
+                        <img src="#" alt="{{ user.name }}" />
+                    {% else %}
+                        {{ user.first_name|first|upper }}
                     {% endif %}
-                    <span class="help-text">e.g., Computer Science & Engineering</span>
                 </div>
-                
-                <div class="form-group1">
-                    <label for="id_code" class="form-label1">
-                        Department Code
-                    </label>
-                    {{ form.code }}
-                    {% if form.code.errors %}
-                        {% for error in form.code.errors %}
-                            <span class="error-message">{{ error }}</span>
-                        {% endfor %}
-                    {% endif %}
-                    <span class="help-text">e.g., CSE, EEE, BBA (Optional)</span>
+                <div class="admin-details1">
+                    <h3>{{user.first_name}}</h3>
+                    <p>{{user.email}}</p>
                 </div>
-                
-                <div class="form-actions">
-                    <a href="{% url 'admin_dashboard' %}" class="btn-cancel">Cancel</a>
-                    <button type="submit" class="btn-submit">{{ submit_text }}</button>
+            </div>
+
+            <ul class="nav-menu1">
+                <li class="nav-item1">
+                    <a href="{% url 'admin_dashboard' %}" class="nav-link1">
+                        <span class="nav-icon1">📊</span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a href="{% url 'admin_dashboard' %}#crs" class="nav-link1">
+                        <span class="nav-icon1">👥</span>
+                        <span>All CRs</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a href="{% url 'admin_dashboard' %}#reviews" class="nav-link1">
+                        <span class="nav-icon1">📝</span>
+                        <span>Reviews</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a href="{% url 'admin_dashboard' %}#users" class="nav-link1">
+                        <span class="nav-icon1">👤</span>
+                        <span>Users</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a href="{% url 'admin_dashboard' %}#universities" class="nav-link1">
+                        <span class="nav-icon1">🏛️</span>
+                        <span>Universities</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a href="{% url 'admin_dashboard' %}#departments" class="nav-link1 active">
+                        <span class="nav-icon1">📚</span>
+                        <span>Departments</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a href="{% url 'admin_dashboard' %}#settings" class="nav-link1">
+                        <span class="nav-icon1">⚙️</span>
+                        <span>Settings</span>
+                    </a>
+                </li>
+                <li class="nav-item1">
+                    <a href="/logout/" class="nav-link1" id="logoutBtn1">
+                        <span class="nav-icon1">🚪</span>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content1" id="mainContent1">
+            <div class="top-bar1">
+                <h1 class="page-title1" id="pageTitle1">📚 {{ title }}</h1>
+                <a href="{% url 'admin_dashboard' %}#departments" class="btn1 btn-primary1" style="text-decoration:None; ">
+                    <span> Back to Departments </span>
+                </a>
+            </div>
+
+            <div class="form-container">
+                <div class="form-card">
+                   
+                    
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        
+                        <div class="form-group1">
+                            <label for="id_title" class="form-label1">
+                                Department Name<span class="required">*</span>
+                            </label>
+                            {{ form.title }}
+                            {% if form.title.errors %}
+                                {% for error in form.title.errors %}
+                                    <span class="error-message">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                            <span class="help-text">e.g., Computer Science & Engineering</span>
+                        </div>
+                        
+                        <div class="form-group1">
+                            <label for="id_code" class="form-label1">
+                                Department Code
+                            </label>
+                            {{ form.code }}
+                            {% if form.code.errors %}
+                                {% for error in form.code.errors %}
+                                    <span class="error-message">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                            <span class="help-text">CSE, EEE, BBA (Optional)</span>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <a href="{% url 'admin_dashboard' %}#departments" class="btn-cancel">Cancel</a>
+                            <button type="submit" class="btn-submit">{{ submit_text }}</button>
+                        </div>
+                    </form>
                 </div>
-            </form>
-        </div>
+            </div>
+        </main>
     </div>
-</body>
-</html>
+
+    <script src="{% static 'admin_dashboard/admin_dashboard.js' %}"></script>
+    <script src="{% static 'script.js' %}"></script>
+{% endblock content %}
