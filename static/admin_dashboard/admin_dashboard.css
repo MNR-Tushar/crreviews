@@ -8,7 +8,7 @@
 
 /* Sidebar Styles */
 .sidebar1 {
-    width: 280px;
+    width: 250px;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(30px);
     border-right: 1px solid rgba(255, 255, 255, 0.2);
@@ -23,7 +23,7 @@
 }
 
 .sidebar1.collapsed {
-    width: 80px;
+    width: 90px;
 }
 
 .sidebar1.collapsed .logo-text1,
@@ -109,7 +109,7 @@
 /* Navigation Menu */
 .nav-menu1 {
     list-style: none;
-    padding: 0 1rem;
+    padding: 0 0.8rem;
 }
 
 .nav-item1 {
@@ -144,7 +144,7 @@
 /* Main Content Area */
 .main-content1 {
     flex: 1;
-    margin-left: 280px;
+    margin-left: 250px;
     padding: 2rem;
     transition: all 0.3s ease;
     width: calc(100% - 280px);
@@ -415,10 +415,10 @@
 .form-input1 {
     width: 100%;
     padding: 0.8rem 1.5rem;
+    color: black;
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     background: rgba(255, 255, 255, 0.05);
-    color: white;
     font-family: 'Poppins', sans-serif;
 }
 
