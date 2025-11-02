@@ -386,3 +386,53 @@ def admin_delete_cr(request, slug):
     cr.delete()
     messages.success(request, f'CR Profile "{cr_name}" has been deleted successfully!')
     return HttpResponseRedirect(reverse('admin_dashboard') + '#crs')
+
+
+@staff_member_required
+def admin_view_review(request, slug):
+    """Admin view to see review details"""
+    review = get_object_or_404(Review, slug=slug)
+    
+    context = {
+        'review': review,
+        'title': f'View Review: {review.cr_profile.name}',
+    }
+    return render(request, 'admin_dashboard/view_review_admin.html', context)
+
+
+@staff_member_required
+def admin_edit_review(request, slug):
+    """Admin view to edit an existing review"""
+    review = get_object_or_404(Review, slug=slug)
+
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        description = request.POST.get('description', '').strip()
+        
+        try:
+            review.rating = int(rating)
+            review.description = description
+            review.save()
+            
+            messages.success(request, f'Review for "{review.cr_profile.name}" has been updated successfully!')
+            return HttpResponseRedirect(reverse('admin_dashboard') + '#reviews')
+        except Exception as e:
+            messages.error(request, f'Error updating review: {str(e)}')
+
+    context = {
+        'review': review,
+        'title': f'Edit Review: {review.cr_profile.name}',
+    }
+    return render(request, 'admin_dashboard/edit_review_admin.html', context)
+
+
+@staff_member_required
+def admin_delete_review(request, slug):
+    """Admin view to delete a review"""
+    review = get_object_or_404(Review, slug=slug)
+    cr_name = review.cr_profile.name
+    reviewer_name = review.get_reviewer_name()
+    
+    review.delete()
+    messages.success(request, f'Review by "{reviewer_name}" for "{cr_name}" has been deleted successfully!')
+    return HttpResponseRedirect(reverse('admin_dashboard') + '#reviews')

@@ -161,7 +161,7 @@
             <h2 class="card-title1">Recent Reviews ({{reviews.paginator.count}})</h2>
         </div>
         {% for review in reviews %}
-        <div class="review-card1">
+        <div class="review-card1" data-slug="{{ review.slug }}">
             <div class="review-header1">
                 <div>
                     <strong style="color: white;">{{review.cr_profile.name}}</strong>
@@ -189,7 +189,11 @@
                 </div>
             </div>
             <p style="color: rgba(255,255,255,0.8); line-height: 1.6; margin-bottom: 1rem;">
-                {{review.description|truncatewords:30}}
+                {% if review.description %}
+                    {{review.description|truncatewords:30}}
+                {% else %}
+                    <em style="opacity: 0.6;">No comment provided.</em>
+                {% endif %}
             </p>
             <div style="display: flex; gap: 0.5rem;">
                 <button class="action-btn1 view">View</button>

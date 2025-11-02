@@ -19,4 +19,10 @@ urlpatterns = [
     path('admin_dashboard/cr/view/<slug:slug>/', admin_view_cr, name='admin_view_cr'),
     path('admin_dashboard/cr/edit/<slug:slug>/', admin_edit_cr, name='admin_edit_cr'),
     path('admin_dashboard/cr/delete/<slug:slug>/', admin_delete_cr, name='admin_delete_cr'),
+
+    # Review URLs
+    path('admin_dashboard/review/view/<slug:slug>/', admin_view_review, name='admin_view_review'),
+    path('admin_dashboard/review/edit/<slug:slug>/', admin_edit_review, name='admin_edit_review'),
+    path('admin_dashboard/review/delete/<slug:slug>/', admin_delete_review, name='admin_delete_review'),
+
 ]

@@ -1,0 +1,142 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'admin_dashboard/admin_dashboard.css' %}">
+</head>
+<body>
+    <div class="container" style="max-width: 800px; padding-top: 3rem;">
+        <!-- Back Button -->
+        <div style="margin-bottom: 2rem;">
+            <a href="{% url 'admin_dashboard' %}#reviews" class="btn btn-secondary">
+                ← Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Edit Form Card -->
+        <div class="dashboard-card1">
+            <div class="card-header1">
+                <h2 class="card-title1">✏️ Edit Review</h2>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <!-- Review Info Display -->
+                <div style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 15px; margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div>
+                            <div style="color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-bottom: 0.3rem;">
+                                👤 Reviewer
+                            </div>
+                            <div style="color: white; font-weight: 600;">
+                                {{ review.get_reviewer_name }}
+                            </div>
+                        </div>
+                        <div>
+                            <div style="color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-bottom: 0.3rem;">
+                                🎓 CR Profile
+                            </div>
+                            <div style="color: white; font-weight: 600;">
+                                {{ review.cr_profile.name }}
+                            </div>
+                        </div>
+                        <div>
+                            <div style="color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-bottom: 0.3rem;">
+                                📅 Created
+                            </div>
+                            <div style="color: white; font-weight: 600;">
+                                {{ review.created_at|date:"M d, Y" }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rating Input -->
+                <div class="form-group1">
+                    <label class="form-label1" style="font-size: 1.1rem; margin-bottom: 1rem;">
+                        ⭐ Rating (Required)
+                    </label>
+                    <div style="display: flex; justify-content: center; gap: 1rem; margin: 1.5rem 0; padding: 2rem; background: rgba(255,255,255,0.05); border-radius: 15px;">
+                        {% for i in "12345" %}
+                            <span class="rating-star-edit" 
+                                  data-value="{{ forloop.counter }}" 
+                                  onclick="setEditRating({{ forloop.counter }})"
+                                  style="cursor: pointer; font-size: 3rem; {% if forloop.counter <= review.rating %}color: #ffeb3b; text-shadow: 0 0 20px rgba(255, 235, 59, 0.8);{% else %}color: rgba(255, 255, 255, 0.3);{% endif %} transition: all 0.3s ease;">
+                                ⭐
+                            </span>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="rating" id="edit-rating-value" value="{{ review.rating }}" required>
+                    <div id="rating-display" style="text-align: center; color: white; font-size: 1.1rem; font-weight: 600; margin-top: 1rem;">
+                        Current Rating: {{ review.rating }}/5
+                    </div>
+                </div>
+
+                <!-- Description Input -->
+                <div class="form-group1">
+                    <label for="description" class="form-label1" style="font-size: 1.1rem;">
+                        💬 Review Comment (Optional)
+                    </label>
+                    <textarea 
+                        name="description" 
+                        id="description" 
+                        class="form-input1" 
+                        rows="8" 
+                        placeholder="Enter review comment..."
+                        style="resize: vertical; min-height: 150px;">{{ review.description }}</textarea>
+                </div>
+
+                <!-- Submit Buttons -->
+                <div style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap;">
+                    <button type="submit" class="btn button_save" style="flex: 1; min-width: 200px; font-size: 1.1rem; padding: 1.2rem;">
+                        ✅ Update Review
+                    </button>
+                    <a href="{% url 'admin_dashboard' %}#reviews" class="btn btn-secondary" style="flex: 1; min-width: 200px; font-size: 1.1rem; padding: 1.2rem; text-align: center; display: flex; align-items: center; justify-content: center;">
+                        ❌ Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function setEditRating(value) {
+            document.getElementById('edit-rating-value').value = value;
+            document.getElementById('rating-display').textContent = `Current Rating: ${value}/5`;
+            
+            // Update star display
+            const stars = document.querySelectorAll('.rating-star-edit');
+            stars.forEach((star, index) => {
+                if (index < value) {
+                    star.style.color = '#ffeb3b';
+                    star.style.textShadow = '0 0 20px rgba(255, 235, 59, 0.8)';
+                    star.style.transform = 'scale(1.1)';
+                } else {
+                    star.style.color = 'rgba(255, 255, 255, 0.3)';
+                    star.style.textShadow = 'none';
+                    star.style.transform = 'scale(1)';
+                }
+            });
+        }
+
+        // Add hover effect
+        document.querySelectorAll('.rating-star-edit').forEach(star => {
+            star.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.2)';
+            });
+            
+            star.addEventListener('mouseleave', function() {
+                const currentRating = parseInt(document.getElementById('edit-rating-value').value);
+                const starValue = parseInt(this.getAttribute('data-value'));
+                this.style.transform = starValue <= currentRating ? 'scale(1.1)' : 'scale(1)';
+            });
+        });
+    </script>
+    <script src="{% static 'script.js' %}"></script>
+</body>
+</html>
