@@ -436,3 +436,104 @@ def admin_delete_review(request, slug):
     review.delete()
     messages.success(request, f'Review by "{reviewer_name}" for "{cr_name}" has been deleted successfully!')
     return HttpResponseRedirect(reverse('admin_dashboard') + '#reviews')
+
+
+# Add these functions to your admin_dashboard/views.py file
+
+@staff_member_required
+def admin_view_user(request, slug):
+    """Admin view to see user details"""
+    user = get_object_or_404(User, slug=slug)
+    reviews = Review.objects.filter(user=user, is_approved=True).order_by('-created_at')[:5]
+    saved_crs = SavedCR.objects.filter(user=user).select_related('cr_profile')[:5]
+    
+    total_reviews_count = Review.objects.filter(user=user).count()
+    approved_reviews_count = Review.objects.filter(user=user, is_approved=True).count()
+    pending_reviews_count = total_reviews_count - approved_reviews_count
+    saved_crs_count = saved_crs.count()
+    
+    context = {
+        'view_user': user,
+        'reviews': reviews,
+        'saved_crs': saved_crs,
+        'title': f'View User: {user.get_full_name()}',
+        'total_reviews_count': total_reviews_count,
+        'approved_reviews_count': approved_reviews_count,
+        'pending_reviews_count': pending_reviews_count,
+        'saved_crs_count': saved_crs_count,
+    }
+    return render(request, 'admin_dashboard/view_user_admin.html', context)
+
+
+@staff_member_required
+def admin_edit_user(request, slug):
+    """Admin view to edit an existing user"""
+    user = get_object_or_404(User, slug=slug)
+    universities = University.objects.all().order_by('title')
+    departments = Department.objects.all().order_by('title')
+
+    if request.method == 'POST':
+        user.first_name = request.POST.get('first_name')
+        user.last_name = request.POST.get('last_name')
+        user.email = request.POST.get('email')
+        user.student_id = request.POST.get('student_id')
+        user.gender = request.POST.get('gender')
+        user.phone = request.POST.get('phone')
+        user.batch = request.POST.get('batch')
+        user.dept_batch = request.POST.get('dept_batch')
+        user.section = request.POST.get('section')
+        user.bio = request.POST.get('bio')
+        user.date_of_birth = request.POST.get('date_of_birth') or None
+        
+        user.facebook_url = request.POST.get('facebook_url') or 'https://www.facebook.com/'
+        user.instagram_url = request.POST.get('instagram_url') or 'https://www.instagram.com/'
+        user.linkedin_url = request.POST.get('linkedin_url') or 'https://www.linkedin.com/'
+        
+        # Handle profile picture
+        new_picture = request.FILES.get('profile_picture')
+        if new_picture:
+            user.profile_picture = new_picture
+        
+        # Handle university and department
+        university_id = request.POST.get('university')
+        department_id = request.POST.get('department')
+        
+        if university_id:
+            user.university = University.objects.get(id=university_id)
+        if department_id:
+            user.department = Department.objects.get(id=department_id)
+        
+        # Handle user status
+        is_active = request.POST.get('is_active') == 'on'
+        is_email_verified = request.POST.get('is_email_verified') == 'on'
+        
+        user.is_active = is_active
+        user.is_email_verified = is_email_verified
+        
+        user.save()
+        messages.success(request, f'User "{user.get_full_name()}" has been updated successfully!')
+        return HttpResponseRedirect(reverse('admin_dashboard') + '#users')
+
+    context = {
+        'view_user': user,
+        'universities': universities,
+        'departments': departments,
+        'title': f'Edit User: {user.get_full_name()}',
+    }
+    return render(request, 'admin_dashboard/edit_user_admin.html', context)
+
+
+@staff_member_required
+def admin_delete_user(request, slug):
+    """Admin view to delete a user"""
+    user = get_object_or_404(User, slug=slug)
+    
+    # Prevent deleting superusers or staff members
+    if user.is_superuser or user.is_staff:
+        messages.error(request, 'Cannot delete admin or staff users!')
+        return HttpResponseRedirect(reverse('admin_dashboard') + '#users')
+    
+    user_name = user.get_full_name()
+    user.delete()
+    messages.success(request, f'User "{user_name}" has been deleted successfully!')
+    return HttpResponseRedirect(reverse('admin_dashboard') + '#users')

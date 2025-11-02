@@ -25,4 +25,10 @@ urlpatterns = [
     path('admin_dashboard/review/edit/<slug:slug>/', admin_edit_review, name='admin_edit_review'),
     path('admin_dashboard/review/delete/<slug:slug>/', admin_delete_review, name='admin_delete_review'),
 
+    # User URLs
+    path('admin_dashboard/user/view/<slug:slug>/', admin_view_user, name='admin_view_user'),
+    path('admin_dashboard/user/edit/<slug:slug>/', admin_edit_user, name='admin_edit_user'),
+    path('admin_dashboard/user/delete/<slug:slug>/', admin_delete_user, name='admin_delete_user'),
+
+
 ]
