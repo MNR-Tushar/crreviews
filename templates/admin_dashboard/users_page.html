@@ -1,85 +1,131 @@
-<!-- Users Page -->
 <div class="page-content1" id="users1-page">
+    <!-- Users Statistics -->
     <div class="stats-grid1">
         <div class="stat-card1">
             <div class="stat-header1">
-                <div>
-                    <div class="stat-label1">Total Users</div>
-                    <div class="stat-value1">{{total_users}}</div>
-                </div>
-                <div class="stat-icon1 blue">👥</div>
+                <div class="stat-icon1 blue">👤</div>
             </div>
+            <div class="stat-label1">Total Users</div>
+            <div class="stat-value1">{{ total_users }}</div>
         </div>
+
         <div class="stat-card1">
             <div class="stat-header1">
-                <div>
-                    <div class="stat-label1">Active Today</div>
-                    <div class="stat-value1">#</div>
-                </div>
-                <div class="stat-icon1 green">🔥</div>
+                <div class="stat-icon1 green">✅</div>
             </div>
+            <div class="stat-label1">Verified Users</div>
+            <div class="stat-value1">{{ users|length }}</div>
         </div>
+
         <div class="stat-card1">
             <div class="stat-header1">
-                <div>
-                    <div class="stat-label1">New This Week</div>
-                    <div class="stat-value1">#</div>
-                </div>
-                <div class="stat-icon1 purple">✨</div>
+                <div class="stat-icon1 orange">⏳</div>
             </div>
+            <div class="stat-label1">Active Users</div>
+            <div class="stat-value1">{{ total_users }}</div>
+        </div>
+
+        <div class="stat-card1">
+            <div class="stat-header1">
+                <div class="stat-icon1 purple">👥</div>
+            </div>
+            <div class="stat-label1">New This Month</div>
+            <div class="stat-value1">{{ users.paginator.count }}</div>
         </div>
     </div>
 
+    <!-- Users Table -->
     <div class="dashboard-card1">
         <div class="card-header1">
-            <h2 class="card-title1">All Users ({{users.paginator.count}})</h2>
+            <h2 class="card-title1">👥 All Users</h2>
+            <div class="search-filters1">
+                <input type="text" class="form-input1" placeholder="🔍 Search users..." id="userSearch">
+            </div>
         </div>
-        <table class="data-table1">
-            <thead>
-                <tr>
-                    <th>User</th>
-                    <th>Email</th>
-                    {% comment %} <th>University</th> {% endcomment %}
-                    <th>Joined</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                <tr>
-                    <td>
-                        <div class="user-cell1">
-                            <div class="user-avatar1">{{ user.first_name|first|upper }}</div>
-                            <span>{{user.get_full_name}}</span>
-                        </div>
-                    </td>
-                    <td>{{user.email}}</td>
-                    {% comment %} <td>{{user.university|default:"N/A"}}</td> {% endcomment %}
-                    <td>{{user.created_at|date:"M d, Y"}}</td>
-                    <td>
-                        <button class="action-btn1 view">View</button>
-                        <button class="action-btn1 edit">Edit</button>
-                         <button class="action-btn1 delete">Delete</button>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="5" style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.6);">
-                        No users found.
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+
+        <div style="overflow-x: auto;">
+            <table class="data-table1">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>University</th>
+                        {% comment %} <th>Department</th> {% endcomment %}
+                        {% comment %} <th>Student ID</th> {% endcomment %}
+                        <th>Status</th>
+                        <th>Joined</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr data-slug="{{ user.slug }}">
+                        <td>
+                            <div class="user-cell1">
+                                <div class="user-avatar1">
+                                    {% if user.profile_picture %}
+                                        <img src="{{ user.profile_picture.url }}" alt="{{ user.get_full_name }}" 
+                                             style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                                    {% else %}
+                                        {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <strong>{{ user.get_full_name }}</strong>
+                                    <br>
+                                    <small style="color: rgba(255,255,255,0.6);">
+                                        {{ user.role|title }}
+                                    </small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.university.title|default:"Not specified" }}</td>
+                        {% comment %} <td>{{ user.department.title|default:"Not specified" }}</td> {% endcomment %}
+                        {% comment %} <td>{{ user.student_id|default:"N/A" }}</td> {% endcomment %}
+                        <td>
+                            {% if user.is_active %}
+                                <span class="badge1 approved">Active</span>
+                            {% else %}
+                                <span class="badge1 rejected">Inactive</span>
+                            {% endif %}
+                            {% if user.is_email_verified %}
+                                <span class="badge1 approved">Verified</span>
+                            {% else %}
+                                <span class="badge1 pending">Unverified</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ user.created_at|date:"M d, Y" }}</td>
+                        <td>
+                            <button class="action-btn1 view">View</button>
+                            <button class="action-btn1 edit">Edit</button>
+                            {% if not user.is_staff and not user.is_superuser %}
+                                <button class="action-btn1 delete">Delete</button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 3rem; color: rgba(255,255,255,0.7);">
+                            No users found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
         <!-- Pagination -->
-        {% if users.paginator.num_pages > 1 %}
+        {% if users.has_other_pages %}
         <div class="pagination-section" style="margin-top: 2rem;">
             <div class="pagination">
                 <div class="pagination-numbers">
                     {% if users.has_previous %}
                         <a href="?users_page=1" class="pagination-btn pagination-first">First</a>
-                        <a href="?users_page={{ users.previous_page_number }}" class="pagination-btn pagination-prev">← Prev</a>
+                        <a href="?users_page={{ users.previous_page_number }}" class="pagination-btn pagination-prev">Previous</a>
+                    {% else %}
+                        <span class="pagination-btn pagination-disabled">First</span>
+                        <span class="pagination-btn pagination-disabled">Previous</span>
                     {% endif %}
 
                     {% for num in users.paginator.page_range %}
@@ -91,16 +137,34 @@
                     {% endfor %}
 
                     {% if users.has_next %}
-                        <a href="?users_page={{ users.next_page_number }}" class="pagination-btn pagination-next">Next →</a>
+                        <a href="?users_page={{ users.next_page_number }}" class="pagination-btn pagination-next">Next</a>
                         <a href="?users_page={{ users.paginator.num_pages }}" class="pagination-btn pagination-last">Last</a>
+                    {% else %}
+                        <span class="pagination-btn pagination-disabled">Next</span>
+                        <span class="pagination-btn pagination-disabled">Last</span>
                     {% endif %}
                 </div>
             </div>
 
             <div class="pagination-info">
-                <p>Showing {{ users.start_index }} - {{ users.end_index }} of {{ users.paginator.count }} users</p>
+                <p>
+                    Showing {{ users.start_index }} to {{ users.end_index }} of {{ users.paginator.count }} users
+                </p>
             </div>
         </div>
         {% endif %}
     </div>
 </div>
+
+<!-- Search functionality for users -->
+<script>
+document.getElementById('userSearch')?.addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const rows = document.querySelectorAll('#users1-page tbody tr');
+    
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(searchTerm) ? '' : 'none';
+    });
+});
+</script>
