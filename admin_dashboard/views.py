@@ -3,6 +3,8 @@ from django.contrib import messages
 from django.db.models import Count
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from cr.models import *
 from userprofile.models import *
 from .forms import UniversityForm, DepartmentForm
@@ -133,7 +135,7 @@ def add_university(request):
         if form.is_valid():
             university = form.save()
             messages.success(request, f'University "{university.title}" has been added successfully!')
-            return redirect('admin_dashboard')  # Redirect to dashboard
+            return HttpResponseRedirect(reverse('admin_dashboard') + '#universities')
         else:
             messages.error(request, 'Please correct the errors below.')
     else:
@@ -157,7 +159,7 @@ def edit_university(request, slug):
         if form.is_valid():
             university = form.save()
             messages.success(request, f'University "{university.title}" has been updated successfully!')
-            return redirect('admin_dashboard')
+            return HttpResponseRedirect(reverse('admin_dashboard') + '#universities')
         else:
             messages.error(request, 'Please correct the errors below.')
     else:
@@ -175,12 +177,10 @@ def edit_university(request, slug):
 @staff_member_required
 def delete_university(request, slug):
     university = get_object_or_404(University, slug=slug)
-    
-
     title = university.title
     university.delete()
     messages.success(request, f'University "{title}" has been deleted successfully!')
-    return redirect('admin_dashboard')
+    return HttpResponseRedirect(reverse('admin_dashboard') + '#universities')
    
 
 
@@ -192,7 +192,7 @@ def add_department(request):
         if form.is_valid():
             department = form.save()
             messages.success(request, f'Department "{department.title}" has been added successfully!')
-            return redirect('admin_dashboard')
+            return HttpResponseRedirect(reverse('admin_dashboard') + '#departments')
         else:
             messages.error(request, 'Please correct the errors below.')
     else:
@@ -216,7 +216,7 @@ def edit_department(request, slug):
         if form.is_valid():
             department = form.save()
             messages.success(request, f'Department "{department.title}" has been updated successfully!')
-            return redirect('admin_dashboard')
+            return HttpResponseRedirect(reverse('admin_dashboard') + '#departments')
         else:
             messages.error(request, 'Please correct the errors below.')
     else:
@@ -233,11 +233,8 @@ def edit_department(request, slug):
 
 @staff_member_required
 def delete_department(request, slug):
-
     department = get_object_or_404(Department, slug=slug)
-   
     title = department.title
     department.delete()
     messages.success(request, f'Department "{title}" has been deleted successfully!')
-    return redirect('admin_dashboard')
-   
+    return HttpResponseRedirect(reverse('admin_dashboard') + '#departments')
