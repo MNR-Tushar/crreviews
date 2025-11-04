@@ -130,7 +130,7 @@ def admin_dashboard(request):
 
 @staff_member_required
 def add_university(request):
-    """View to add a new university"""
+  
     if request.method == 'POST':
         form = UniversityForm(request.POST)
         if form.is_valid():
@@ -152,7 +152,7 @@ def add_university(request):
 
 @staff_member_required
 def edit_university(request, slug):
-    """View to edit an existing university"""
+   
     university = get_object_or_404(University, slug=slug)
     
     if request.method == 'POST':
@@ -168,7 +168,7 @@ def edit_university(request, slug):
     
     context = {
         'form': form,
-        'title': f'Edit University: {university.title}',
+        'title': university.title,
         'submit_text': 'Update University',
         'university': university
     }
@@ -187,7 +187,7 @@ def delete_university(request, slug):
 
 @staff_member_required
 def add_department(request):
-    """View to add a new department"""
+  
     if request.method == 'POST':
         form = DepartmentForm(request.POST)
         if form.is_valid():
@@ -209,7 +209,7 @@ def add_department(request):
 
 @staff_member_required
 def edit_department(request, slug):
-    """View to edit an existing department"""
+   
     department = get_object_or_404(Department, slug=slug)
     
     if request.method == 'POST':

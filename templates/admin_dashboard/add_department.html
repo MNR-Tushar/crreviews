@@ -1,5 +1,4 @@
 {% load static %}
-{% block title %} {{ title }} - Admin {% endblock title %}
 {% block content %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <link rel="stylesheet" href="{% static 'admin_dashboard/admin_dashboard.css' %}">
@@ -192,7 +191,7 @@
         <!-- Main Content -->
         <main class="main-content1" id="mainContent1">
             <div class="top-bar1">
-                <h1 class="page-title1" id="pageTitle1">📚 {{ title }}</h1>
+                <h1 class="page-title1" id="pageTitle1">📚 Edit Department </h1>
                 <a href="{% url 'admin_dashboard' %}#departments" class="btn1 btn-primary1" style="text-decoration:None; ">
                     <span> Back to Departments </span>
                 </a>
