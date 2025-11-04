@@ -2,7 +2,7 @@ from django import forms
 from cr.models import University, Department
 
 class UniversityForm(forms.ModelForm):
-    """Form for creating and editing universities"""
+
     
     class Meta:
         model = University
@@ -40,8 +40,7 @@ class UniversityForm(forms.ModelForm):
 
 
 class DepartmentForm(forms.ModelForm):
-    """Form for creating and editing departments"""
-    
+   
     class Meta:
         model = Department
         fields = ['title', 'code']
@@ -53,7 +52,7 @@ class DepartmentForm(forms.ModelForm):
             }),
             'code': forms.TextInput(attrs={
                 'class': 'form-input1',
-                'placeholder': 'Enter department code (e.g., CSE, EEE)'
+                'placeholder': 'Enter department code (CSE, EEE)'
             }),
         }
         labels = {
