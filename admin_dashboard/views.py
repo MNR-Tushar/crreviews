@@ -7,8 +7,13 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from cr.models import *
 from userprofile.models import *
+from .models import *
 from .forms import UniversityForm, DepartmentForm
 from django.contrib.auth import get_user_model
+from django.db.models.functions import TruncMonth
+from django.utils import timezone
+from datetime import timedelta
+import json
 
 @staff_member_required
 def admin_dashboard(request):
@@ -18,10 +23,10 @@ def admin_dashboard(request):
         return redirect('home')
     
    
+  
+    
     pending_count = Review.objects.filter(is_anonymous=True, is_approved=False).count()
     anonymous_reviews = Review.objects.filter(is_anonymous=True, is_approved=True).count()
-    
-   
     total_users = User.objects.count()
     total_crs = CrProfile.objects.count()
     total_reviews = Review.objects.count()
@@ -29,6 +34,68 @@ def admin_dashboard(request):
     total_departments = Department.objects.count()
     private_universities = University.objects.filter(type='Private').count()
     public_universities = University.objects.filter(type='Public').count()
+
+    # Add these new counts
+    total_notices = Notice.objects.count()
+    active_notices = Notice.objects.filter(is_active=True).count()
+    total_messages = ContactMessage.objects.count()
+    unread_messages = ContactMessage.objects.filter(is_read=False).count()
+
+    # Developer Profile counts
+    total_developers = Developer_Profile.objects.count()
+    total_tech_stack = Teck_Stack.objects.count()
+    
+    # Monthly Statistics - Last 6 months
+    six_months_ago = timezone.now() - timedelta(days=180)
+    
+    # CRs per month
+    cr_monthly = CrProfile.objects.filter(
+        created_at__gte=six_months_ago
+    ).annotate(
+        month=TruncMonth('created_at')
+    ).values('month').annotate(
+        count=Count('id')
+    ).order_by('month')
+    
+    # Reviews per month
+    review_monthly = Review.objects.filter(
+        created_at__gte=six_months_ago
+    ).annotate(
+        month=TruncMonth('created_at')
+    ).values('month').annotate(
+        count=Count('id')
+    ).order_by('month')
+    
+    # Users per month
+    user_monthly = User.objects.filter(
+        created_at__gte=six_months_ago
+    ).annotate(
+        month=TruncMonth('created_at')
+    ).values('month').annotate(
+        count=Count('id')
+    ).order_by('month')
+    
+    # Format data for chart
+    def format_monthly_data(queryset):
+        data = []
+        max_count = max([item['count'] for item in queryset], default=1)
+        for item in queryset:
+            data.append({
+                'month': item['month'].strftime('%Y-%m'),
+                'month_name': item['month'].strftime('%b'),
+                'count': item['count'],
+                'percentage': (item['count'] / max_count * 100) if max_count > 0 else 0
+            })
+        return data
+    
+    monthly_stats = {
+        'crs': json.dumps(format_monthly_data(cr_monthly)),
+        'reviews': json.dumps(format_monthly_data(review_monthly)),
+        'users': json.dumps(format_monthly_data(user_monthly)),
+    }
+
+    # print(monthly_stats)
+    # print(monthly_stats['crs'])
 
     # Get page parameter for different sections
     users_page = request.GET.get('users_page', 1)
@@ -123,6 +190,18 @@ def admin_dashboard(request):
         'univercities': univercities,
         'departments': departments,
         'pending_reviews': pending,
+        'total_notices': total_notices,
+        'active_notices': active_notices,
+        'total_messages': total_messages,
+        'unread_messages': unread_messages,
+        'notices': Notice.objects.all()[:5],  
+        'contact_messages': ContactMessage.objects.all()[:10],
+        'developer_profiles': Developer_Profile.objects.all()[:3],
+        'tech_stack_list': Teck_Stack.objects.all(),
+        'monthly_stats': monthly_stats,
+        'total_developers': total_developers,
+        'total_tech_stack': total_tech_stack,
+
     }
     
     return render(request, 'admin_dashboard/admin_dashboard.html', context)
@@ -537,3 +616,250 @@ def admin_delete_user(request, slug):
     user.delete()
     messages.success(request, f'User "{user_name}" has been deleted successfully!')
     return HttpResponseRedirect(reverse('admin_dashboard') + '#users')
+
+
+
+
+# Add after your existing views
+
+@staff_member_required
+def manage_notices(request):
+    """View to manage notices"""
+    notices = Notice.objects.all().order_by('-created_at')
+    
+    context = {
+        'notices': notices,
+    }
+    return render(request, 'admin_dashboard/manage_notices.html', context)
+
+@staff_member_required
+def add_notice(request):
+    """Add new notice"""
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        message = request.POST.get('message')
+        notice_type = request.POST.get('notice_type')
+        link = request.POST.get('link')
+        is_active = request.POST.get('is_active') == 'on'
+        
+        Notice.objects.create(
+            title=title,
+            message=message,
+            notice_type=notice_type,
+            link=link,
+            is_active=is_active
+        )
+        messages.success(request, 'Notice created successfully!')
+        return redirect('admin_dashboard')
+    
+    return render(request, 'admin_dashboard/add_notice.html')
+
+@staff_member_required
+def edit_notice(request, pk):
+    """Edit existing notice"""
+    notice = get_object_or_404(Notice, pk=pk)
+    
+    if request.method == 'POST':
+        notice.title = request.POST.get('title')
+        notice.message = request.POST.get('message')
+        notice.notice_type = request.POST.get('notice_type')
+        notice.link = request.POST.get('link')
+        notice.is_active = request.POST.get('is_active') == 'on'
+        notice.save()
+        
+        messages.success(request, 'Notice updated successfully!')
+        return redirect('admin_dashboard')
+    
+    context = {'notice': notice}
+    return render(request, 'admin_dashboard/edit_notice.html', context)
+
+@staff_member_required
+def delete_notice(request, pk):
+    """Delete notice"""
+    notice = get_object_or_404(Notice, pk=pk)
+    notice.delete()
+    messages.success(request, 'Notice deleted successfully!')
+    return redirect('admin_dashboard')
+
+@staff_member_required
+def toggle_notice(request, pk):
+    """Toggle notice active status"""
+    notice = get_object_or_404(Notice, pk=pk)
+    notice.is_active = not notice.is_active
+    notice.save()
+    status = "activated" if notice.is_active else "deactivated"
+    messages.success(request, f'Notice {status} successfully!')
+    return redirect('admin_dashboard')
+
+@staff_member_required
+def view_messages(request):
+    """View contact messages"""
+    messages_list = ContactMessage.objects.all().order_by('-created_at')
+    
+    # Pagination
+    page = request.GET.get('page', 1)
+    paginator = Paginator(messages_list, 10)
+    
+    try:
+        contact_messages = paginator.page(page)
+    except PageNotAnInteger:
+        contact_messages = paginator.page(1)
+    except EmptyPage:
+        contact_messages = paginator.page(paginator.num_pages)
+    
+    context = {
+        'contact_messages': contact_messages,
+    }
+    return render(request, 'admin_dashboard/view_messages.html', context)
+
+@staff_member_required
+def mark_message_read(request, pk):
+    """Mark message as read"""
+    message = get_object_or_404(ContactMessage, pk=pk)
+    message.is_read = True
+    message.save()
+    messages.success(request, 'Message marked as read!')
+    return redirect('admin_dashboard')
+
+@staff_member_required
+def delete_message(request, pk):
+    """Delete contact message"""
+    message = get_object_or_404(ContactMessage, pk=pk)
+    message.delete()
+    messages.success(request, 'Message deleted successfully!')
+    return redirect('admin_dashboard')
+
+# Developer Profile Management
+@staff_member_required
+def add_developer_profile(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        degisnation = request.POST.get('degisnation')
+        about = request.POST.get('about')
+        years_of_experience = request.POST.get('years_of_experience') or None
+        projects_built = request.POST.get('projects_built') or None
+        location = request.POST.get('location')
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')
+        github_url = request.POST.get('github_url')
+        linkedin_url = request.POST.get('linkedin_url')
+        facebook_url = request.POST.get('facebook_url')
+        twitter_url = request.POST.get('twitter_url')
+        profile_picture = request.FILES.get('profile_picture')
+        
+        tech_stack_ids = request.POST.getlist('tech_stack')
+        
+        developer = Developer_Profile.objects.create(
+            name=name,
+            degisnation=degisnation,
+            about=about,
+            years_of_experience=years_of_experience,
+            projects_built=projects_built,
+            location=location,
+            phone=phone,
+            email=email,
+            github_url=github_url,
+            linkedin_url=linkedin_url,
+            facebook_url=facebook_url,
+            twitter_url=twitter_url,
+            profile_picture=profile_picture
+        )
+        
+        if tech_stack_ids:
+            developer.tack_stack.set(tech_stack_ids)
+        
+        messages.success(request, f'Developer profile for {name} created successfully!')
+        return HttpResponseRedirect(reverse('admin_dashboard') + '#developers')
+    
+    tech_stacks = Teck_Stack.objects.all()
+    context = {'tech_stacks': tech_stacks}
+    return render(request, 'admin_dashboard/add_developer_profile.html', context)
+
+
+@staff_member_required
+def edit_developer_profile(request, pk):
+    developer = get_object_or_404(Developer_Profile, pk=pk)
+    
+    if request.method == 'POST':
+        developer.name = request.POST.get('name')
+        developer.degisnation = request.POST.get('degisnation')
+        developer.about = request.POST.get('about')
+        developer.years_of_experience = request.POST.get('years_of_experience') or None
+        developer.projects_built = request.POST.get('projects_built') or None
+        developer.location = request.POST.get('location')
+        developer.phone = request.POST.get('phone')
+        developer.email = request.POST.get('email')
+        developer.github_url = request.POST.get('github_url')
+        developer.linkedin_url = request.POST.get('linkedin_url')
+        developer.facebook_url = request.POST.get('facebook_url')
+        developer.twitter_url = request.POST.get('twitter_url')
+        
+        new_picture = request.FILES.get('profile_picture')
+        if new_picture:
+            developer.profile_picture = new_picture
+        
+        tech_stack_ids = request.POST.getlist('tech_stack')
+        if tech_stack_ids:
+            developer.tack_stack.set(tech_stack_ids)
+        
+        developer.save()
+        messages.success(request, f'Developer profile for {developer.name} updated successfully!')
+        return HttpResponseRedirect(reverse('admin_dashboard') + '#developers')
+    
+    tech_stacks = Teck_Stack.objects.all()
+    context = {
+        'developer': developer,
+        'tech_stacks': tech_stacks
+    }
+    return render(request, 'admin_dashboard/edit_developer_profile.html', context)
+
+
+@staff_member_required
+def view_developer_profile(request, pk):
+    developer = get_object_or_404(Developer_Profile, pk=pk)
+    context = {'developer': developer}
+    return render(request, 'admin_dashboard/view_developer_profile.html', context)
+
+
+@staff_member_required
+def delete_developer_profile(request, pk):
+    developer = get_object_or_404(Developer_Profile, pk=pk)
+    name = developer.name
+    developer.delete()
+    messages.success(request, f'Developer profile for {name} deleted successfully!')
+    return HttpResponseRedirect(reverse('admin_dashboard') + '#developers')
+
+
+# Tech Stack Management
+@staff_member_required
+def add_tech_stack(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        Teck_Stack.objects.create(title=title)
+        messages.success(request, f'Technology "{title}" added successfully!')
+        return HttpResponseRedirect(reverse('admin_dashboard') + '#tech-stack')
+    
+    return render(request, 'admin_dashboard/add_tech_stack.html')
+
+
+@staff_member_required
+def edit_tech_stack(request, pk):
+    tech = get_object_or_404(Teck_Stack, pk=pk)
+    
+    if request.method == 'POST':
+        tech.title = request.POST.get('title')
+        tech.save()
+        messages.success(request, f'Technology updated to "{tech.title}"!')
+        return HttpResponseRedirect(reverse('admin_dashboard') + '#tech-stack')
+    
+    context = {'tech': tech}
+    return render(request, 'admin_dashboard/edit_tech_stack.html', context)
+
+
+@staff_member_required
+def delete_tech_stack(request, pk):
+    tech = get_object_or_404(Teck_Stack, pk=pk)
+    title = tech.title
+    tech.delete()
+    messages.success(request, f'Technology "{title}" deleted successfully!')
+    return HttpResponseRedirect(reverse('admin_dashboard') + '#tech-stack')

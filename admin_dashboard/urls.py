@@ -30,5 +30,28 @@ urlpatterns = [
     path('admin_dashboard/user/edit/<slug:slug>/', admin_edit_user, name='admin_edit_user'),
     path('admin_dashboard/user/delete/<slug:slug>/', admin_delete_user, name='admin_delete_user'),
 
+    # Notice URLs
+    path('admin_dashboard/notice/add/', add_notice, name='add_notice'),
+    path('admin_dashboard/notice/edit/<int:pk>/', edit_notice, name='edit_notice'),
+    path('admin_dashboard/notice/delete/<int:pk>/', delete_notice, name='delete_notice'),
+    path('admin_dashboard/notice/toggle/<int:pk>/', toggle_notice, name='toggle_notice'),
+
+    # Message URLs
+    path('admin_dashboard/messages/', view_messages, name='view_messages'),
+    path('admin_dashboard/message/read/<int:pk>/', mark_message_read, name='mark_message_read'),
+    path('admin_dashboard/message/delete/<int:pk>/', delete_message, name='delete_message'),
+
+    # Developer Profile URLs
+    path('admin_dashboard/developer/add/', add_developer_profile, name='add_developer_profile'),
+    path('admin_dashboard/developer/view/<int:pk>/', view_developer_profile, name='view_developer_profile'),
+    path('admin_dashboard/developer/edit/<int:pk>/', edit_developer_profile, name='edit_developer_profile'),
+    path('admin_dashboard/developer/delete/<int:pk>/', delete_developer_profile, name='delete_developer_profile'),
+    
+    # Tech Stack URLs
+    path('admin_dashboard/tech-stack/add/', add_tech_stack, name='add_tech_stack'),
+    path('admin_dashboard/tech-stack/edit/<int:pk>/', edit_tech_stack, name='edit_tech_stack'),
+    path('admin_dashboard/tech-stack/delete/<int:pk>/', delete_tech_stack, name='delete_tech_stack'),
+
+
 
 ]
