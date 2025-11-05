@@ -1,86 +1,4 @@
-
-function handleUrlFragment() {
-    const hash = window.location.hash.substring(1); // Remove # from hash
-    
-    if (hash) {
-        // Map fragments to page names
-        const fragmentToPage = {
-            'departments': 'departments1',
-            'universities': 'universities1',
-            'users': 'users1',
-            'reviews': 'reviews1',
-            'crs': 'all-crs1',
-            'dashboard': 'dashboard1'
-        };
-        
-        const pageName = fragmentToPage[hash];
-        
-        if (pageName) {
-            // Find and click the corresponding nav link
-            const targetNavLink = document.querySelector(`[data-page="${pageName}"]`);
-            
-            if (targetNavLink) {
-                // Remove active from all links
-                navLinks.forEach(l => l.classList.remove('active'));
-                
-                // Add active to target link
-                targetNavLink.classList.add('active');
-                
-                // Hide all pages
-                pageContents.forEach(page => page.classList.remove('active'));
-                
-                // Show target page
-                const targetPage = document.getElementById(pageName + '-page');
-                if (targetPage) {
-                    targetPage.classList.add('active');
-                    
-                    // Update current active page
-                    currentActivePage = pageName;
-                    
-                    // Update page title and action button
-                    const config = pageConfigs[pageName];
-                    if (config) {
-                        if (pageTitle) pageTitle.textContent = config.title;
-                        if (topActionBtn) {
-                            topActionBtn.innerHTML = config.button;
-                            topActionBtn.style.display = config.button ? 'inline-flex' : 'none';
-                            topActionBtn.setAttribute('data-action', config.action || '');
-                        }
-                    }
-                    
-                    // Initialize pagination for this page
-                    initializePaginationForPage(pageName);
-                }
-                
-                // Restore scroll position if saved
-                restoreScrollPosition();
-            }
-        }
-        
-        // Remove hash from URL without triggering page reload
-        history.replaceState(null, null, window.location.pathname);
-    }
-}
-
-// Call this function when page loads
-window.addEventListener('load', () => {
-    // Handle URL fragment first
-    handleUrlFragment();
-    
-    setTimeout(() => {
-        animateCounters();
-        
-        // Only initialize if no fragment was handled
-        if (!window.location.hash) {
-            initializePaginationForPage('dashboard1');
-        }
-        
-        // Attach action button handlers
-        attachActionButtonHandlers();
-    }, 500);
-});
-
-// DOM Elements
+// DOM Elements - Declare first
 const sidebar = document.getElementById('sidebar1');
 const mainContent = document.getElementById('mainContent1');
 const toggleBtn = document.getElementById('toggleBtn1');
@@ -184,20 +102,67 @@ navLinks.forEach(link => {
     });
 });
 
+function handleUrlFragment() {
+    const hash = window.location.hash.substring(1);
+    
+    if (hash) {
+        const fragmentToPage = {
+            'departments': 'departments1',
+            'universities': 'universities1',
+            'users': 'users1',
+            'reviews': 'reviews1',
+            'crs': 'all-crs1',
+            'dashboard': 'dashboard1'
+        };
+        
+        const pageName = fragmentToPage[hash];
+        
+        if (pageName) {
+            const targetNavLink = document.querySelector(`[data-page="${pageName}"]`);
+            
+            if (targetNavLink) {
+                navLinks.forEach(l => l.classList.remove('active'));
+                targetNavLink.classList.add('active');
+                
+                pageContents.forEach(page => page.classList.remove('active'));
+                
+                const targetPage = document.getElementById(pageName + '-page');
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                    currentActivePage = pageName;
+                    
+                    const config = pageConfigs[pageName];
+                    if (config) {
+                        if (pageTitle) pageTitle.textContent = config.title;
+                        if (topActionBtn) {
+                            topActionBtn.innerHTML = config.button;
+                            topActionBtn.style.display = config.button ? 'inline-flex' : 'none';
+                            topActionBtn.setAttribute('data-action', config.action || '');
+                        }
+                    }
+                    
+                    initializePaginationForPage(pageName);
+                }
+                
+                restoreScrollPosition();
+            }
+        }
+        
+        history.replaceState(null, null, window.location.pathname);
+    }
+}
+
 // Dynamic Pagination Handler
 function initializePaginationForPage(pageName) {
     const pageElement = document.getElementById(pageName + '-page');
     if (!pageElement) return;
     
-    // Find all pagination links in this page
     const paginationLinks = pageElement.querySelectorAll('.pagination-btn:not(.pagination-active):not(.pagination-disabled)');
     
     paginationLinks.forEach(link => {
-        // Remove any existing click handlers
         link.replaceWith(link.cloneNode(true));
     });
     
-    // Re-query after replacing
     const freshPaginationLinks = pageElement.querySelectorAll('.pagination-btn:not(.pagination-active):not(.pagination-disabled)');
     
     freshPaginationLinks.forEach(link => {
@@ -207,11 +172,9 @@ function initializePaginationForPage(pageName) {
             const href = this.getAttribute('href');
             if (!href) return;
             
-            // Parse the URL to get page parameter
             const url = new URL(href, window.location.origin);
             const params = new URLSearchParams(url.search);
             
-            // Get the page parameter name (e.g., 'page', 'users_page', etc.)
             let pageParam = null;
             let pageNumber = null;
             
@@ -225,16 +188,12 @@ function initializePaginationForPage(pageName) {
             
             if (!pageParam || !pageNumber) return;
             
-            // Show loading state
             showLoadingState(pageElement);
-            
-            // Fetch new data
             fetchPageData(pageParam, pageNumber, pageElement);
         });
     });
 }
 
-// Show loading state
 function showLoadingState(pageElement) {
     const tables = pageElement.querySelectorAll('.data-table1 tbody');
     const grids = pageElement.querySelectorAll('.university-grid1, .review-card1');
@@ -249,7 +208,6 @@ function showLoadingState(pageElement) {
         grid.style.pointerEvents = 'none';
     });
     
-    // Add loading spinner
     const loadingSpinner = document.createElement('div');
     loadingSpinner.className = 'loading-spinner-overlay';
     loadingSpinner.innerHTML = `
@@ -261,7 +219,6 @@ function showLoadingState(pageElement) {
     pageElement.appendChild(loadingSpinner);
 }
 
-// Remove loading state
 function removeLoadingState(pageElement) {
     const tables = pageElement.querySelectorAll('.data-table1 tbody');
     const grids = pageElement.querySelectorAll('.university-grid1, .review-card1');
@@ -276,18 +233,14 @@ function removeLoadingState(pageElement) {
         grid.style.pointerEvents = 'auto';
     });
     
-    // Remove loading spinner
     const spinner = pageElement.querySelector('.loading-spinner-overlay');
     if (spinner) spinner.remove();
 }
 
-// Fetch page data via AJAX
 function fetchPageData(pageParam, pageNumber, pageElement) {
-    // Build URL with page parameter
     const currentUrl = new URL(window.location.href);
     currentUrl.searchParams.set(pageParam, pageNumber);
     
-    // Fetch data
     fetch(currentUrl.toString(), {
         method: 'GET',
         headers: {
@@ -296,43 +249,27 @@ function fetchPageData(pageParam, pageNumber, pageElement) {
     })
     .then(response => response.text())
     .then(html => {
-        // Parse the HTML
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
         
-        // Find the corresponding page content in the fetched HTML
         const pageId = pageElement.getAttribute('id');
         const newPageContent = doc.getElementById(pageId);
         
         if (newPageContent) {
-            // Replace only the inner content, keep the page wrapper
             pageElement.innerHTML = newPageContent.innerHTML;
-            
-            // Re-initialize pagination for the updated content
             initializePaginationForPage(currentActivePage);
-            
-            // Re-attach action button handlers
             attachActionButtonHandlers();
-            
-            // Update URL without reloading
             window.history.pushState({}, '', currentUrl.toString());
-            
-            // Scroll to top of content
             pageElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         
         removeLoadingState(pageElement);
-        
     })
     .catch(error => {
         console.error('Error fetching page data:', error);
         removeLoadingState(pageElement);
-        showNotification('Failed to load page. Please try again.', 'error');
     });
 }
-
-// Notification system
-
 
 // Logout Functionality
 if (logoutBtn) {
@@ -344,126 +281,91 @@ if (logoutBtn) {
     });
 }
 
-// === SCROLL POSITION SAVE/RESTORE SYSTEM ===
-
-// Save scroll position before navigation
+// Scroll Position Management
 function saveScrollPosition() {
     localStorage.setItem('scrollPos', window.scrollY);
 }
 
-// Restore scroll position after reload
 function restoreScrollPosition() {
     const scrollPos = localStorage.getItem('scrollPos');
     if (scrollPos) {
         window.scrollTo(0, parseInt(scrollPos));
-        localStorage.removeItem('scrollPos'); // clear after restore
+        localStorage.removeItem('scrollPos');
     }
 }
 
-// Call restore on load
 document.addEventListener('DOMContentLoaded', restoreScrollPosition);
 
-
-// === EXISTING FUNCTION MODIFIED BELOW ===
-
-// Attach action button handlers
+// Action Button Handlers
 function attachActionButtonHandlers() {
-    // View buttons
     document.querySelectorAll('.action-btn1.view').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
-
             const container = this.closest('[data-slug]');
             const slug = container ? container.getAttribute('data-slug') : null;
-
-            if (!slug) {
-                showNotification('Slug not found for this item!', 'error');
-                return;
-            }
-
-            // ✅ Save scroll before redirect
+            
+            if (!slug) return;
+            
             saveScrollPosition();
-
+            
             if (currentActivePage === 'universities1') {
                 window.location.href = `/admin_dashboard/university/view/${slug}`;
-            }
-            else if (currentActivePage === 'departments1') {
+            } else if (currentActivePage === 'departments1') {
                 window.location.href = `/admin_dashboard/department/view/${slug}`;
-            }
-            else if (currentActivePage === 'all-crs1') {
+            } else if (currentActivePage === 'all-crs1') {
                 window.location.href = `/admin_dashboard/cr/view/${slug}`;
-            }
-            else if(currentActivePage === 'reviews1') {
+            } else if(currentActivePage === 'reviews1') {
                 window.location.href = `/admin_dashboard/review/view/${slug}`;
-            }
-            else if(currentActivePage === 'users1') {
+            } else if(currentActivePage === 'users1') {
                 window.location.href = `/admin_dashboard/user/view/${slug}`;
             }
         });
     });
 
-    // Edit buttons
     document.querySelectorAll('.action-btn1.edit').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
-
             const container = this.closest('[data-slug]');
             const slug = container ? container.getAttribute('data-slug') : null;
-
-            if (!slug) {
-                showNotification('Slug not found for this item!', 'error');
-                return;
-            }
-
-            // ✅ Save scroll before redirect
+            
+            if (!slug) return;
+            
             saveScrollPosition();
-
+            
             if (currentActivePage === 'universities1') {
                 window.location.href = `/admin_dashboard/university/edit/${slug}`;
-                
             } else if (currentActivePage === 'departments1') {
                 window.location.href = `/admin_dashboard/department/edit/${slug}`;
-            }
-            else if (currentActivePage === 'all-crs1') {
+            } else if (currentActivePage === 'all-crs1') {
                 window.location.href = `/admin_dashboard/cr/edit/${slug}`;
-            }
-            else if(currentActivePage === 'reviews1') {
+            } else if(currentActivePage === 'reviews1') {
                 window.location.href = `/admin_dashboard/review/edit/${slug}`;
-            }
-            else if(currentActivePage === 'users1') {
+            } else if(currentActivePage === 'users1') {
                 window.location.href = `/admin_dashboard/user/edit/${slug}`;
             }
         });
     });
 
-    // Delete buttons
     document.querySelectorAll('.action-btn1.delete').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             if (confirm('Are you sure you want to delete this item?')) {
                 const container = this.closest('[data-slug]');
                 const slug = container ? container.getAttribute('data-slug') : null;
-
-                if (!slug) {
-                    showNotification('Slug not found for this item!', 'error');
-                    return;
-                }
-
-                // ✅ Save scroll before redirect
+                
+                if (!slug) return;
+                
                 saveScrollPosition();
-
+                
                 if (currentActivePage === 'universities1') {
                     window.location.href = `/admin_dashboard/university/delete/${slug}`;
                 } else if (currentActivePage === 'departments1') {
                     window.location.href = `/admin_dashboard/department/delete/${slug}`;
-                }
-                else if (currentActivePage === 'all-crs1') {
+                } else if (currentActivePage === 'all-crs1') {
                     window.location.href = `/admin_dashboard/cr/delete/${slug}`;
-                }
-                else if(currentActivePage === 'reviews1') {
+                } else if(currentActivePage === 'reviews1') {
                     window.location.href = `/admin_dashboard/review/delete/${slug}`;
-                }
-                else if(currentActivePage === 'users1') {
+                } else if(currentActivePage === 'users1') {
                     window.location.href = `/admin_dashboard/user/delete/${slug}`;
                 }
             }
@@ -471,39 +373,21 @@ function attachActionButtonHandlers() {
     });
 }
 
-
 // Top Action Button
 if (topActionBtn) {
     topActionBtn.addEventListener('click', function() {
         const action = this.getAttribute('data-action');
         
         if (action && action.startsWith('/')) {
-            // Save scroll position before navigation
             saveScrollPosition();
-            // Navigate to the URL
             window.location.href = action;
-        } else if (action === 'export_reviews') {
-            showNotification('Export feature coming soon!', 'info');
-        } else {
-            const buttonText = this.textContent.trim();
-            showNotification(buttonText + ' feature coming soon!', 'info');
-        }    });
+        }
+    });
 }
 
-// Add CSS for notifications and loading spinner
+// Styles
 const style = document.createElement('style');
 style.textContent = `
-    @keyframes slideIn {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-    }
-    @keyframes slideOut {
-        from { transform: translateX(0); opacity: 1; }
-        to { transform: translateX(100%); opacity: 0; }
-    }
-    
-   
-    
     .loading-spinner-overlay {
         position: absolute;
         top: 50%;
@@ -538,7 +422,6 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Animate Statistics
 function animateCounters() {
     const statValues = document.querySelectorAll('.stat-value1');
     statValues.forEach(stat => {
@@ -564,18 +447,20 @@ function animateCounters() {
     });
 }
 
-// Initialize animations on page load
+// Page Load Handler
 window.addEventListener('load', () => {
+    handleUrlFragment();
+    
     setTimeout(() => {
         animateCounters();
-        // Initialize pagination for the default active page
-        initializePaginationForPage('dashboard1');
-        // Attach action button handlers
+        if (!window.location.hash) {
+            initializePaginationForPage('dashboard1');
+        }
         attachActionButtonHandlers();
     }, 500);
 });
 
-// Mobile Menu Toggle
+// Mobile Menu
 if (window.innerWidth <= 1024) {
     const mobileToggle = document.createElement('button');
     mobileToggle.innerHTML = '☰';
@@ -598,12 +483,9 @@ if (window.innerWidth <= 1024) {
     document.body.appendChild(mobileToggle);
     
     mobileToggle.addEventListener('click', () => {
-        if (sidebar) {
-            sidebar.classList.toggle('active');
-        }
+        if (sidebar) sidebar.classList.toggle('active');
     });
     
-    // Close sidebar when clicking outside
     document.addEventListener('click', (e) => {
         if (sidebar && sidebar.classList.contains('active')) {
             if (!sidebar.contains(e.target) && e.target !== mobileToggle) {
@@ -613,29 +495,7 @@ if (window.innerWidth <= 1024) {
     });
 }
 
-// Search Functionality
-const searchInputs = document.querySelectorAll('.form-input1[type="text"]');
-searchInputs.forEach(input => {
-    input.addEventListener('input', function() {
-        this.style.borderColor = 'rgba(79, 172, 254, 0.5)';
-        this.style.boxShadow = '0 0 20px rgba(79, 172, 254, 0.3)';
-        
-        setTimeout(() => {
-            this.style.borderColor = '';
-            this.style.boxShadow = '';
-        }, 1000);
-    });
-});
-
-// Chart Bar Animation
-const chartBars = document.querySelectorAll('.chart-bar1');
-chartBars.forEach((bar, index) => {
-    setTimeout(() => {
-        bar.style.animation = 'growBar 1s ease-out forwards';
-    }, index * 200);
-});
-
-// Add chart animation CSS
+// Chart Animation
 const chartStyle = document.createElement('style');
 chartStyle.textContent = `
     @keyframes growBar {
@@ -649,14 +509,3 @@ chartStyle.textContent = `
     }
 `;
 document.head.appendChild(chartStyle);
-
-// Table Row Hover Effect
-document.querySelectorAll('.data-table1 tr').forEach(row => {
-    row.addEventListener('mouseenter', function() {
-        this.style.transform = 'scale(1.01)';
-    });
-    
-    row.addEventListener('mouseleave', function() {
-        this.style.transform = 'scale(1)';
-    });
-});

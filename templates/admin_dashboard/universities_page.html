@@ -33,12 +33,12 @@
     <div class="university-grid1">
         {% for uni in univercities %}
        <div class="dashboard-card1">
-    <h3 style="color: white; font-size: 1.3rem; margin-bottom: 1rem;">🏛️ {{uni.title}}</h3>
+    <h3 style="color: white; font-size: 1.3rem; margin-bottom: 1rem;">{{uni.title}}</h3>
     <p style="color: rgba(255,255,255,0.7); margin-bottom: 1rem;">{{uni.type}}</p>
     <div style="color: rgba(255,255,255,0.8); margin-bottom: 1rem;">
         <div>📍 {{uni.address}}</div>
         <div>👥 {{uni.total_cr}} CRs</div>
-        <div>👥 {{uni.total_users}} Users</div>
+        <div>👤 {{uni.total_users}} Users</div>
         <div>⭐ {{uni.total_review}} Reviews</div>
     </div>
     <div style="display: flex; gap: 0.5rem;" data-slug="{{uni.slug}}">
