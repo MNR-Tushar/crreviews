@@ -1,139 +1,341 @@
-
 <!-- Dashboard Page -->
 <div class="page-content1 active" id="dashboard1-page">
+    <!-- Statistics Cards -->
     <div class="stats-grid1">
         <div class="stat-card1">
             <div class="stat-header1">
                 <div>
                     <div class="stat-label1">Total CRs</div>
-                    <div class="stat-value1">2,545</div>
-                    <div class="stat-change1">↗ 12% this month</div>
+                    <div class="stat-value1">{{ total_crs }}</div>
+                    <div class="stat-change1">↗ Active Profiles</div>
                 </div>
                 <div class="stat-icon1 blue">👥</div>
             </div>
         </div>
+        
+        <div class="stat-card1">
+            <div class="stat-header1">
+                <div>
+                    <div class="stat-label1">Total Users</div>
+                    <div class="stat-value1">{{ total_users }}</div>
+                    <div class="stat-change1">↗ Registered Users</div>
+                </div>
+                <div class="stat-icon1 orange">👤</div>
+            </div>
+        </div>
+        
         <div class="stat-card1">
             <div class="stat-header1">
                 <div>
                     <div class="stat-label1">Total Reviews</div>
-                    <div class="stat-value1">15,789</div>
-                    <div class="stat-change1">↗ 8% this month</div>
+                    <div class="stat-value1">{{ total_reviews }}</div>
+                    <div class="stat-change1">↗ All Reviews</div>
                 </div>
                 <div class="stat-icon1 green">📝</div>
             </div>
         </div>
-        <div class="stat-card1">
-            <div class="stat-header1">
-                <div>
-                    <div class="stat-label1">Active Users</div>
-                    <div class="stat-value1">8,432</div>
-                    <div class="stat-change1">↗ 15% this month</div>
-                </div>
-                <div class="stat-icon1 orange">🔥</div>
-            </div>
-        </div>
+        
         <div class="stat-card1">
             <div class="stat-header1">
                 <div>
                     <div class="stat-label1">Pending Reviews</div>
-                    <div class="stat-value1">247</div>
-                    <div class="stat-change1">↘ 5% this week</div>
+                    <div class="stat-value1">{{ pending_count }}</div>
+                    <div class="stat-change1">⏳ Awaiting Approval</div>
                 </div>
                 <div class="stat-icon1 purple">⏳</div>
             </div>
         </div>
-    </div>
-
-    <div class="dashboard-card1">
-        <div class="card-header1">
-            <h2 class="card-title1">Recent CR Registrations</h2>
+        
+        <div class="stat-card1">
+            <div class="stat-header1">
+                <div>
+                    <div class="stat-label1">Anonymous Reviews</div>
+                    <div class="stat-value1">{{ anonymous_reviews }}</div>
+                    <div class="stat-change1">✓ Approved</div>
+                </div>
+                <div class="stat-icon1 blue">🔒</div>
+            </div>
         </div>
-        <table class="data-table1">
-            <thead>
-                <tr>
-                    <th>CR Name</th>
-                    <th>University</th>
-                    <th>Department</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <div class="user-cell1">
-                            <div class="user-avatar1">A</div>
-                            <span>Ahmed Hasan</span>
-                        </div>
-                    </td>
-                    <td>Dhaka University</td>
-                    <td>Computer Science</td>
-                    <td><span class="badge1 approved">Approved</span></td>
-                    <td>
-                        <button class="action-btn1 view">View</button>
-                        <button class="action-btn1 edit">Edit</button>
-                        <button class="action-btn1 delete">Delete</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="user-cell1">
-                            <div class="user-avatar1">F</div>
-                            <span>Fatima Khatun</span>
-                        </div>
-                    </td>
-                    <td>BUET</td>
-                    <td>Electrical Eng.</td>
-                    <td><span class="badge1 pending">Pending</span></td>
-                    <td>
-                        <button class="action-btn1 view">View</button>
-                        <button class="action-btn1 edit">Edit</button>
-                        <button class="action-btn1 delete">Delete</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="user-cell1">
-                            <div class="user-avatar1">R</div>
-                            <span>Rahim Uddin</span>
-                        </div>
-                    </td>
-                    <td>Jahangirnagar</td>
-                    <td>Physics</td>
-                    <td><span class="badge1 approved">Approved</span></td>
-                    <td>
-                        <button class="action-btn1 view">View</button>
-                        <button class="action-btn1 edit">Edit</button>
-                        <button class="action-btn1 delete">Delete</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        
+        <div class="stat-card1">
+            <div class="stat-header1">
+                <div>
+                    <div class="stat-label1">Universities</div>
+                    <div class="stat-value1">{{ total_universities }}</div>
+                    <div class="stat-change1">🏛️ Total Institutions</div>
+                </div>
+                <div class="stat-icon1 green">🏛️</div>
+            </div>
+        </div>
+        
+        <div class="stat-card1">
+            <div class="stat-header1">
+                <div>
+                    <div class="stat-label1">Private Universities</div>
+                    <div class="stat-value1">{{ private_universities }}</div>
+                    <div class="stat-change1">🏢 Private Sector</div>
+                </div>
+                <div class="stat-icon1 purple">🏢</div>
+            </div>
+        </div>
+        
+        <div class="stat-card1">
+            <div class="stat-header1">
+                <div>
+                    <div class="stat-label1">Public Universities</div>
+                    <div class="stat-value1">{{ public_universities }}</div>
+                    <div class="stat-change1">🏛️ Public Sector</div>
+                </div>
+                <div class="stat-icon1 orange">🏛️</div>
+            </div>
+        </div>
+        
+        <div class="stat-card1">
+            <div class="stat-header1">
+                <div>
+                    <div class="stat-label1">Departments</div>
+                    <div class="stat-value1">{{ total_departments }}</div>
+                    <div class="stat-change1">📚 Total Departments</div>
+                </div>
+                <div class="stat-icon1 blue">📚</div>
+            </div>
+        </div>
     </div>
 
     <!-- Monthly Statistics Chart -->
     <div class="dashboard-card1">
         <div class="card-header1">
             <h2 class="card-title1">Monthly Statistics</h2>
-            <select class="form-input1" style="width: auto;">
-                <option>CR Registrations</option>
-                <option>Reviews Submitted</option>
-                <option>Active Users</option>
+            <select class="form-input1" id="chartSelector" style="width: auto; max-width: 250px;">
+                <option value="crs" selected>CR Registrations</option>
+                <option value="reviews">Reviews Submitted</option>
+                <option value="users">User Registrations</option>
             </select>
         </div>
-        <div class="chart-container1">
-            <div class="chart-bar1" style="height: 60%;">
-                <div class="chart-value1">180</div>
-                <div class="chart-label1">Jan</div>
+        <div class="chart-container1" id="monthlyChart">
+            {% for month_data in monthly_stats.crs %}
+            <div class="chart-bar1" style="height: {{ month_data.percentage }}%;" data-month="{{ month_data.month }}">
+                <div class="chart-value1">{{ month_data.count }}</div>
+                <div class="chart-label1">{{ month_data.month_name }}</div>
             </div>
-            <div class="chart-bar1" style="height: 75%;">
-                <div class="chart-value1">225</div>
-                <div class="chart-label1">Feb</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Notices Section -->
+    <div class="dashboard-card1">
+        <div class="card-header1">
+            <h2 class="card-title1">Recent Notices ({{ active_notices }} Active)</h2>
+            <button class="btn1 btn-primary1" onclick="window.location.href='{% url 'add_notice' %}'">
+                <span>➕</span><span>Add Notice</span>
+            </button>
+        </div>
+        <table class="data-table1">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for notice in notices %}
+                <tr>
+                    <td>{{ notice.title|truncatewords:8 }}</td>
+                    <td>
+                        <span class="badge1 {% if notice.notice_type == 'urgent' %}rejected{% elif notice.notice_type == 'success' %}approved{% else %}pending{% endif %}">
+                            {{ notice.get_notice_type_display }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if notice.is_active %}
+                            <span class="badge1 approved">Active</span>
+                        {% else %}
+                            <span class="badge1 rejected">Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ notice.created_at|date:"M d, Y" }}</td>
+                    <td>
+                        <button class="action-btn1 view" onclick="window.location.href='{% url 'toggle_notice' notice.pk %}'">Toggle</button>
+                        <button class="action-btn1 edit" onclick="window.location.href='{% url 'edit_notice' notice.pk %}'">Edit</button>
+                        <button class="action-btn1 delete" onclick="if(confirm('Delete this notice?')) window.location.href='{% url 'delete_notice' notice.pk %}'">Delete</button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.6);">
+                        No notices yet. Create your first notice!
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Messages Section -->
+    <div class="dashboard-card1">
+        <div class="card-header1">
+            <h2 class="card-title1">Contact Messages ({{ unread_messages }} Unread)</h2>
+        </div>
+        <table class="data-table1">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for msg in contact_messages %}
+                <tr style="{% if not msg.is_read %}background: rgba(79, 172, 254, 0.1);{% endif %}">
+                    <td>
+                        <div class="user-cell1">
+                            <div class="user-avatar1">{{ msg.name|first|upper }}</div>
+                            <span>{{ msg.name }}</span>
+                        </div>
+                    </td>
+                    <td>{{ msg.email|truncatewords:2 }}</td>
+                    <td>{{ msg.message|truncatewords:8 }}</td>
+                    <td>
+                        {% if msg.is_read %}
+                            <span class="badge1 approved">Read</span>
+                        {% else %}
+                            <span class="badge1 pending">Unread</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ msg.created_at|date:"M d, Y" }}</td>
+                    <td>
+                        {% if not msg.is_read %}
+                        <button class="action-btn1 view" onclick="window.location.href='{% url 'mark_message_read' msg.pk %}'">Mark Read</button>
+                        {% endif %}
+                        <button class="action-btn1 delete" onclick="if(confirm('Delete this message?')) window.location.href='{% url 'delete_message' msg.pk %}'">Delete</button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.6);">
+                        No messages yet
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Developer Profiles Section -->
+    <div class="dashboard-card1">
+        <div class="card-header1">
+            <h2 class="card-title1">Developer Profiles ({{ total_developers }})</h2>
+            <button class="btn1 btn-primary1" onclick="window.location.href='{% url 'add_developer_profile' %}'">
+                <span>➕</span><span>Add Developer</span>
+            </button>
+        </div>
+        <div class="university-grid1">
+            {% for developer in developer_profiles %}
+            <div class="stat-card1" style="cursor: default;">
+                <div style="text-align: center; margin-bottom: 1rem;">
+                    {% if developer.profile_picture %}
+                        <img src="{{ developer.profile_picture.url }}" alt="{{ developer.name }}" 
+                             style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 1rem;">
+                    {% else %}
+                        <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); 
+                                    display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; 
+                                    color: white; font-size: 2rem; font-weight: 700;">
+                            {{ developer.name|first|upper }}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <h3 style="color: white; font-size: 1.2rem; font-weight: 700; margin-bottom: 0.3rem; text-align: center;">
+                    {{ developer.name }}
+                </h3>
+                <p style="color: rgba(255,255,255,0.7); text-align: center; margin-bottom: 1rem; font-size: 0.9rem;">
+                    {{ developer.degisnation|default:"Developer" }}
+                </p>
+                
+                <div style="margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span style="color: rgba(255,255,255,0.7); font-size: 0.85rem;">Experience:</span>
+                        <span style="color: white; font-weight: 600;">{{ developer.years_of_experience|default:"N/A" }} years</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span style="color: rgba(255,255,255,0.7); font-size: 0.85rem;">Projects:</span>
+                        <span style="color: white; font-weight: 600;">{{ developer.projects_built|default:"N/A" }}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: rgba(255,255,255,0.7); font-size: 0.85rem;">Location:</span>
+                        <span style="color: white; font-weight: 600;">{{ developer.location|default:"N/A" }}</span>
+                    </div>
+                </div>
+                
+                <div style="display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 1rem;">
+                    {% for tech in developer.tack_stack.all|slice:":5" %}
+                    <span class="badge1 approved" style="font-size: 0.7rem;">{{ tech.title }}</span>
+                    {% endfor %}
+                    {% if developer.tack_stack.count > 5 %}
+                    <span class="badge1 pending" style="font-size: 0.7rem;">+{{ developer.tack_stack.count|add:"-5" }} more</span>
+                    {% endif %}
+                </div>
+                
+                <div style="display: flex; gap: 0.5rem; justify-content: center; margin-top: 1rem;">
+                    {% if developer.github_url %}
+                    <a href="{{ developer.github_url }}" target="_blank" style="color: rgba(255,255,255,0.8); font-size: 1.2rem;">🔗</a>
+                    {% endif %}
+                    {% if developer.linkedin_url %}
+                    <a href="{{ developer.linkedin_url }}" target="_blank" style="color: rgba(255,255,255,0.8); font-size: 1.2rem;">💼</a>
+                    {% endif %}
+                    {% if developer.email %}
+                    <a href="mailto:{{ developer.email }}" style="color: rgba(255,255,255,0.8); font-size: 1.2rem;">📧</a>
+                    {% endif %}
+                </div>
+                
+                <div style="display: flex; gap: 0.5rem; margin-top: 1rem; justify-content: center;" data-slug="{{ developer.pk }}">
+                    <button class="action-btn1 view" onclick="window.location.href='{% url 'view_developer_profile' developer.pk %}'">View</button>
+                    <button class="action-btn1 edit" onclick="window.location.href='{% url 'edit_developer_profile' developer.pk %}'">Edit</button>
+                    <button class="action-btn1 delete" onclick="if(confirm('Delete this developer profile?')) window.location.href='{% url 'delete_developer_profile' developer.pk %}'">Delete</button>
+                </div>
             </div>
-            <div class="chart-bar1" style="height: 85%;">
-                <div class="chart-value1">255</div>
-                <div class="chart-label1">Mar</div>
+            {% empty %}
+            <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: rgba(255,255,255,0.6);">
+                <p style="font-size: 1.2rem; margin-bottom: 1rem;">No developer profiles yet</p>
+                <button class="btn1 btn-primary1" onclick="window.location.href='{% url 'add_developer_profile' %}'">
+                    <span>➕</span><span>Add First Developer</span>
+                </button>
             </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Tech Stack Section -->
+    <div class="dashboard-card1">
+        <div class="card-header1">
+            <h2 class="card-title1">Technology Stack ({{ total_tech_stack }})</h2>
+            <button class="btn1 btn-primary1" onclick="window.location.href='{% url 'add_tech_stack' %}'">
+                <span>➕</span><span>Add Tech</span>
+            </button>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+            {% for tech in tech_stack_list %}
+            <div style="background: rgba(255,255,255,0.05); padding: 1rem 1.5rem; border-radius: 12px; 
+                        display: flex; align-items: center; gap: 1rem; border: 1px solid rgba(255,255,255,0.1);">
+                <span style="color: white; font-weight: 600; font-size: 1rem;">{{ tech.title }}</span>
+                <div style="display: flex; gap: 0.3rem;">
+                    <button class="action-btn1 edit" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" 
+                            onclick="window.location.href='{% url 'edit_tech_stack' tech.pk %}'">Edit</button>
+                    <button class="action-btn1 delete" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" 
+                            onclick="if(confirm('Delete {{ tech.title }}?')) window.location.href='{% url 'delete_tech_stack' tech.pk %}'">Del</button>
+                </div>
+            </div>
+            {% empty %}
+            <div style="width: 100%; text-align: center; padding: 2rem; color: rgba(255,255,255,0.6);">
+                No technologies added yet
+            </div>
+            {% endfor %}
         </div>
     </div>
 
@@ -143,46 +345,64 @@
             <h2 class="card-title1">Recent Activity</h2>
         </div>
         <div class="activity-feed1">
+            {% for cr in crs|slice:":3" %}
             <div class="activity-item1">
                 <div class="activity-icon1 new">➕</div>
                 <div class="activity-content1">
                     <h4>New CR Added</h4>
-                    <p>Ahmed Hasan registered as CR</p>
-                    <div class="activity-time1">2 hours ago</div>
+                    <p>{{ cr.name }} registered as CR</p>
+                    <div class="activity-time1">{{ cr.created_at|timesince }} ago</div>
                 </div>
             </div>
+            {% endfor %}
+            
+            {% for review in reviews|slice:":2" %}
             <div class="activity-item1">
                 <div class="activity-icon1 update">📝</div>
                 <div class="activity-content1">
                     <h4>Review Submitted</h4>
-                    <p>New review for Fatima Khatun</p>
-                    <div class="activity-time1">4 hours ago</div>
+                    <p>New review for {{ review.cr_profile.name }}</p>
+                    <div class="activity-time1">{{ review.created_at|timesince }} ago</div>
                 </div>
             </div>
-            <div class="activity-item1">
-                <div class="activity-icon1 new">👤</div>
-                <div class="activity-content1">
-                    <h4>New User Registered</h4>
-                    <p>Student joined the platform</p>
-                    <div class="activity-time1">5 hours ago</div>
-                </div>
-            </div>
-            <div class="activity-item1">
-                <div class="activity-icon1 update">✏️</div>
-                <div class="activity-content1">
-                    <h4>CR Profile Updated</h4>
-                    <p>Rahim Uddin updated profile</p>
-                    <div class="activity-time1">1 day ago</div>
-                </div>
-            </div>
-            <div class="activity-item1">
-                <div class="activity-icon1 delete">🗑️</div>
-                <div class="activity-content1">
-                    <h4>Review Deleted</h4>
-                    <p>Inappropriate review removed</p>
-                    <div class="activity-time1">2 days ago</div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </div>
+
+<script>
+// Chart Selector Handler
+document.addEventListener('DOMContentLoaded', function() {
+    const chartSelector = document.getElementById('chartSelector');
+    const chart = document.getElementById('monthlyChart');
+    
+    const chartData = {
+        crs: {{ monthly_stats.crs|safe }},
+        reviews: {{ monthly_stats.reviews|safe }},
+        users: {{ monthly_stats.users|safe }}
+    };
+
+    function renderChart(type) {
+        const selectedData = chartData[type];
+        chart.innerHTML = '';
+        selectedData.forEach(data => {
+            const bar = document.createElement('div');
+            bar.className = 'chart-bar1';
+            bar.style.height = data.percentage + '%';
+            bar.innerHTML = `
+                <div class="chart-value1">${data.count}</div>
+                <div class="chart-label1">${data.month_name}</div>
+            `;
+            chart.appendChild(bar);
+        });
+    }
+
+ 
+    chartSelector.addEventListener('change', function() {
+        renderChart(this.value);
+    });
+
+    renderChart(chartSelector.value);
+});
+
+</script>
