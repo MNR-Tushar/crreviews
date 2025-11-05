@@ -1,11 +1,11 @@
 {% load static %}
-{% block title %} {{ title }} - Admin {% endblock title %}
+
 {% block content %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <link rel="stylesheet" href="{% static 'admin_dashboard/admin_dashboard.css' %}">
     <link rel="stylesheet" href="{% static 'add_cr.css' %}">
     
-    <div class="dashboard-container1">
+    <div class="container">
         <!-- Sidebar -->
         <aside class="sidebar1" id="sidebar1">
             <div class="sidebar-header1">
@@ -14,7 +14,11 @@
 
             <div class="admin-info1">
                 <div class="admin-avatar1">
-                    {{ user.first_name|first|upper }}
+                    {% if user.profile_picture %}
+                        <img src="#" alt="{{ user.name }}" />
+                    {% else %}
+                        {{ user.first_name|first|upper }}
+                    {% endif %}
                 </div>
                 <div class="admin-details1">
                     <h3>{{user.first_name}}</h3>
@@ -22,45 +26,53 @@
                 </div>
             </div>
 
+            <!-- Replace the sidebar navigation section in add_university.html and add_department.html -->
+
             <ul class="nav-menu1">
                 <li class="nav-item1">
-                    <a href="{% url 'admin_dashboard' %}" class="nav-link1">
-                        <span class="nav-icon1">📊</span>
-                        <span>Dashboard</span>
-                    </a>
+                <a href="{% url 'admin_dashboard' %}" class="nav-link1">
+                <span class="nav-icon1">📊</span>
+                <span>Dashboard</span>
+                </a>
                 </li>
                 <li class="nav-item1">
-                    <a href="{% url 'admin_dashboard' %}#crs" class="nav-link1 active">
-                        <span class="nav-icon1">👥</span>
-                        <span>All CRs</span>
-                    </a>
+                <a href="{% url 'admin_dashboard' %}#crs" class="nav-link1">
+                <span class="nav-icon1">👥</span>
+                <span>All CRs</span>
+                </a>
                 </li>
                 <li class="nav-item1">
-                    <a href="{% url 'admin_dashboard' %}#reviews" class="nav-link1">
-                        <span class="nav-icon1">📝</span>
-                        <span>Reviews</span>
-                    </a>
+                <a href="{% url 'admin_dashboard' %}#reviews" class="nav-link1">
+                <span class="nav-icon1">📝</span>
+                <span>Reviews</span>
+                </a>
                 </li>
                 <li class="nav-item1">
-                    <a href="{% url 'admin_dashboard' %}#users" class="nav-link1">
-                        <span class="nav-icon1">👤</span>
-                        <span>Users</span>
-                    </a>
+                <a href="{% url 'admin_dashboard' %}#users" class="nav-link1">
+                <span class="nav-icon1">👤</span>
+                <span>Users</span>
+                </a>
                 </li>
                 <li class="nav-item1">
-                    <a href="{% url 'admin_dashboard' %}#universities" class="nav-link1">
-                        <span class="nav-icon1">🏛️</span>
-                        <span>Universities</span>
-                    </a>
+                <a href="{% url 'admin_dashboard' %}#universities" class="nav-link1{% if 'university' in request.path %} active{% endif %}">
+                <span class="nav-icon1">🏛️</span>
+                <span>Universities</span>
+                </a>
                 </li>
                 <li class="nav-item1">
-                    <a href="{% url 'admin_dashboard' %}#departments" class="nav-link1">
-                        <span class="nav-icon1">📚</span>
-                        <span>Departments</span>
-                    </a>
+                <a href="{% url 'admin_dashboard' %}#departments" class="nav-link1{% if 'department' in request.path %} active{% endif %}">
+                <span class="nav-icon1">📚</span>
+                <span>Departments</span>
+                </a>
                 </li>
                 <li class="nav-item1">
-                    <a href="/logout/" class="nav-link1">
+                <a href="{% url 'admin_dashboard' %}#settings" class="nav-link1">
+                <span class="nav-icon1">⚙️</span>
+                <span>Settings</span>
+                </a>
+                </li>
+                <li class="nav-item1">
+                    <a href="/logout/" class="nav-link1" id="logoutBtn1">
                         <span class="nav-icon1">🚪</span>
                         <span>Logout</span>
                     </a>
@@ -72,8 +84,8 @@
         <main class="main-content1" id="mainContent1">
             <div class="top-bar1">
                 <h1 class="page-title1">👥 {{ title }}</h1>
-                <a href="{% url 'admin_dashboard' %}#crs" class="btn1 btn-primary1">
-                    <span>←</span>
+                <a href="{% url 'admin_dashboard' %}#crs" class="btn1 btn-primary1" style"text-decoration: none;">
+                    <span></span>
                     <span>Back to CRs</span>
                 </a>
             </div>
@@ -83,14 +95,7 @@
                 <form method="POST" enctype="multipart/form-data" class="form-main" id="addCrForm">
                     {% csrf_token %}
                     
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }}" style="margin-bottom: 2rem; padding: 1rem; border-radius: 12px; background: rgba({% if message.tags == 'success' %}76, 175, 80{% else %}244, 67, 54{% endif %}, 0.2); border: 1px solid rgba({% if message.tags == 'success' %}76, 175, 80{% else %}244, 67, 54{% endif %}, 0.3); color: {% if message.tags == 'success' %}#4caf50{% else %}#f44336{% endif %};">
-                                <span>{% if message.tags == 'success' %}✓{% else %}⚠{% endif %}</span>
-                                <span>{{ message }}</span>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
+                    
 
                     <!-- User Selection (Only for Add, not Edit) -->
                     {% if not cr %}
@@ -259,7 +264,7 @@
                             <input type="file" name="profile_picture" id="profilePicture" class="file-input" accept="image/*">
                         </div>
                         
-                        <div class="preview-section" id="previewSection">
+                        <div class="preview-section" id="previewSection" style="display: none;">
                             <div class="preview-card">
                                 <img id="previewImage" class="preview-img" src="" alt="Preview">
                                 <div class="preview-info">
@@ -269,6 +274,7 @@
                                 <button type="button" class="remove-btn" id="removeBtn">Remove</button>
                             </div>
                         </div>
+
                     </div>
 
                     <!-- Social Media -->
@@ -334,6 +340,6 @@
         </main>
     </div>
 
-    <script src="{% static 'add_cr.js' %}"></script>
-    <script src="{% static 'admin_dashboard/admin_dashboard.js' %}"></script>
+    {% comment %} <script src="{% static 'add_cr.js' %}"></script> {% endcomment %}
+    {% comment %} <script src="{% static 'admin_dashboard/admin_dashboard.js' %}"></script> {% endcomment %}
 {% endblock content %}

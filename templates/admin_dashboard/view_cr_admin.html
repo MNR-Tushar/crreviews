@@ -1,10 +1,10 @@
 {% load static %}
-{% block title %} {{ title }} - Admin {% endblock title %}
+
 {% block content %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <link rel="stylesheet" href="{% static 'admin_dashboard/admin_dashboard.css' %}">
     
-    <div class="dashboard-container1">
+    <div class="container">
         <!-- Sidebar -->
         <aside class="sidebar1" id="sidebar1">
             <div class="sidebar-header1">
@@ -13,7 +13,11 @@
 
             <div class="admin-info1">
                 <div class="admin-avatar1">
-                    {{ user.first_name|first|upper }}
+                    {% if user.profile_picture %}
+                        <img src="#" alt="{{ user.name }}" />
+                    {% else %}
+                        {{ user.first_name|first|upper }}
+                    {% endif %}
                 </div>
                 <div class="admin-details1">
                     <h3>{{user.first_name}}</h3>
@@ -21,33 +25,53 @@
                 </div>
             </div>
 
+            <!-- Replace the sidebar navigation section in add_university.html and add_department.html -->
+
             <ul class="nav-menu1">
                 <li class="nav-item1">
-                    <a href="{% url 'admin_dashboard' %}" class="nav-link1">
-                        <span class="nav-icon1">📊</span>
-                        <span>Dashboard</span>
-                    </a>
+                <a href="{% url 'admin_dashboard' %}" class="nav-link1">
+                <span class="nav-icon1">📊</span>
+                <span>Dashboard</span>
+                </a>
                 </li>
                 <li class="nav-item1">
-                    <a href="{% url 'admin_dashboard' %}#crs" class="nav-link1 active">
-                        <span class="nav-icon1">👥</span>
-                        <span>All CRs</span>
-                    </a>
+                <a href="{% url 'admin_dashboard' %}#crs" class="nav-link1">
+                <span class="nav-icon1">👥</span>
+                <span>All CRs</span>
+                </a>
                 </li>
                 <li class="nav-item1">
-                    <a href="{% url 'admin_dashboard' %}#reviews" class="nav-link1">
-                        <span class="nav-icon1">📝</span>
-                        <span>Reviews</span>
-                    </a>
+                <a href="{% url 'admin_dashboard' %}#reviews" class="nav-link1">
+                <span class="nav-icon1">📝</span>
+                <span>Reviews</span>
+                </a>
                 </li>
                 <li class="nav-item1">
-                    <a href="{% url 'admin_dashboard' %}#users" class="nav-link1">
-                        <span class="nav-icon1">👤</span>
-                        <span>Users</span>
-                    </a>
+                <a href="{% url 'admin_dashboard' %}#users" class="nav-link1">
+                <span class="nav-icon1">👤</span>
+                <span>Users</span>
+                </a>
                 </li>
                 <li class="nav-item1">
-                    <a href="/logout/" class="nav-link1">
+                <a href="{% url 'admin_dashboard' %}#universities" class="nav-link1{% if 'university' in request.path %} active{% endif %}">
+                <span class="nav-icon1">🏛️</span>
+                <span>Universities</span>
+                </a>
+                </li>
+                <li class="nav-item1">
+                <a href="{% url 'admin_dashboard' %}#departments" class="nav-link1{% if 'department' in request.path %} active{% endif %}">
+                <span class="nav-icon1">📚</span>
+                <span>Departments</span>
+                </a>
+                </li>
+                <li class="nav-item1">
+                <a href="{% url 'admin_dashboard' %}#settings" class="nav-link1">
+                <span class="nav-icon1">⚙️</span>
+                <span>Settings</span>
+                </a>
+                </li>
+                <li class="nav-item1">
+                    <a href="/logout/" class="nav-link1" id="logoutBtn1">
                         <span class="nav-icon1">🚪</span>
                         <span>Logout</span>
                     </a>
@@ -55,16 +79,17 @@
             </ul>
         </aside>
 
+
         <!-- Main Content -->
         <main class="main-content1" id="mainContent1">
             <div class="top-bar1">
                 <h1 class="page-title1">👁️ View CR Profile</h1>
-                <div style="display: flex; gap: 1rem;">
-                    <a href="{% url 'admin_edit_cr' cr.slug %}" class="btn1 btn-primary1">
+                <div style="display: flex; gap: 1rem; ">
+                    {% comment %} <a href="{% url 'admin_edit_cr' cr.slug %}" class="btn1 btn-primary1" style="text-decoration: none;">
                         <span>✏️</span>
                         <span>Edit CR</span>
-                    </a>
-                    <a href="{% url 'admin_dashboard' %}#crs" class="btn1 btn-secondary1">
+                    </a> {% endcomment %}
+                    <a href="{% url 'admin_dashboard' %}#crs" class="btn1 btn-secondary1" style="text-decoration: none;">
                         <span>←</span>
                         <span>Back</span>
                     </a>
@@ -103,10 +128,10 @@
 
                 <!-- Quick Actions -->
                 <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
-                    <a href="{% url 'cr_profile' cr.slug %}" target="_blank" class="btn1 btn-primary1">
+                    <a href="{% url 'cr_profile' cr.slug %}" target="_blank" class="btn1 btn-primary1" style="text-decoration: none;">
                         🔗 View Public Profile
                     </a>
-                    <a href="{% url 'admin_edit_cr' cr.slug %}" class="btn1 btn-primary1">
+                    <a href="{% url 'admin_edit_cr' cr.slug %}" class="btn1 btn-primary1" style="text-decoration: none;">
                         ✏️ Edit Profile
                     </a>
                 </div>
@@ -178,14 +203,14 @@
             <div class="dashboard-card1">
                 <h2 class="card-title1">🔗 Social Media</h2>
                 <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                    <a href="{{ cr.facebook_url }}" target="_blank" class="btn1" style="background: linear-gradient(135deg, #1877f2, #0c5dbf);">
-                        f Facebook
+                    <a href="{{ cr.facebook_url }}" target="_blank" class="btn1" style="background: linear-gradient(135deg, #1877f2, #0c5dbf); text-decoration: none; color:white;">
+                        Facebook
                     </a>
-                    <a href="{{ cr.instagram_url }}" target="_blank" class="btn1" style="background: linear-gradient(135deg, #e1306c, #c13584);">
-                        📷 Instagram
+                    <a href="{{ cr.instagram_url }}" target="_blank" class="btn1" style="background: linear-gradient(135deg, #e1306c, #c13584); text-decoration: none; color:white;">
+                        Instagram
                     </a>
-                    <a href="{{ cr.linkedin_url }}" target="_blank" class="btn1" style="background: linear-gradient(135deg, #0077b5, #005885);">
-                        in LinkedIn
+                    <a href="{{ cr.linkedin_url }}" target="_blank" class="btn1" style="background: linear-gradient(135deg, #0077b5, #005885); text-decoration: none; color:white;">
+                        LinkedIn
                     </a>
                 </div>
             </div>
