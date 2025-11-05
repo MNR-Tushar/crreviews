@@ -1,194 +1,277 @@
-{% extends 'base.html' %}
+
 {% load static %}
 
-{% block title %}{{ title }} - Admin Dashboard{% endblock %}
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'style.css' %}">
 <link rel="stylesheet" href="{% static 'admin_dashboard/admin_dashboard.css' %}">
 
 <div class="container" style="max-width: 900px; margin-top: 3rem;">
-    <!-- Back Button -->
-    <div style="margin-bottom: 2rem;">
-        <a href="{% url 'admin_dashboard' %}#users" class="btn btn-secondary">
-            ← Back to Dashboard
-        </a>
-    </div>
-
-    <!-- Edit User Form -->
-    <div class="dashboard-card1">
-        <div class="card-header1">
-            <h2 class="card-title1">✏️ {{ title }}</h2>
+    
+     <!-- Sidebar -->
+    <aside class="sidebar1" id="sidebar1">
+        <div class="sidebar-header1">
+            <button class="toggle-btn1" id="toggleBtn1">☰</button>
         </div>
 
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-
-            <!-- Personal Information -->
-            <h3 style="color: white; margin: 2rem 0 1rem; font-size: 1.3rem;">👤 Personal Information</h3>
-            
-            <div class="form-group1">
-                <label class="form-label1" for="first_name">First Name *</label>
-                <input type="text" class="form-input1" id="first_name" name="first_name" 
-                       value="{{ view_user.first_name }}" required>
-            </div>
-
-            <div class="form-group1">
-                <label class="form-label1" for="last_name">Last Name *</label>
-                <input type="text" class="form-input1" id="last_name" name="last_name" 
-                       value="{{ view_user.last_name }}" required>
-            </div>
-
-            <div class="form-group1">
-                <label class="form-label1" for="email">Email *</label>
-                <input type="email" class="form-input1" id="email" name="email" 
-                       value="{{ view_user.email }}" required>
-            </div>
-
-            <div class="form-group1">
-                <label class="form-label1" for="gender">Gender *</label>
-                <select class="form-input1" id="gender" name="gender" required>
-                    <option value="M" {% if view_user.gender == 'M' %}selected{% endif %}>Male</option>
-                    <option value="F" {% if view_user.gender == 'F' %}selected{% endif %}>Female</option>
-                </select>
-            </div>
-
-            <div class="form-group1">
-                <label class="form-label1" for="phone">Phone</label>
-                <input type="text" class="form-input1" id="phone" name="phone" 
-                       value="{{ view_user.phone|default:'' }}">
-            </div>
-
-            <div class="form-group1">
-                <label class="form-label1" for="date_of_birth">Date of Birth</label>
-                <input type="date" class="form-input1" id="date_of_birth" name="date_of_birth" 
-                       value="{{ view_user.date_of_birth|date:'Y-m-d' }}">
-            </div>
-
-            <div class="form-group1">
-                <label class="form-label1" for="profile_picture">Profile Picture</label>
-                {% if view_user.profile_picture %}
-                    <div style="margin-bottom: 1rem;">
-                        <img src="{{ view_user.profile_picture.url }}" alt="Current" 
-                             style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
-                    </div>
+        <div class="admin-info1">
+            <div class="admin-avatar1">
+                {% if user.profile_picture %}
+                    <img src="#" alt="{{ user.name }}" />
+                {% else %}
+                    {{ user.first_name|first|upper }}
                 {% endif %}
-                <input type="file" class="form-input1" id="profile_picture" name="profile_picture" accept="image/*">
             </div>
-
-            <!-- Academic Information -->
-            <h3 style="color: white; margin: 2rem 0 1rem; font-size: 1.3rem;">🎓 Academic Information</h3>
-
-            <div class="form-group1">
-                <label class="form-label1" for="student_id">Student ID</label>
-                <input type="text" class="form-input1" id="student_id" name="student_id" 
-                       value="{{ view_user.student_id|default:'' }}">
+            <div class="admin-details1">
+                <h3>{{user.first_name}}</h3>
+                <p>{{user.email}}</p>
             </div>
+        </div>
 
-            <div class="form-group1">
-                <label class="form-label1" for="university">University</label>
-                <select class="form-input1" id="university" name="university">
-                    <option value="">Select University</option>
-                    {% for uni in universities %}
-                        <option value="{{ uni.id }}" {% if view_user.university.id == uni.id %}selected{% endif %}>
-                            {{ uni.title }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
+        <!-- Replace the sidebar navigation section in add_university.html and add_department.html -->
 
-            <div class="form-group1">
-                <label class="form-label1" for="department">Department</label>
-                <select class="form-input1" id="department" name="department">
-                    <option value="">Select Department</option>
-                    {% for dept in departments %}
-                        <option value="{{ dept.id }}" {% if view_user.department.id == dept.id %}selected{% endif %}>
-                            {{ dept.title }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
+        <ul class="nav-menu1">
+            <li class="nav-item1">
+            <a href="{% url 'admin_dashboard' %}" class="nav-link1">
+            <span class="nav-icon1">📊</span>
+            <span>Dashboard</span>
+            </a>
+            </li>
+            <li class="nav-item1">
+            <a href="{% url 'admin_dashboard' %}#crs" class="nav-link1">
+            <span class="nav-icon1">👥</span>
+            <span>All CRs</span>
+            </a>
+            </li>
+            <li class="nav-item1">
+            <a href="{% url 'admin_dashboard' %}#reviews" class="nav-link1">
+            <span class="nav-icon1">📝</span>
+            <span>Reviews</span>
+            </a>
+            </li>
+            <li class="nav-item1">
+            <a href="{% url 'admin_dashboard' %}#users" class="nav-link1">
+            <span class="nav-icon1">👤</span>
+            <span>Users</span>
+            </a>
+            </li>
+            <li class="nav-item1">
+            <a href="{% url 'admin_dashboard' %}#universities" class="nav-link1{% if 'university' in request.path %} active{% endif %}">
+            <span class="nav-icon1">🏛️</span>
+            <span>Universities</span>
+            </a>
+            </li>
+            <li class="nav-item1">
+            <a href="{% url 'admin_dashboard' %}#departments" class="nav-link1{% if 'department' in request.path %} active{% endif %}">
+            <span class="nav-icon1">📚</span>
+            <span>Departments</span>
+            </a>
+            </li>
+            <li class="nav-item1">
+            <a href="{% url 'admin_dashboard' %}#settings" class="nav-link1">
+            <span class="nav-icon1">⚙️</span>
+            <span>Settings</span>
+            </a>
+            </li>
+            <li class="nav-item1">
+                <a href="/logout/" class="nav-link1" id="logoutBtn1">
+                    <span class="nav-icon1">🚪</span>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
 
-            <div class="form-group1">
-                <label class="form-label1" for="batch">Batch</label>
-                <input type="text" class="form-input1" id="batch" name="batch" 
-                       value="{{ view_user.batch|default:'' }}">
-            </div>
-
-            <div class="form-group1">
-                <label class="form-label1" for="dept_batch">Dept Batch</label>
-                <input type="text" class="form-input1" id="dept_batch" name="dept_batch" 
-                       value="{{ view_user.dept_batch|default:'' }}">
-            </div>
-
-            <div class="form-group1">
-                <label class="form-label1" for="section">Section</label>
-                <input type="text" class="form-input1" id="section" name="section" 
-                       value="{{ view_user.section|default:'' }}">
-            </div>
-
-            <!-- Bio -->
-            <h3 style="color: white; margin: 2rem 0 1rem; font-size: 1.3rem;">📝 Bio</h3>
-
-            <div class="form-group1">
-                <label class="form-label1" for="bio">Bio</label>
-                <textarea class="form-input1" id="bio" name="bio" rows="4" 
-                          style="resize: vertical;">{{ view_user.bio|default:'' }}</textarea>
-            </div>
-
-            <!-- Social Links -->
-            <h3 style="color: white; margin: 2rem 0 1rem; font-size: 1.3rem;">🔗 Social Links</h3>
-
-            <div class="form-group1">
-                <label class="form-label1" for="facebook_url">Facebook URL</label>
-                <input type="url" class="form-input1" id="facebook_url" name="facebook_url" 
-                       value="{{ view_user.facebook_url|default:'https://www.facebook.com/' }}">
-            </div>
-
-            <div class="form-group1">
-                <label class="form-label1" for="instagram_url">Instagram URL</label>
-                <input type="url" class="form-input1" id="instagram_url" name="instagram_url" 
-                       value="{{ view_user.instagram_url|default:'https://www.instagram.com/' }}">
-            </div>
-
-            <div class="form-group1">
-                <label class="form-label1" for="linkedin_url">LinkedIn URL</label>
-                <input type="url" class="form-input1" id="linkedin_url" name="linkedin_url" 
-                       value="{{ view_user.linkedin_url|default:'https://www.linkedin.com/' }}">
-            </div>
-
-            <!-- Account Status -->
-            <h3 style="color: white; margin: 2rem 0 1rem; font-size: 1.3rem;">⚙️ Account Status</h3>
-
-            <div class="form-group1">
-                <label style="display: flex; align-items: center; gap: 1rem; color: rgba(255,255,255,0.9); cursor: pointer;">
-                    <input type="checkbox" name="is_active" 
-                           {% if view_user.is_active %}checked{% endif %}
-                           style="width: 20px; height: 20px; cursor: pointer;">
-                    <span>Account Active</span>
-                </label>
-            </div>
-
-            <div class="form-group1">
-                <label style="display: flex; align-items: center; gap: 1rem; color: rgba(255,255,255,0.9); cursor: pointer;">
-                    <input type="checkbox" name="is_email_verified" 
-                           {% if view_user.is_email_verified %}checked{% endif %}
-                           style="width: 20px; height: 20px; cursor: pointer;">
-                    <span>Email Verified</span>
-                </label>
-            </div>
-
-            <!-- Submit Buttons -->
-            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-                <button type="submit" class="btn1 btn-primary1">
-                    ✓ Update User
-                </button>
-                <a href="{% url 'admin_dashboard' %}#users" class="btn1 btn-secondary1">
-                    ✗ Cancel
+    <main class="main-content1" id="mainContent1">
+        
+        <div class="top-bar1">
+            <!-- Back Button -->
+            <div style="margin-bottom: 2rem;">
+                <a href="{% url 'admin_dashboard' %}#users" class="btn btn-secondary">
+                    ← Back to Dashboard
                 </a>
             </div>
-        </form>
-    </div>
+        </div>
+
+
+        <!-- Edit User Form -->
+        <div class="dashboard-card1">
+            <div class="card-header1">
+                <h2 class="card-title1">✏️ {{ title }}</h2>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <!-- Personal Information -->
+                <h3 style="color: white; margin: 2rem 0 1rem; font-size: 1.3rem;">👤 Personal Information</h3>
+                
+                <div class="form-group1">
+                    <label class="form-label1" for="first_name">First Name *</label>
+                    <input type="text" class="form-input1" id="first_name" name="first_name" 
+                        value="{{ view_user.first_name }}" required>
+                </div>
+
+                <div class="form-group1">
+                    <label class="form-label1" for="last_name">Last Name *</label>
+                    <input type="text" class="form-input1" id="last_name" name="last_name" 
+                        value="{{ view_user.last_name }}" required>
+                </div>
+
+                <div class="form-group1">
+                    <label class="form-label1" for="email">Email *</label>
+                    <input type="email" class="form-input1" id="email" name="email" 
+                        value="{{ view_user.email }}" required>
+                </div>
+
+                <div class="form-group1">
+                    <label class="form-label1" for="gender">Gender *</label>
+                    <select class="form-input1" id="gender" name="gender" required>
+                        <option value="M" {% if view_user.gender == 'M' %}selected{% endif %}>Male</option>
+                        <option value="F" {% if view_user.gender == 'F' %}selected{% endif %}>Female</option>
+                    </select>
+                </div>
+
+                <div class="form-group1">
+                    <label class="form-label1" for="phone">Phone</label>
+                    <input type="text" class="form-input1" id="phone" name="phone" 
+                        value="{{ view_user.phone|default:'' }}">
+                </div>
+
+                <div class="form-group1">
+                    <label class="form-label1" for="date_of_birth">Date of Birth</label>
+                    <input type="date" class="form-input1" id="date_of_birth" name="date_of_birth" 
+                        value="{{ view_user.date_of_birth|date:'Y-m-d' }}">
+                </div>
+
+                <div class="form-group1">
+                    <label class="form-label1" for="profile_picture">Profile Picture</label>
+                    {% if view_user.profile_picture %}
+                        <div style="margin-bottom: 1rem;">
+                            <img src="{{ view_user.profile_picture.url }}" alt="Current" 
+                                style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
+                        </div>
+                    {% endif %}
+                    <input type="file" class="form-input1" id="profile_picture" name="profile_picture" accept="image/*">
+                </div>
+
+                <!-- Academic Information -->
+                <h3 style="color: white; margin: 2rem 0 1rem; font-size: 1.3rem;">🎓 Academic Information</h3>
+
+                <div class="form-group1">
+                    <label class="form-label1" for="student_id">Student ID</label>
+                    <input type="text" class="form-input1" id="student_id" name="student_id" 
+                        value="{{ view_user.student_id|default:'' }}">
+                </div>
+
+                <div class="form-group1">
+                    <label class="form-label1" for="university">University</label>
+                    <select class="form-input1" id="university" name="university">
+                        <option value="">Select University</option>
+                        {% for uni in universities %}
+                            <option value="{{ uni.id }}" {% if view_user.university.id == uni.id %}selected{% endif %}>
+                                {{ uni.title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group1">
+                    <label class="form-label1" for="department">Department</label>
+                    <select class="form-input1" id="department" name="department">
+                        <option value="">Select Department</option>
+                        {% for dept in departments %}
+                            <option value="{{ dept.id }}" {% if view_user.department.id == dept.id %}selected{% endif %}>
+                                {{ dept.title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group1">
+                    <label class="form-label1" for="batch">Batch</label>
+                    <input type="text" class="form-input1" id="batch" name="batch" 
+                        value="{{ view_user.batch|default:'' }}">
+                </div>
+
+                <div class="form-group1">
+                    <label class="form-label1" for="dept_batch">Dept Batch</label>
+                    <input type="text" class="form-input1" id="dept_batch" name="dept_batch" 
+                        value="{{ view_user.dept_batch|default:'' }}">
+                </div>
+
+                <div class="form-group1">
+                    <label class="form-label1" for="section">Section</label>
+                    <input type="text" class="form-input1" id="section" name="section" 
+                        value="{{ view_user.section|default:'' }}">
+                </div>
+
+                <!-- Bio -->
+                <h3 style="color: white; margin: 2rem 0 1rem; font-size: 1.3rem;">📝 Bio</h3>
+
+                <div class="form-group1">
+                    <label class="form-label1" for="bio">Bio</label>
+                    <textarea class="form-input1" id="bio" name="bio" rows="4" 
+                            style="resize: vertical;">{{ view_user.bio|default:'' }}</textarea>
+                </div>
+
+                <!-- Social Links -->
+                <h3 style="color: white; margin: 2rem 0 1rem; font-size: 1.3rem;">🔗 Social Links</h3>
+
+                <div class="form-group1">
+                    <label class="form-label1" for="facebook_url">Facebook URL</label>
+                    <input type="url" class="form-input1" id="facebook_url" name="facebook_url" 
+                        value="{{ view_user.facebook_url|default:'https://www.facebook.com/' }}">
+                </div>
+
+                <div class="form-group1">
+                    <label class="form-label1" for="instagram_url">Instagram URL</label>
+                    <input type="url" class="form-input1" id="instagram_url" name="instagram_url" 
+                        value="{{ view_user.instagram_url|default:'https://www.instagram.com/' }}">
+                </div>
+
+                <div class="form-group1">
+                    <label class="form-label1" for="linkedin_url">LinkedIn URL</label>
+                    <input type="url" class="form-input1" id="linkedin_url" name="linkedin_url" 
+                        value="{{ view_user.linkedin_url|default:'https://www.linkedin.com/' }}">
+                </div>
+
+                <!-- Account Status -->
+                <h3 style="color: white; margin: 2rem 0 1rem; font-size: 1.3rem;">⚙️ Account Status</h3>
+
+                <div class="form-group1">
+                    <label style="display: flex; align-items: center; gap: 1rem; color: rgba(255,255,255,0.9); cursor: pointer;">
+                        <input type="checkbox" name="is_active" 
+                            {% if view_user.is_active %}checked{% endif %}
+                            style="width: 20px; height: 20px; cursor: pointer;">
+                        <span>Account Active</span>
+                    </label>
+                </div>
+
+                <div class="form-group1">
+                    <label style="display: flex; align-items: center; gap: 1rem; color: rgba(255,255,255,0.9); cursor: pointer;">
+                        <input type="checkbox" name="is_email_verified" 
+                            {% if view_user.is_email_verified %}checked{% endif %}
+                            style="width: 20px; height: 20px; cursor: pointer;">
+                        <span>Email Verified</span>
+                    </label>
+                </div>
+
+                <!-- Submit Buttons -->
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="btn1 btn-primary1">
+                        Update User
+                    </button>
+                    <a href="{% url 'admin_dashboard' %}#users" class="btn1 btn-secondary1" style="text-decoration: none;">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+            
+    </main>
+
+    
 </div>
 
 <script src="{% static 'script.js' %}"></script>
