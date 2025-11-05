@@ -134,6 +134,7 @@
             <thead>
                 <tr>
                     <th>Title</th>
+                    <th>Notices</th>
                     <th>Type</th>
                     <th>Status</th>
                     <th>Created</th>
@@ -144,6 +145,7 @@
                 {% for notice in notices %}
                 <tr>
                     <td>{{ notice.title|truncatewords:8 }}</td>
+                    <td title="{{ notice.message }}">{{ notice.message|truncatewords:10 }}</td>
                     <td>
                         <span class="badge1 {% if notice.notice_type == 'urgent' %}rejected{% elif notice.notice_type == 'success' %}approved{% else %}pending{% endif %}">
                             {{ notice.get_notice_type_display }}
@@ -162,7 +164,9 @@
                         <button class="action-btn1 edit" onclick="window.location.href='{% url 'edit_notice' notice.pk %}'">Edit</button>
                         <button class="action-btn1 delete" onclick="if(confirm('Delete this notice?')) window.location.href='{% url 'delete_notice' notice.pk %}'">Delete</button>
                     </td>
+                    
                 </tr>
+               
                 {% empty %}
                 <tr>
                     <td colspan="5" style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.6);">
