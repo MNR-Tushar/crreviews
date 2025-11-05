@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from .models import *
 from userprofile.models import *
-
+from admin_dashboard.models import *
 
 # About Us Page
 def about_us(request):

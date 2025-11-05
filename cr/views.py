@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import *
 from userprofile.models import *
+from admin_dashboard.models import *
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.utils import timezone
