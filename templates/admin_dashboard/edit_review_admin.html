@@ -1,20 +1,95 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
+
+{% block content %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <link rel="stylesheet" href="{% static 'admin_dashboard/admin_dashboard.css' %}">
-</head>
-<body>
-    <div class="container" style="max-width: 800px; padding-top: 3rem;">
-        <!-- Back Button -->
-        <div style="margin-bottom: 2rem;">
-            <a href="{% url 'admin_dashboard' %}#reviews" class="btn btn-secondary">
-                ← Back to Dashboard
+<div class="container" style="padding-top: 3rem;">
+        
+    <!-- Sidebar -->
+    <aside class="sidebar1" id="sidebar1">
+        <div class="sidebar-header1">
+            <button class="toggle-btn1" id="toggleBtn1">☰</button>
+        </div>
+
+        <div class="admin-info1">
+            <div class="admin-avatar1">
+                {% if user.profile_picture %}
+                    <img src="#" alt="{{ user.name }}" />
+                {% else %}
+                    {{ user.first_name|first|upper }}
+                {% endif %}
+            </div>
+            <div class="admin-details1">
+                <h3>{{user.first_name}}</h3>
+                <p>{{user.email}}</p>
+            </div>
+        </div>
+
+        <!-- Replace the sidebar navigation section in add_university.html and add_department.html -->
+
+        <ul class="nav-menu1">
+            <li class="nav-item1">
+            <a href="{% url 'admin_dashboard' %}" class="nav-link1">
+            <span class="nav-icon1">📊</span>
+            <span>Dashboard</span>
             </a>
+            </li>
+            <li class="nav-item1">
+            <a href="{% url 'admin_dashboard' %}#crs" class="nav-link1">
+            <span class="nav-icon1">👥</span>
+            <span>All CRs</span>
+            </a>
+            </li>
+            <li class="nav-item1">
+            <a href="{% url 'admin_dashboard' %}#reviews" class="nav-link1">
+            <span class="nav-icon1">📝</span>
+            <span>Reviews</span>
+            </a>
+            </li>
+            <li class="nav-item1">
+            <a href="{% url 'admin_dashboard' %}#users" class="nav-link1">
+            <span class="nav-icon1">👤</span>
+            <span>Users</span>
+            </a>
+            </li>
+            <li class="nav-item1">
+            <a href="{% url 'admin_dashboard' %}#universities" class="nav-link1{% if 'university' in request.path %} active{% endif %}">
+            <span class="nav-icon1">🏛️</span>
+            <span>Universities</span>
+            </a>
+            </li>
+            <li class="nav-item1">
+            <a href="{% url 'admin_dashboard' %}#departments" class="nav-link1{% if 'department' in request.path %} active{% endif %}">
+            <span class="nav-icon1">📚</span>
+            <span>Departments</span>
+            </a>
+            </li>
+            <li class="nav-item1">
+            <a href="{% url 'admin_dashboard' %}#settings" class="nav-link1">
+            <span class="nav-icon1">⚙️</span>
+            <span>Settings</span>
+            </a>
+            </li>
+            <li class="nav-item1">
+                <a href="/logout/" class="nav-link1" id="logoutBtn1">
+                    <span class="nav-icon1">🚪</span>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+
+    <main class="main-content1" id="mainContent1">
+        
+        <div class="top-bar1">
+            <!-- Back Button -->
+       
+                <a href="{% url 'admin_dashboard' %}#reviews" class="btn btn-secondary">
+                    ← Back to Dashboard
+                </a>
+       
+
         </div>
 
         <!-- Edit Form Card -->
@@ -102,7 +177,11 @@
                 </div>
             </form>
         </div>
-    </div>
+
+            
+    </main>
+    
+</div>
 
     <script>
         function setEditRating(value) {
@@ -138,5 +217,4 @@
         });
     </script>
     <script src="{% static 'script.js' %}"></script>
-</body>
-</html>
+{% endblock content %}
