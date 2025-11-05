@@ -49,7 +49,7 @@
                     <tr>
                         <th>User</th>
                         <th>Email</th>
-                        <th>University</th>
+                        {% comment %} <th>University</th> {% endcomment %}
                         {% comment %} <th>Department</th> {% endcomment %}
                         {% comment %} <th>Student ID</th> {% endcomment %}
                         <th>Status</th>
@@ -79,8 +79,8 @@
                                 </div>
                             </div>
                         </td>
-                        <td>{{ user.email }}</td>
-                        <td>{{ user.university.title|default:"Not specified" }}</td>
+                        <td><span>{{ user.email }}</span></td>
+                        {% comment %} <td>{{ user.university.title|default:"Not specified" }}</td> {% endcomment %}
                         {% comment %} <td>{{ user.department.title|default:"Not specified" }}</td> {% endcomment %}
                         {% comment %} <td>{{ user.student_id|default:"N/A" }}</td> {% endcomment %}
                         <td>
