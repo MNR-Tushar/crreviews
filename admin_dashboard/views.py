@@ -225,7 +225,7 @@ def edit_department(request, slug):
     
     context = {
         'form': form,
-        'title': f'Edit Department: {department.title}',
+        'title': department.title,
         'submit_text': 'Update Department',
         'department': department
     }

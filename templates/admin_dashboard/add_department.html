@@ -136,62 +136,64 @@
                 </div>
             </div>
 
-            <ul class="nav-menu1">
-                <li class="nav-item1">
-                    <a href="{% url 'admin_dashboard' %}" class="nav-link1">
-                        <span class="nav-icon1">📊</span>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li class="nav-item1">
-                    <a href="{% url 'admin_dashboard' %}#crs" class="nav-link1">
-                        <span class="nav-icon1">👥</span>
-                        <span>All CRs</span>
-                    </a>
-                </li>
-                <li class="nav-item1">
-                    <a href="{% url 'admin_dashboard' %}#reviews" class="nav-link1">
-                        <span class="nav-icon1">📝</span>
-                        <span>Reviews</span>
-                    </a>
-                </li>
-                <li class="nav-item1">
-                    <a href="{% url 'admin_dashboard' %}#users" class="nav-link1">
-                        <span class="nav-icon1">👤</span>
-                        <span>Users</span>
-                    </a>
-                </li>
-                <li class="nav-item1">
-                    <a href="{% url 'admin_dashboard' %}#universities" class="nav-link1">
-                        <span class="nav-icon1">🏛️</span>
-                        <span>Universities</span>
-                    </a>
-                </li>
-                <li class="nav-item1">
-                    <a href="{% url 'admin_dashboard' %}#departments" class="nav-link1 active">
-                        <span class="nav-icon1">📚</span>
-                        <span>Departments</span>
-                    </a>
-                </li>
-                <li class="nav-item1">
-                    <a href="{% url 'admin_dashboard' %}#settings" class="nav-link1">
-                        <span class="nav-icon1">⚙️</span>
-                        <span>Settings</span>
-                    </a>
-                </li>
-                <li class="nav-item1">
-                    <a href="/logout/" class="nav-link1" id="logoutBtn1">
-                        <span class="nav-icon1">🚪</span>
-                        <span>Logout</span>
-                    </a>
-                </li>
-            </ul>
+           <!-- Replace the sidebar navigation section in add_university.html and add_department.html -->
+
+<ul class="nav-menu1">
+    <li class="nav-item1">
+        <a href="{% url 'admin_dashboard' %}" class="nav-link1">
+            <span class="nav-icon1">📊</span>
+            <span>Dashboard</span>
+        </a>
+    </li>
+    <li class="nav-item1">
+        <a href="{% url 'admin_dashboard' %}#crs" class="nav-link1">
+            <span class="nav-icon1">👥</span>
+            <span>All CRs</span>
+        </a>
+    </li>
+    <li class="nav-item1">
+        <a href="{% url 'admin_dashboard' %}#reviews" class="nav-link1">
+            <span class="nav-icon1">📝</span>
+            <span>Reviews</span>
+        </a>
+    </li>
+    <li class="nav-item1">
+        <a href="{% url 'admin_dashboard' %}#users" class="nav-link1">
+            <span class="nav-icon1">👤</span>
+            <span>Users</span>
+        </a>
+    </li>
+    <li class="nav-item1">
+        <a href="{% url 'admin_dashboard' %}#universities" class="nav-link1{% if 'university' in request.path %} active{% endif %}">
+            <span class="nav-icon1">🏛️</span>
+            <span>Universities</span>
+        </a>
+    </li>
+    <li class="nav-item1">
+        <a href="{% url 'admin_dashboard' %}#departments" class="nav-link1{% if 'department' in request.path %} active{% endif %}">
+            <span class="nav-icon1">📚</span>
+            <span>Departments</span>
+        </a>
+    </li>
+    <li class="nav-item1">
+        <a href="{% url 'admin_dashboard' %}#settings" class="nav-link1">
+            <span class="nav-icon1">⚙️</span>
+            <span>Settings</span>
+        </a>
+    </li>
+    <li class="nav-item1">
+        <a href="/logout/" class="nav-link1" id="logoutBtn1">
+            <span class="nav-icon1">🚪</span>
+            <span>Logout</span>
+        </a>
+    </li>
+</ul>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content1" id="mainContent1">
             <div class="top-bar1">
-                <h1 class="page-title1" id="pageTitle1">📚 Edit Department </h1>
+                <h1 class="page-title1" id="pageTitle1">📚 {{title}} </h1>
                 <a href="{% url 'admin_dashboard' %}#departments" class="btn1 btn-primary1" style="text-decoration:None; ">
                     <span> Back to Departments </span>
                 </a>
@@ -242,4 +244,37 @@
 
     <script src="{% static 'admin_dashboard/admin_dashboard.js' %}"></script>
     <script src="{% static 'script.js' %}"></script>
+
+     <script>
+    // Navigation handler for edit/add pages
+    document.addEventListener('DOMContentLoaded', function() {
+        const navLinks = document.querySelectorAll('.nav-link1');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                
+                // If it's a fragment link (contains #), navigate to dashboard with fragment
+                if (href && href.includes('#')) {
+                    e.preventDefault();
+                    localStorage.removeItem('scrollPos');
+                    window.location.href = href;
+                }
+            });
+        });
+        
+        // Toggle sidebar
+        const toggleBtn = document.getElementById('toggleBtn1');
+        const sidebar = document.getElementById('sidebar1');
+        const mainContent = document.getElementById('mainContent1');
+        
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                if (sidebar) sidebar.classList.toggle('collapsed');
+                if (mainContent) mainContent.classList.toggle('expanded');
+            });
+        }
+    });
+    </script>
+
 {% endblock content %}
