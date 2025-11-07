@@ -17,8 +17,7 @@
                         <img src="#" alt="{{ user.name }}" />
                     {% else %}
                         {{ user.first_name|first|upper }}
-                    {% endif %}
-                </div>
+                    {% endif %}                </div>
                 <div class="admin-details1">
                     <h3>{{user.first_name}}</h3>
                     <p>{{user.email}}</p>
@@ -35,7 +34,7 @@
                 </a>
                 </li>
                 <li class="nav-item1">
-                <a href="{% url 'admin_dashboard' %}#crs" class="nav-link1">
+                <a href="{% url 'admin_dashboard' %}#crs" class="nav-link1{% if 'cr' in request.path %} active{% endif %}">
                 <span class="nav-icon1">👥</span>
                 <span>All CRs</span>
                 </a>
