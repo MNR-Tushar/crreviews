@@ -9,7 +9,7 @@ const topActionBtn = document.getElementById('topActionBtn1');
 const logoutBtn = document.getElementById('logoutBtn1');
 
 // Current active page tracking
-let currentActivePage = 'dashboard1';
+let currentActivePage = 'null';
 
 // Page Configuration
 const pageConfigs = {
@@ -449,16 +449,24 @@ function animateCounters() {
 
 // Page Load Handler
 window.addEventListener('load', () => {
-    handleUrlFragment();
+    
+    if (window.location.hash) {
+        handleUrlFragment();
+    } else {
+        const defaultLink = document.querySelector('[data-page="dashboard1"]');
+        if (defaultLink) defaultLink.classList.add('active');
+        const defaultPage = document.getElementById('dashboard1-page');
+        if (defaultPage) defaultPage.classList.add('active');
+        currentActivePage = 'dashboard1';
+    }
     
     setTimeout(() => {
         animateCounters();
-        if (!window.location.hash) {
-            initializePaginationForPage('dashboard1');
-        }
+        initializePaginationForPage(currentActivePage || 'dashboard1');
         attachActionButtonHandlers();
     }, 500);
 });
+window.addEventListener('hashchange', handleUrlFragment);
 
 // Mobile Menu
 if (window.innerWidth <= 1024) {
