@@ -38,6 +38,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap:15px;
 }
 
 .logo1 {
@@ -74,10 +75,6 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding: 1.5rem 2rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 15px;
-    margin: 0 1rem 2rem 1rem;
 }
 
 .admin-avatar1 {

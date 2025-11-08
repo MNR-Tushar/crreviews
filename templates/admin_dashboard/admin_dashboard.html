@@ -9,26 +9,12 @@
         <!-- Sidebar -->
         <aside class="sidebar1" id="sidebar1">
             <div class="sidebar-header1">
-                {% comment %} <a href="#" class="logo1">
-                    <span>🎓</span>
-                    <span class="logo-text1">CR Reviews</span>
-                </a> {% endcomment %}
+               
                 <button class="toggle-btn1" id="toggleBtn1">☰</button>
+                     <img src="{% static 'logo.svg' %}" alt="CR Reviews" style="height:55px !important; width:auto !important; margin-right:10px;">
             </div>
 
-            <div class="admin-info1">
-                <div class="admin-avatar1">
-                    {% if user.profile_picture %}
-                        <img src="#" alt="{{ user.name }}" />
-                    {% else %}
-                        {{ user.first_name|first|upper }}
-                    {% endif %}
-                </div>
-                <div class="admin-details1">
-                    <h3>{{user.first_name}}</h3>
-                    <p>{{user.email}}</p>
-                </div>
-            </div>
+           
 
             <ul class="nav-menu1">
                 <li class="nav-item1">
@@ -86,10 +72,20 @@
         <main class="main-content1" id="mainContent1">
             <div class="top-bar1">
                 <h1 class="page-title1" id="pageTitle1">📊 Admin Dashboard</h1>
-                {% comment %} <button class="btn1 btn-primary1" id="topActionBtn1">
-                    <span>➕</span>
-                    <span>Add New CR</span>
-                </button> {% endcomment %}
+                <div class="admin-info1" >
+                 <div class="admin-avatar1">
+                    {% if user.profile_picture %}
+                        <img src="#" alt="{{ user.name }}" />
+                    {% else %}
+                        {{ user.first_name|first|upper }}
+                    {% endif %}
+                </div>
+                <div class="admin-details1">
+                    <h3>{{user.first_name}}</h3>
+                    <p>{{user.email}}</p>
+                </div>
+            </div>
+           
             </div>
 
             <!-- Dashboard Page -->
