@@ -6,7 +6,10 @@
 <link rel="stylesheet" href="{% static 'admin_dashboard/admin_dashboard.css' %}">
 
 <div class="dashboard-container1">
-    <main class="main-content1" style="margin-left: 0; width: 100%;">
+    <!-- Sidebar -->
+    {% include 'admin_dashboard/sidebar.html' %}
+    
+    <main class="main-content1">
         <div class="top-bar1">
             <h1 class="page-title1">✏️ Edit Developer Profile</h1>
             <button class="btn1 btn-primary1" onclick="window.location.href='{% url 'admin_dashboard' %}'">
