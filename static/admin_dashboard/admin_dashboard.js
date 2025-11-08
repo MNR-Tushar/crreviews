@@ -17,11 +17,13 @@ const pageConfigs = {
         title: '📊 Admin Dashboard',
         button: '<span>➕</span><span>Add New CR</span>',
         action: '/admin/cr/add/'
+   
     },
     'all-crs1': {
         title: '👥 All CRs Management',
         button: '<span>➕</span><span>Add New CR</span>',
         action: '/admin_dashboard/cr/add/'
+
     },
     'reviews1': {
         title: '📝 Reviews Management',
@@ -447,17 +449,80 @@ function animateCounters() {
     });
 }
 
+// Detect current page from URL path
+function detectCurrentPageFromPath() {
+    const path = window.location.pathname;
+    
+    // Check if we're in an edit/view/add page
+    if (path.includes('/admin_dashboard/university/') || path.includes('/admin/university/')) {
+        return 'universities1';
+    } else if (path.includes('/admin_dashboard/department/') || path.includes('/admin/department/')) {
+        return 'departments1';
+    } else if (path.includes('/admin_dashboard/cr/') || path.includes('/admin/cr/')) {
+        return 'all-crs1';
+    } else if (path.includes('/admin_dashboard/review/') || path.includes('/admin/review/')) {
+        return 'reviews1';
+    } else if (path.includes('/admin_dashboard/user/') || path.includes('/admin/user/')) {
+        return 'users1';
+    }
+    
+    return null;
+}
+
+// Set active nav based on current page
+function setActiveNavigation(pageName, showPageContent = true) {
+    if (!pageName) return;
+    
+    // Remove all active classes
+    navLinks.forEach(l => l.classList.remove('active'));
+    
+    // Set the correct nav link as active
+    const targetNavLink = document.querySelector(`[data-page="${pageName}"]`);
+    if (targetNavLink) {
+        targetNavLink.classList.add('active');
+    }
+    
+    // Only show page content if on main dashboard page
+    if (showPageContent) {
+        pageContents.forEach(page => page.classList.remove('active'));
+        
+        const targetPage = document.getElementById(pageName + '-page');
+        if (targetPage) {
+            targetPage.classList.add('active');
+            currentActivePage = pageName;
+            
+            // Update page title and button
+            const config = pageConfigs[pageName];
+            if (config) {
+                if (pageTitle) pageTitle.textContent = config.title;
+                if (topActionBtn) {
+                    topActionBtn.innerHTML = config.button;
+                    topActionBtn.style.display = config.button ? 'inline-flex' : 'none';
+                    topActionBtn.setAttribute('data-action', config.action || '');
+                }
+            }
+        }
+    } else {
+        // Just track the current active page
+        currentActivePage = pageName;
+    }
+}
+
 // Page Load Handler
 window.addEventListener('load', () => {
     
-    if (window.location.hash) {
+    // First check if we're on a specific page (edit/view/add)
+    const detectedPage = detectCurrentPageFromPath();
+    
+    if (detectedPage) {
+        // We're on an edit/view/add page, only set nav active (don't show page content)
+        setActiveNavigation(detectedPage, false);
+    } else if (window.location.hash) {
+        // If there's a hash, handle it (show page content)
         handleUrlFragment();
     } else {
-        const defaultLink = document.querySelector('[data-page="dashboard1"]');
-        if (defaultLink) defaultLink.classList.add('active');
-        const defaultPage = document.getElementById('dashboard1-page');
-        if (defaultPage) defaultPage.classList.add('active');
-        currentActivePage = 'dashboard1';
+        // Only set dashboard as active if we're on the main dashboard page (show page content)
+        setActiveNavigation('dashboard1', true);
     }
     
     setTimeout(() => {
@@ -517,5 +582,3 @@ chartStyle.textContent = `
     }
 `;
 document.head.appendChild(chartStyle);
-
-

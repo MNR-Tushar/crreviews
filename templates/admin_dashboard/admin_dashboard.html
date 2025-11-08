@@ -13,19 +13,24 @@
         <main class="main-content1" id="mainContent1">
             <div class="top-bar1">
                 <h1 class="page-title1" id="pageTitle1">📊 Admin Dashboard</h1>
+                <button class="btn1 btn-primary1" id="topActionBtn1" style="display: none;">
+                <span>➕</span><span>Add New</span>
+                </button>
+                {% if 'dashboard1' in request.path %}
                 <div class="admin-info1" >
-                 <div class="user-avatar-large">
-                    {% if user.profile_picture %}
-                        <img src="{{ user.profile_picture.url }}" alt="{{ user.name }}" />
-                    {% else %}
-                    <span>{{ user.first_name|first|upper }}</span>
-                    {% endif %}
+                    <div class="user-avatar-large">
+                        {% if user.profile_picture %}
+                            <img src="{{ user.profile_picture.url }}" alt="{{ user.name }}" />
+                        {% else %}
+                        <span>{{ user.first_name|first|upper }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="admin-details1">
+                        <h3>{{user.first_name}}</h3>
+                        <p>{{user.role}}</p>
+                    </div>
                 </div>
-                <div class="admin-details1">
-                    <h3>{{user.first_name}}</h3>
-                    <p>{{user.email}}</p>
-                </div>
-            </div>
+                {% endif %}
            
             </div>
 
