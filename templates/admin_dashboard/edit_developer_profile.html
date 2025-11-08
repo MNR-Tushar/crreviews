@@ -1,0 +1,245 @@
+{% load static %}
+{% block title %}Edit Developer Profile{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'style.css' %}">
+<link rel="stylesheet" href="{% static 'admin_dashboard/admin_dashboard.css' %}">
+
+<div class="dashboard-container1">
+    <main class="main-content1" style="margin-left: 0; width: 100%;">
+        <div class="top-bar1">
+            <h1 class="page-title1">✏️ Edit Developer Profile</h1>
+            <button class="btn1 btn-primary1" onclick="window.location.href='{% url 'admin_dashboard' %}'">
+                <span>← Back to Dashboard</span>
+            </button>
+        </div>
+
+        <div class="dashboard-card1" style="max-width: 900px; margin: 2rem auto;">
+            <form method="POST" enctype="multipart/form-data" style="padding: 2rem;">
+                {% csrf_token %}
+
+                <div style="display: grid; gap: 2rem;">
+                    <!-- Current Profile Picture -->
+                    {% if developer.profile_picture %}
+                    <div style="text-align: center;">
+                        <label class="form-label1">Current Profile Picture</label>
+                        <div style="margin: 1rem auto; width: 120px; height: 120px; border-radius: 50%; overflow: hidden; 
+                                    border: 3px solid rgba(255,255,255,0.2);">
+                            <img src="{{ developer.profile_picture.url }}" alt="{{ developer.name }}" 
+                                 style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Profile Picture -->
+                    <div>
+                        <label class="form-label1">
+                            {% if developer.profile_picture %}Update Profile Picture{% else %}Add Profile Picture{% endif %}
+                        </label>
+                        <input type="file" name="profile_picture" accept="image/*" class="form-input1">
+                        <small style="color: rgba(255,255,255,0.6); display: block; margin-top: 0.5rem;">
+                            {% if developer.profile_picture %}
+                                Leave empty to keep current picture
+                            {% else %}
+                                Upload a profile picture (optional)
+                            {% endif %}
+                        </small>
+                    </div>
+
+                    <!-- Basic Information -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div>
+                            <label class="form-label1">Full Name *</label>
+                            <input type="text" name="name" required class="form-input1" 
+                                   value="{{ developer.name }}" placeholder="Enter full name">
+                        </div>
+
+                        <div>
+                            <label class="form-label1">Designation</label>
+                            <input type="text" name="degisnation" class="form-input1" 
+                                   value="{{ developer.degisnation }}" placeholder="e.g., Full Stack Developer">
+                        </div>
+                    </div>
+
+                    <!-- About -->
+                    <div>
+                        <label class="form-label1">About</label>
+                        <textarea name="about" rows="4" class="form-input1" 
+                                  placeholder="Brief description about the developer" 
+                                  maxlength="1000">{{ developer.about }}</textarea>
+                        <small style="color: rgba(255,255,255,0.6); display: block; margin-top: 0.5rem;">
+                            Maximum 1000 characters
+                        </small>
+                    </div>
+
+                    <!-- Experience & Projects -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div>
+                            <label class="form-label1">Years of Experience</label>
+                            <input type="number" name="years_of_experience" min="0" class="form-input1" 
+                                   value="{{ developer.years_of_experience }}" placeholder="e.g., 5">
+                        </div>
+
+                        <div>
+                            <label class="form-label1">Projects Built</label>
+                            <input type="number" name="projects_built" min="0" class="form-input1" 
+                                   value="{{ developer.projects_built }}" placeholder="e.g., 50">
+                        </div>
+                    </div>
+
+                    <!-- Tech Stack -->
+                    <div>
+                        <label class="form-label1">Tech Stack</label>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; 
+                                    max-height: 300px; overflow-y: auto; padding: 1rem; 
+                                    background: rgba(255,255,255,0.05); border-radius: 8px;">
+                            {% for tech in tech_stacks %}
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; 
+                                          color: white; padding: 0.5rem; border-radius: 6px; 
+                                          transition: background 0.3s;">
+                                <input type="checkbox" name="tech_stack" value="{{ tech.id }}" 
+                                       {% if tech in developer.tack_stack.all %}checked{% endif %}
+                                       style="width: 18px; height: 18px; cursor: pointer;">
+                                <span>{{ tech.title }}</span>
+                            </label>
+                            {% empty %}
+                            <p style="color: rgba(255,255,255,0.6); grid-column: 1/-1;">
+                                No technologies available. Please add technologies first.
+                            </p>
+                            {% endfor %}
+                        </div>
+                        <small style="color: rgba(255,255,255,0.6); display: block; margin-top: 0.5rem;">
+                            Select all technologies the developer is proficient in
+                        </small>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div>
+                            <label class="form-label1">Location</label>
+                            <input type="text" name="location" class="form-input1" 
+                                   value="{{ developer.location }}" placeholder="e.g., Dhaka, Bangladesh">
+                        </div>
+
+                        <div>
+                            <label class="form-label1">Phone</label>
+                            <input type="tel" name="phone" class="form-input1" 
+                                   value="{{ developer.phone }}" placeholder="e.g., +880 1234567890" maxlength="30">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="form-label1">Email</label>
+                        <input type="email" name="email" class="form-input1" 
+                               value="{{ developer.email }}" placeholder="developer@example.com">
+                    </div>
+
+                    <!-- Social Media Links -->
+                    <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+                        <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.1rem;">
+                            🔗 Social Media Links
+                        </h3>
+
+                        <div style="display: grid; gap: 1.5rem;">
+                            <div>
+                                <label class="form-label1">GitHub URL</label>
+                                <input type="url" name="github_url" class="form-input1" 
+                                       value="{{ developer.github_url }}" placeholder="https://github.com/username">
+                            </div>
+
+                            <div>
+                                <label class="form-label1">LinkedIn URL</label>
+                                <input type="url" name="linkedin_url" class="form-input1" 
+                                       value="{{ developer.linkedin_url }}" placeholder="https://linkedin.com/in/username">
+                            </div>
+
+                            <div>
+                                <label class="form-label1">Facebook URL</label>
+                                <input type="url" name="facebook_url" class="form-input1" 
+                                       value="{{ developer.facebook_url }}" placeholder="https://facebook.com/username">
+                            </div>
+
+                            <div>
+                                <label class="form-label1">Twitter URL</label>
+                                <input type="url" name="twitter_url" class="form-input1" 
+                                       value="{{ developer.twitter_url }}" placeholder="https://twitter.com/username">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div style="display: flex; gap: 1rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                        <button type="submit" class="btn1 btn-primary1">
+                            <span>✓</span>
+                            <span>Update Developer Profile</span>
+                        </button>
+                        <button type="button" class="btn1" onclick="window.location.href='{% url 'view_developer_profile' developer.pk %}'"
+                                style="background: rgba(255,255,255,0.1);">
+                            <span>👁️</span>
+                            <span>View Profile</span>
+                        </button>
+                        <button type="button" class="btn1" onclick="window.location.href='{% url 'admin_dashboard' %}'"
+                                style="background: rgba(255,255,255,0.1);">
+                            <span>✗</span>
+                            <span>Cancel</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+{% if messages %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    {% for message in messages %}
+     showNotification("{{ message|escapejs }}", "{{ message.tags }}");
+    {% endfor %}
+    });
+</script>
+{% endif %}
+
+<script src="{% static 'script.js' %}"></script>
+
+<style>
+.form-label1 {
+    display: block;
+    color: rgba(255,255,255,0.8);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.form-input1 {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    color: white;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+}
+
+.form-input1:focus {
+    outline: none;
+    border-color: #4FACFE;
+    background: rgba(255,255,255,0.08);
+}
+
+.form-input1::placeholder {
+    color: rgba(255,255,255,0.4);
+}
+
+textarea.form-input1 {
+    resize: vertical;
+    min-height: 100px;
+}
+
+label:has(input[type="checkbox"]):hover {
+    background: rgba(255,255,255,0.05) !important;
+}
+</style>
+
+{% endblock content %}

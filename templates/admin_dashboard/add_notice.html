@@ -1,0 +1,193 @@
+{% load static %}
+{% block title %}Add Notice{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'style.css' %}">
+<link rel="stylesheet" href="{% static 'admin_dashboard/admin_dashboard.css' %}">
+
+<div class="dashboard-container1">
+    <main class="main-content1" style="margin-left: 0; width: 100%;">
+        <div class="top-bar1">
+            <h1 class="page-title1">📢 Add New Notice</h1>
+            <button class="btn1 btn-primary1" onclick="window.location.href='{% url 'admin_dashboard' %}'">
+                <span>← Back to Dashboard</span>
+            </button>
+        </div>
+
+        <div class="dashboard-card1" style="max-width: 800px; margin: 2rem auto;">
+            <div class="card-header1" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem; margin-bottom: 2rem;">
+                <h2 class="card-title1">Create New Notice</h2>
+                <p style="color: rgba(255,255,255,0.6); margin-top: 0.5rem; font-size: 0.9rem;">
+                    Create an important notice or announcement for all users
+                </p>
+            </div>
+
+            <form method="POST" style="padding: 0 2rem 2rem 2rem;">
+                {% csrf_token %}
+
+                <div style="display: grid; gap: 2rem;">
+                    <!-- Title -->
+                    <div>
+                        <label class="form-label1">Notice Title *</label>
+                        <input type="text" name="title" required class="form-input1" 
+                               placeholder="Enter a clear, descriptive title" 
+                               maxlength="200" autofocus>
+                        <small style="color: rgba(255,255,255,0.6); display: block; margin-top: 0.5rem;">
+                            Keep it concise and attention-grabbing (max 200 characters)
+                        </small>
+                    </div>
+
+                    <!-- Message -->
+                    <div>
+                        <label class="form-label1">Notice Message *</label>
+                        <textarea name="message" required rows="6" class="form-input1" 
+                                  placeholder="Enter the full notice message..."></textarea>
+                        <small style="color: rgba(255,255,255,0.6); display: block; margin-top: 0.5rem;">
+                            Provide detailed information about the notice
+                        </small>
+                    </div>
+
+                    <!-- Notice Type and Link -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div>
+                            <label class="form-label1">Notice Type *</label>
+                            <select name="notice_type" required class="form-input1" id="noticeType">
+                                <option value="info">ℹ️ Information</option>
+                                <option value="warning">⚠️ Warning</option>
+                                <option value="success">✓ Success</option>
+                                <option value="urgent">🚨 Urgent</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="form-label1">Optional Link</label>
+                            <input type="url" name="link" class="form-input1" 
+                                   placeholder="https://example.com">
+                            <small style="color: rgba(255,255,255,0.6); display: block; margin-top: 0.5rem;">
+                                Add a related link if needed
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <div>
+                        <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; 
+                                      padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px;
+                                      border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s;">
+                            <input type="checkbox" name="is_active" checked
+                                   style="width: 20px; height: 20px; cursor: pointer;">
+                            <div>
+                                <span style="color: white; font-weight: 600; display: block;">Active Notice</span>
+                                <small style="color: rgba(255,255,255,0.6);">
+                                    When checked, this notice will be visible to all users
+                                </small>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Preview Section -->
+                    <div style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 8px; 
+                                border: 1px solid rgba(255,255,255,0.1);">
+                        <h4 style="color: rgba(255,255,255,0.8); margin-bottom: 1rem; font-size: 0.95rem;">
+                            📋 Notice Type Examples:
+                        </h4>
+                        <div style="display: grid; gap: 0.75rem;">
+                            <div style="padding: 0.75rem; background: rgba(79, 172, 254, 0.15); border-radius: 6px; 
+                                        border-left: 3px solid #4FACFE;">
+                                <strong style="color: #4FACFE;">ℹ️ Information:</strong>
+                                <span style="color: rgba(255,255,255,0.8);"> General announcements and updates</span>
+                            </div>
+                            <div style="padding: 0.75rem; background: rgba(255, 193, 7, 0.15); border-radius: 6px; 
+                                        border-left: 3px solid #FFC107;">
+                                <strong style="color: #FFC107;">⚠️ Warning:</strong>
+                                <span style="color: rgba(255,255,255,0.8);"> Important cautionary messages</span>
+                            </div>
+                            <div style="padding: 0.75rem; background: rgba(76, 175, 80, 0.15); border-radius: 6px; 
+                                        border-left: 3px solid #4CAF50;">
+                                <strong style="color: #4CAF50;">✓ Success:</strong>
+                                <span style="color: rgba(255,255,255,0.8);"> Positive updates and achievements</span>
+                            </div>
+                            <div style="padding: 0.75rem; background: rgba(244, 67, 54, 0.15); border-radius: 6px; 
+                                        border-left: 3px solid #F44336;">
+                                <strong style="color: #F44336;">🚨 Urgent:</strong>
+                                <span style="color: rgba(255,255,255,0.8);"> Critical and time-sensitive alerts</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div style="display: flex; gap: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                        <button type="submit" class="btn1 btn-primary1">
+                            <span>✓</span>
+                            <span>Create Notice</span>
+                        </button>
+                        <button type="button" class="btn1" onclick="window.location.href='{% url 'admin_dashboard' %}'"
+                                style="background: rgba(255,255,255,0.1);">
+                            <span>✗</span>
+                            <span>Cancel</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+{% if messages %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    {% for message in messages %}
+     showNotification("{{ message|escapejs }}", "{{ message.tags }}");
+    {% endfor %}
+    });
+</script>
+{% endif %}
+
+<script src="{% static 'script.js' %}"></script>
+
+<style>
+.form-label1 {
+    display: block;
+    color: rgba(255,255,255,0.8);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.form-input1 {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    color: white;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+}
+
+.form-input1:focus {
+    outline: none;
+    border-color: #4FACFE;
+    background: rgba(255,255,255,0.08);
+}
+
+.form-input1::placeholder {
+    color: rgba(255,255,255,0.4);
+}
+
+textarea.form-input1 {
+    resize: vertical;
+    min-height: 120px;
+}
+
+select.form-input1 {
+    cursor: pointer;
+}
+
+label:has(input[type="checkbox"]):hover {
+    background: rgba(255,255,255,0.08) !important;
+    border-color: rgba(255,255,255,0.2) !important;
+}
+</style>
+
+{% endblock content %}

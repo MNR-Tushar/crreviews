@@ -1,0 +1,151 @@
+{% load static %}
+{% block title %}Edit Technology{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'style.css' %}">
+<link rel="stylesheet" href="{% static 'admin_dashboard/admin_dashboard.css' %}">
+
+<div class="dashboard-container1">
+    <main class="main-content1" style="margin-left: 0; width: 100%;">
+        <div class="top-bar1">
+            <h1 class="page-title1">✏️ Edit Technology</h1>
+            <button class="btn1 btn-primary1" onclick="window.location.href='{% url 'admin_dashboard' %}'">
+                <span>← Back to Dashboard</span>
+            </button>
+        </div>
+
+        <div class="dashboard-card1" style="max-width: 600px; margin: 2rem auto;">
+            <div class="card-header1" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem; margin-bottom: 2rem;">
+                <h2 class="card-title1">Edit Technology: {{ tech.title }}</h2>
+                <p style="color: rgba(255,255,255,0.6); margin-top: 0.5rem; font-size: 0.9rem;">
+                    Update the technology name
+                </p>
+            </div>
+
+            <form method="POST" style="padding: 0 2rem 2rem 2rem;">
+                {% csrf_token %}
+
+                <div style="margin-bottom: 2rem;">
+                    <label class="form-label1">
+                        Technology Name *
+                    </label>
+                    <input type="text" name="title" required class="form-input1" 
+                           value="{{ tech.title }}"
+                           placeholder="e.g., Python, React, Django, PostgreSQL" 
+                           maxlength="100" autofocus>
+                    <small style="color: rgba(255,255,255,0.6); display: block; margin-top: 0.5rem;">
+                        Enter the name of the programming language, framework, tool, or technology
+                    </small>
+                </div>
+
+                <!-- Usage Information -->
+                <div style="background: rgba(79, 172, 254, 0.1); padding: 1.5rem; border-radius: 8px; 
+                            border-left: 3px solid #4FACFE; margin-bottom: 2rem;">
+                    <h4 style="color: #4FACFE; margin-bottom: 0.5rem; font-size: 0.95rem;">
+                        ℹ️ Important Information
+                    </h4>
+                    <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem; line-height: 1.5; margin: 0;">
+                        Changing this technology name will update it everywhere it's used, including all developer profiles 
+                        that currently have this technology selected.
+                    </p>
+                </div>
+
+                <!-- Developers Using This Tech -->
+                <div style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                    <h4 style="color: rgba(255,255,255,0.8); margin-bottom: 1rem; font-size: 0.95rem;">
+                        👥 Developers Using This Technology:
+                    </h4>
+                    {% if tech.developer_profiles.count > 0 %}
+                        <p style="color: white; font-size: 1.2rem; font-weight: 600;">
+                            {{ tech.developer_profiles.count }} Developer{{ tech.developer_profiles.count|pluralize }}
+                        </p>
+                        <div style="margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            {% for dev in tech.developer_profiles.all|slice:":10" %}
+                            <span style="padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.1); 
+                                         border-radius: 6px; color: rgba(255,255,255,0.8); font-size: 0.85rem;">
+                                {{ dev.name }}
+                            </span>
+                            {% endfor %}
+                            {% if tech.developer_profiles.count > 10 %}
+                            <span style="padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.05); 
+                                         border-radius: 6px; color: rgba(255,255,255,0.6); font-size: 0.85rem;">
+                                +{{ tech.developer_profiles.count|add:"-10" }} more
+                            </span>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">
+                            No developers are currently using this technology
+                        </p>
+                    {% endif %}
+                </div>
+
+                <!-- Submit Buttons -->
+                <div style="display: flex; gap: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <button type="submit" class="btn1 btn-primary1">
+                        <span>✓</span>
+                        <span>Update Technology</span>
+                    </button>
+                    <button type="button" class="btn1" onclick="window.location.href='{% url 'admin_dashboard' %}'"
+                            style="background: rgba(255,255,255,0.1);">
+                        <span>✗</span>
+                        <span>Cancel</span>
+                    </button>
+                    {% if tech.developer_profiles.count == 0 %}
+                    <button type="button" class="btn1" 
+                            onclick="if(confirm('Are you sure you want to delete this technology?')) window.location.href='{% url 'delete_tech_stack' tech.pk %}'"
+                            style="background: linear-gradient(135deg, #FF6B6B, #FF4757); margin-left: auto;">
+                        <span>🗑️</span>
+                        <span>Delete</span>
+                    </button>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+{% if messages %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    {% for message in messages %}
+     showNotification("{{ message|escapejs }}", "{{ message.tags }}");
+    {% endfor %}
+    });
+</script>
+{% endif %}
+
+<script src="{% static 'script.js' %}"></script>
+
+<style>
+.form-label1 {
+    display: block;
+    color: rgba(255,255,255,0.8);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.form-input1 {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    color: white;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+}
+
+.form-input1:focus {
+    outline: none;
+    border-color: #4FACFE;
+    background: rgba(255,255,255,0.08);
+}
+
+.form-input1::placeholder {
+    color: rgba(255,255,255,0.4);
+}
+</style>
+
+{% endblock content %}
