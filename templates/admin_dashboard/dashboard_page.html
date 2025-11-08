@@ -134,7 +134,7 @@
             <thead>
                 <tr>
                     <th>Title</th>
-                    <th>Notices</th>
+                    <th>Message</th>
                     <th>Type</th>
                     <th>Status</th>
                     <th>Created</th>
@@ -160,8 +160,9 @@
                     </td>
                     <td>{{ notice.created_at|date:"M d, Y" }}</td>
                     <td>
-                        <button class="action-btn1 view" onclick="window.location.href='{% url 'toggle_notice' notice.pk %}'">Toggle</button>
+                        <button class="action-btn1 view" onclick="window.location.href='{% url 'view_notice' notice.pk %}'">View</button>
                         <button class="action-btn1 edit" onclick="window.location.href='{% url 'edit_notice' notice.pk %}'">Edit</button>
+                        <button class="action-btn1 view" onclick="window.location.href='{% url 'toggle_notice' notice.pk %}'">Toggle</button>
                         <button class="action-btn1 delete" onclick="if(confirm('Delete this notice?')) window.location.href='{% url 'delete_notice' notice.pk %}'">Delete</button>
                     </td>
                     
@@ -169,7 +170,7 @@
                
                 {% empty %}
                 <tr>
-                    <td colspan="5" style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.6);">
+                    <td colspan="6" style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.6);">
                         No notices yet. Create your first notice!
                     </td>
                 </tr>

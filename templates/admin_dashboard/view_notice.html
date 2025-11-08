@@ -1,0 +1,228 @@
+{% load static %}
+{% block title %}View Notice{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'style.css' %}">
+<link rel="stylesheet" href="{% static 'admin_dashboard/admin_dashboard.css' %}">
+
+<div class="class="container"">
+
+     <!-- Sidebar -->
+    <aside class="sidebar1" id="sidebar1">
+        <div class="sidebar-header1">
+            <button class="toggle-btn1" id="toggleBtn1">☰</button>
+        </div>
+
+        <div class="admin-info1">
+            <div class="admin-avatar1">
+                {% if user.profile_picture %}
+                    <img src="#" alt="{{ user.name }}" />
+                {% else %}
+                    {{ user.first_name|first|upper }}
+                {% endif %}
+            </div>
+            <div class="admin-details1">
+                <h3>{{user.first_name}}</h3>
+                <p>{{user.email}}</p>
+            </div>
+        </div>
+
+        <!-- Replace the sidebar navigation section in add_university.html and add_department.html -->
+
+        <ul class="nav-menu1">
+            <li class="nav-item1">
+            <a href="{% url 'admin_dashboard' %}" class="nav-link1">
+            <span class="nav-icon1">📊</span>
+            <span>Dashboard</span>
+            </a>
+            </li>
+            <li class="nav-item1">
+            <a href="{% url 'admin_dashboard' %}#crs" class="nav-link1">
+            <span class="nav-icon1">👥</span>
+            <span>All CRs</span>
+            </a>
+            </li>
+            <li class="nav-item1">
+            <a href="{% url 'admin_dashboard' %}#reviews" class="nav-link1">
+            <span class="nav-icon1">📝</span>
+            <span>Reviews</span>
+            </a>
+            </li>
+            <li class="nav-item1">
+            <a href="{% url 'admin_dashboard' %}#users" class="nav-link1{% if 'user' in request.path %} active{% endif %}">
+            <span class="nav-icon1">👤</span>
+            <span>Users</span>
+            </a>
+            </li>
+            <li class="nav-item1">
+            <a href="{% url 'admin_dashboard' %}#universities" class="nav-link1{% if 'university' in request.path %} active{% endif %}">
+            <span class="nav-icon1">🏛️</span>
+            <span>Universities</span>
+            </a>
+            </li>
+            <li class="nav-item1">
+            <a href="{% url 'admin_dashboard' %}#departments" class="nav-link1{% if 'department' in request.path %} active{% endif %}">
+            <span class="nav-icon1">📚</span>
+            <span>Departments</span>
+            </a>
+            </li>
+            <li class="nav-item1">
+            <a href="{% url 'admin_dashboard' %}#settings" class="nav-link1">
+            <span class="nav-icon1">⚙️</span>
+            <span>Settings</span>
+            </a>
+            </li>
+            <li class="nav-item1">
+                <a href="/logout/" class="nav-link1" id="logoutBtn1">
+                    <span class="nav-icon1">🚪</span>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="main-content1">
+        <div class="top-bar1">
+            <h1 class="page-title1">📢 View Notice</h1>
+            <button class="btn1 btn-primary1" onclick="window.location.href='{% url 'admin_dashboard' %}'">
+                <span>← Back to Dashboard</span>
+            </button>
+        </div>
+
+        <div class="dashboard-card1" style="max-width: 900px; margin: 2rem auto;">
+            <div class="card-header1" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem; margin-bottom: 2rem;">
+                <h2 class="card-title1">{{ notice.title }}</h2>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    {% if notice.is_active %}
+                        <span class="badge1 approved">Active</span>
+                    {% else %}
+                        <span class="badge1 rejected">Inactive</span>
+                    {% endif %}
+                    <span class="badge1 {% if notice.notice_type == 'urgent' %}rejected{% elif notice.notice_type == 'success' %}approved{% else %}pending{% endif %}">
+                        {{ notice.get_notice_type_display }}
+                    </span>
+                </div>
+            </div>
+
+            <div style="padding: 0 1rem;">
+                <!-- Notice Details -->
+                <div style="margin-bottom: 2rem;">
+                    <div style="display: grid; grid-template-columns: 150px 1fr; gap: 1.5rem; margin-bottom: 1rem;">
+                        <div>
+                            <label style="color: rgba(255,255,255,0.6); font-size: 0.9rem; display: block; margin-bottom: 0.5rem;">
+                                Title:
+                            </label>
+                            <p style="color: white; font-size: 1.1rem; font-weight: 600; margin: 0;">
+                                {{ notice.title }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 150px 1fr; gap: 1.5rem; margin-bottom: 1rem;">
+                        <div>
+                            <label style="color: rgba(255,255,255,0.6); font-size: 0.9rem; display: block; margin-bottom: 0.5rem;">
+                                Message:
+                            </label>
+                        </div>
+                        <div>
+                            <p style="color: white; line-height: 1.6; margin: 0; white-space: pre-wrap;">
+                                {{ notice.message }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 150px 1fr; gap: 1.5rem; margin-bottom: 1rem;">
+                        <div>
+                            <label style="color: rgba(255,255,255,0.6); font-size: 0.9rem; display: block; margin-bottom: 0.5rem;">
+                                Type:
+                            </label>
+                            <p style="color: white; margin: 0;">
+                                {{ notice.get_notice_type_display }}
+                            </p>
+                        </div>
+                    </div>
+
+                    {% if notice.link %}
+                    <div style="display: grid; grid-template-columns: 150px 1fr; gap: 1.5rem; margin-bottom: 1rem;">
+                        <div>
+                            <label style="color: rgba(255,255,255,0.6); font-size: 0.9rem; display: block; margin-bottom: 0.5rem;">
+                                Link:
+                            </label>
+                        </div>
+                        <div>
+                            <a href="{{ notice.link }}" target="_blank" style="color: #4FACFE; text-decoration: none;">
+                                {{ notice.link }}
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div style="display: grid; grid-template-columns: 150px 1fr; gap: 1.5rem; margin-bottom: 1rem;">
+                        <div>
+                            <label style="color: rgba(255,255,255,0.6); font-size: 0.9rem; display: block; margin-bottom: 0.5rem;">
+                                Status:
+                            </label>
+                            <p style="color: white; margin: 0;">
+                                {% if notice.is_active %}
+                                    <span style="color: #4CAF50;">✓ Active</span>
+                                {% else %}
+                                    <span style="color: #FF6B6B;">✗ Inactive</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 150px 1fr; gap: 1.5rem; margin-bottom: 1rem;">
+                        <div>
+                            <label style="color: rgba(255,255,255,0.6); font-size: 0.9rem; display: block; margin-bottom: 0.5rem;">
+                                Created:
+                            </label>
+                            <p style="color: white; margin: 0;">
+                                {{ notice.created_at|date:"F d, Y" }} at {{ notice.created_at|time:"g:i A" }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 150px 1fr; gap: 1.5rem;">
+                        <div>
+                            <label style="color: rgba(255,255,255,0.6); font-size: 0.9rem; display: block; margin-bottom: 0.5rem;">
+                                Last Updated:
+                            </label>
+                            <p style="color: white; margin: 0;">
+                                {{ notice.updated_at|date:"F d, Y" }} at {{ notice.updated_at|time:"g:i A" }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display: flex; gap: 1rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <button class="btn1 btn-primary1" onclick="window.location.href='{% url 'edit_notice' notice.pk %}'">
+                        <span>✏️</span><span>Edit Notice</span>
+                    </button>
+                    <button class="btn1 btn-primary1" onclick="window.location.href='{% url 'toggle_notice' notice.pk %}'">
+                        <span>🔄</span>
+                        <span>{% if notice.is_active %}Deactivate{% else %}Activate{% endif %}</span>
+                    </button>
+                    <button class="btn1" style="background: linear-gradient(135deg, #FF6B6B, #FF4757); margin-left: auto;" 
+                            onclick="if(confirm('Are you sure you want to delete this notice?')) window.location.href='{% url 'delete_notice' notice.pk %}'">
+                        <span>🗑️</span><span>Delete Notice</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+{% if messages %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    {% for message in messages %}
+     showNotification("{{ message|escapejs }}", "{{ message.tags }}");
+    {% endfor %}
+    });
+</script>
+{% endif %}
+
+<script src="{% static 'script.js' %}"></script>
+{% endblock content %}

@@ -618,9 +618,17 @@ def admin_delete_user(request, slug):
     return HttpResponseRedirect(reverse('admin_dashboard') + '#users')
 
 
+@staff_member_required
+def view_notice(request, pk):
+    """View single notice details"""
+    notice = get_object_or_404(Notice, pk=pk)
+    
+    context = {
+        'notice': notice,
+        'title': f'View Notice: {notice.title}',
+    }
+    return render(request, 'admin_dashboard/view_notice.html', context)
 
-
-# Add after your existing views
 
 @staff_member_required
 def manage_notices(request):
@@ -670,7 +678,9 @@ def edit_notice(request, pk):
         messages.success(request, 'Notice updated successfully!')
         return redirect('admin_dashboard')
     
-    context = {'notice': notice}
+    context = {'notice': notice,
+               'title': f'Edit Notice: {notice.title}',
+               }
     return render(request, 'admin_dashboard/edit_notice.html', context)
 
 @staff_member_required
@@ -769,10 +779,13 @@ def add_developer_profile(request):
             developer.tack_stack.set(tech_stack_ids)
         
         messages.success(request, f'Developer profile for {name} created successfully!')
-        return HttpResponseRedirect(reverse('admin_dashboard') + '#developers')
+        return redirect('admin_dashboard')  # Fixed redirect
     
     tech_stacks = Teck_Stack.objects.all()
-    context = {'tech_stacks': tech_stacks}
+    context = {
+        'tech_stacks': tech_stacks,
+        'title': 'Add Developer Profile',
+    }
     return render(request, 'admin_dashboard/add_developer_profile.html', context)
 
 
@@ -804,12 +817,13 @@ def edit_developer_profile(request, pk):
         
         developer.save()
         messages.success(request, f'Developer profile for {developer.name} updated successfully!')
-        return HttpResponseRedirect(reverse('admin_dashboard') + '#developers')
+        return redirect('admin_dashboard')  # Fixed redirect
     
     tech_stacks = Teck_Stack.objects.all()
     context = {
         'developer': developer,
-        'tech_stacks': tech_stacks
+        'tech_stacks': tech_stacks,
+        'title': f'Edit Developer: {developer.name}',
     }
     return render(request, 'admin_dashboard/edit_developer_profile.html', context)
 
@@ -827,18 +841,22 @@ def delete_developer_profile(request, pk):
     name = developer.name
     developer.delete()
     messages.success(request, f'Developer profile for {name} deleted successfully!')
-    return HttpResponseRedirect(reverse('admin_dashboard') + '#developers')
+    return redirect('admin_dashboard') 
 
 
 # Tech Stack Management
+
 @staff_member_required
 def add_tech_stack(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         Teck_Stack.objects.create(title=title)
         messages.success(request, f'Technology "{title}" added successfully!')
-        return HttpResponseRedirect(reverse('admin_dashboard') + '#tech-stack')
+        return redirect('admin_dashboard')  # Fixed redirect
     
+    context = {
+        'title': 'Add Technology',
+    }
     return render(request, 'admin_dashboard/add_tech_stack.html')
 
 
@@ -850,10 +868,14 @@ def edit_tech_stack(request, pk):
         tech.title = request.POST.get('title')
         tech.save()
         messages.success(request, f'Technology updated to "{tech.title}"!')
-        return HttpResponseRedirect(reverse('admin_dashboard') + '#tech-stack')
+        return redirect('admin_dashboard')  # Fixed redirect
     
-    context = {'tech': tech}
+    context = {
+        'tech': tech,
+        'title': f'Edit Technology: {tech.title}',
+    }
     return render(request, 'admin_dashboard/edit_tech_stack.html', context)
+
 
 
 @staff_member_required
@@ -862,4 +884,4 @@ def delete_tech_stack(request, pk):
     title = tech.title
     tech.delete()
     messages.success(request, f'Technology "{title}" deleted successfully!')
-    return HttpResponseRedirect(reverse('admin_dashboard') + '#tech-stack')
+    return redirect('admin_dashboard') 

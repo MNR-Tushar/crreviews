@@ -32,6 +32,7 @@ urlpatterns = [
 
     # Notice URLs
     path('admin_dashboard/notice/add/', add_notice, name='add_notice'),
+    path('admin_dashboard/notice/view/<int:pk>/', view_notice, name='view_notice'),
     path('admin_dashboard/notice/edit/<int:pk>/', edit_notice, name='edit_notice'),
     path('admin_dashboard/notice/delete/<int:pk>/', delete_notice, name='delete_notice'),
     path('admin_dashboard/notice/toggle/<int:pk>/', toggle_notice, name='toggle_notice'),

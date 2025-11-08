@@ -1,0 +1,156 @@
+{% load static %}
+{% block title %}Add Technology{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'style.css' %}">
+<link rel="stylesheet" href="{% static 'admin_dashboard/admin_dashboard.css' %}">
+
+<div class="dashboard-container1">
+    <main class="main-content1" style="margin-left: 0; width: 100%;">
+        <div class="top-bar1">
+            <h1 class="page-title1">⚡ Add Technology</h1>
+            <button class="btn1 btn-primary1" onclick="window.location.href='{% url 'admin_dashboard' %}'">
+                <span>← Back to Dashboard</span>
+            </button>
+        </div>
+
+        <div class="dashboard-card1" style="max-width: 600px; margin: 2rem auto;">
+            <div class="card-header1" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem; margin-bottom: 2rem;">
+                <h2 class="card-title1">Add New Technology to Stack</h2>
+                <p style="color: rgba(255,255,255,0.6); margin-top: 0.5rem; font-size: 0.9rem;">
+                    Add a new technology that developers can select for their profiles
+                </p>
+            </div>
+
+            <form method="POST" style="padding: 0 2rem 2rem 2rem;">
+                {% csrf_token %}
+
+                <div style="margin-bottom: 2rem;">
+                    <label class="form-label1">
+                        Technology Name *
+                    </label>
+                    <input type="text" name="title" required class="form-input1" 
+                           placeholder="e.g., Python, React, Django, PostgreSQL" 
+                           maxlength="100" autofocus>
+                    <small style="color: rgba(255,255,255,0.6); display: block; margin-top: 0.5rem;">
+                        Enter the name of the programming language, framework, tool, or technology
+                    </small>
+                </div>
+
+                <!-- Common Technologies Examples -->
+                <div style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                    <h4 style="color: rgba(255,255,255,0.8); margin-bottom: 1rem; font-size: 0.95rem;">
+                        💡 Popular Technologies (Examples):
+                    </h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        <span class="tech-example">Python</span>
+                        <span class="tech-example">JavaScript</span>
+                        <span class="tech-example">React</span>
+                        <span class="tech-example">Django</span>
+                        <span class="tech-example">Node.js</span>
+                        <span class="tech-example">PostgreSQL</span>
+                        <span class="tech-example">MongoDB</span>
+                        <span class="tech-example">Docker</span>
+                        <span class="tech-example">AWS</span>
+                        <span class="tech-example">Git</span>
+                        <span class="tech-example">TypeScript</span>
+                        <span class="tech-example">Vue.js</span>
+                        <span class="tech-example">FastAPI</span>
+                        <span class="tech-example">Redis</span>
+                        <span class="tech-example">Kubernetes</span>
+                    </div>
+                </div>
+
+                <!-- Submit Buttons -->
+                <div style="display: flex; gap: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <button type="submit" class="btn1 btn-primary1">
+                        <span>✓</span>
+                        <span>Add Technology</span>
+                    </button>
+                    <button type="button" class="btn1" onclick="window.location.href='{% url 'admin_dashboard' %}'"
+                            style="background: rgba(255,255,255,0.1);">
+                        <span>✗</span>
+                        <span>Cancel</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+{% if messages %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    {% for message in messages %}
+     showNotification("{{ message|escapejs }}", "{{ message.tags }}");
+    {% endfor %}
+    });
+</script>
+{% endif %}
+
+<script src="{% static 'script.js' %}"></script>
+
+<style>
+.form-label1 {
+    display: block;
+    color: rgba(255,255,255,0.8);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.form-input1 {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    color: white;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+}
+
+.form-input1:focus {
+    outline: none;
+    border-color: #4FACFE;
+    background: rgba(255,255,255,0.08);
+}
+
+.form-input1::placeholder {
+    color: rgba(255,255,255,0.4);
+}
+
+.tech-example {
+    padding: 0.4rem 0.8rem;
+    background: rgba(79, 172, 254, 0.15);
+    border: 1px solid rgba(79, 172, 254, 0.3);
+    border-radius: 6px;
+    color: #4FACFE;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.tech-example:hover {
+    background: rgba(79, 172, 254, 0.25);
+    border-color: rgba(79, 172, 254, 0.5);
+    transform: translateY(-2px);
+}
+</style>
+
+<script>
+// Allow clicking on example technologies to fill the input
+document.addEventListener('DOMContentLoaded', function() {
+    const examples = document.querySelectorAll('.tech-example');
+    const input = document.querySelector('input[name="title"]');
+    
+    examples.forEach(example => {
+        example.addEventListener('click', function() {
+            input.value = this.textContent;
+            input.focus();
+        });
+    });
+});
+</script>
+
+{% endblock content %}
