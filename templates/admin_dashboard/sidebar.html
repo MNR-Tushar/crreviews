@@ -7,37 +7,37 @@
             </div>
             <ul class="nav-menu1">
                 <li class="nav-item1">
-                    <a class="nav-link1 active" data-page="dashboard1">
+                    <a  href="{% url 'admin_dashboard' %}#dashboard" class="nav-link1{% if 'dashboard1' in request.path %} active{% endif %}" data-page="dashboard1">
                         <span class="nav-icon1">📊</span>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-item1">
-                    <a class="nav-link1" data-page="all-crs1">
+                    <a href="{% url 'admin_dashboard' %}#crs" class="nav-link1{% if 'cr' in request.path %} active{% endif %}" data-page="all-crs1">
                         <span class="nav-icon1">👥</span>
                         <span>All CRs</span>
                     </a>
                 </li>
                 <li class="nav-item1">
-                    <a class="nav-link1" data-page="reviews1">
+                    <a href="{% url 'admin_dashboard' %}#reviews" class="nav-link1{% if 'review' in request.path %} active{% endif %}" data-page="reviews1">
                         <span class="nav-icon1">📝</span>
                         <span>Reviews</span>
                     </a>
                 </li>
                 <li class="nav-item1">
-                    <a class="nav-link1" data-page="users1">
+                    <a href="{% url 'admin_dashboard' %}#users" class="nav-link1{% if 'user' in request.path %} active{% endif %}" data-page="users1">
                         <span class="nav-icon1">👤</span>
                         <span>Users</span>
                     </a>
                 </li>
                 <li class="nav-item1">
-                    <a class="nav-link1" data-page="universities1">
+                    <a href="{% url 'admin_dashboard' %}#universities" class="nav-link1{% if 'university' in request.path %} active{% endif %}" data-page="universities1">
                         <span class="nav-icon1">🏛️</span>
                         <span>Universities</span>
                     </a>
                 </li>
                 <li class="nav-item1">
-                    <a class="nav-link1" data-page="departments1">
+                    <a href="{% url 'admin_dashboard' %}#departments" class="nav-link1{% if 'department' in request.path %} active{% endif %}" data-page="departments1">
                         <span class="nav-icon1">📚</span>
                         <span>Departments</span>
                     </a>
