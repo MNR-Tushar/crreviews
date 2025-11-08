@@ -815,6 +815,9 @@ def edit_developer_profile(request, pk):
         if tech_stack_ids:
             developer.tack_stack.set(tech_stack_ids)
         
+        developer.is_read = request.POST.get('is_active') == 'on'
+       
+        
         developer.save()
         messages.success(request, f'Developer profile for {developer.name} updated successfully!')
         return redirect('admin_dashboard')  # Fixed redirect
