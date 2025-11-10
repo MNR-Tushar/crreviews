@@ -52,7 +52,17 @@ const pageConfigs = {
     }
 };
 
-// Detect current page from URL path - IMPROVED VERSION
+// Save active page to localStorage
+function saveActivePage(pageName) {
+    localStorage.setItem('activeAdminPage', pageName);
+}
+
+// Get active page from localStorage
+function getActivePage() {
+    return localStorage.getItem('activeAdminPage') || 'dashboard1';
+}
+
+// Detect current page from URL path
 function detectCurrentPageFromPath() {
     const path = window.location.pathname;
     
@@ -68,23 +78,26 @@ function detectCurrentPageFromPath() {
     } else if (path.includes('/admin_dashboard/user/') || path.includes('/admin/user/')) {
         return 'users1';
     } else if (path.includes('/admin_dashboard/notice/')) {
-        return 'dashboard1'; // Notices are part of dashboard
-    } else if (path.includes('/admin_dashboard/message/')) {
-        return 'dashboard1'; // Messages are part of dashboard
-    } else if (path.includes('/admin_dashboard/developer/')) {
-        return 'dashboard1'; // Developer profiles are part of dashboard
-    } else if (path.includes('/admin_dashboard/tech-stack/')) {
-        return 'dashboard1'; // Tech stack is part of dashboard
-    } else if (path === '/admin_dashboard/' || path === '/admin_dashboard') {
         return 'dashboard1';
+    } else if (path.includes('/admin_dashboard/message/')) {
+        return 'dashboard1';
+    } else if (path.includes('/admin_dashboard/developer/')) {
+        return 'dashboard1';
+    } else if (path.includes('/admin_dashboard/tech-stack/')) {
+        return 'dashboard1';
+    } else if (path === '/admin_dashboard/' || path === '/admin_dashboard') {
+        return getActivePage(); // Get from localStorage when on main dashboard
     }
     
     return null;
 }
 
-// Set active nav based on current page - IMPROVED VERSION
+// Set active nav based on current page
 function setActiveNavigation(pageName, showPageContent = true) {
     if (!pageName) return;
+    
+    // Save to localStorage
+    saveActivePage(pageName);
     
     // Remove all active classes
     navLinks.forEach(l => l.classList.remove('active'));
@@ -141,6 +154,9 @@ navLinks.forEach(link => {
         const pageName = this.getAttribute('data-page');
         
         if (!pageName) return;
+        
+        // Save active page
+        saveActivePage(pageName);
         
         // Update current active page
         currentActivePage = pageName;
@@ -201,6 +217,9 @@ function handleUrlFragment() {
         const pageName = fragmentToPage[hash];
         
         if (pageName) {
+            // Save to localStorage
+            saveActivePage(pageName);
+            
             const targetNavLink = document.querySelector(`[data-page="${pageName}"]`);
             
             if (targetNavLink) {
@@ -235,20 +254,21 @@ function handleUrlFragment() {
     }
 }
 
-// Page Load Handler - IMPROVED VERSION
+// Page Load Handler
 window.addEventListener('load', () => {
     // First check if we're on a specific page (edit/view/add)
     const detectedPage = detectCurrentPageFromPath();
     
     if (detectedPage) {
-        // We're on an edit/view/add page or main dashboard
-        setActiveNavigation(detectedPage, detectedPage === 'dashboard1');
+        // We're on an edit/view/add page or returning to dashboard
+        setActiveNavigation(detectedPage, detectedPage === 'dashboard1' || window.location.pathname === '/admin_dashboard/' || window.location.pathname === '/admin_dashboard');
     } else if (window.location.hash) {
         // If there's a hash, handle it
         handleUrlFragment();
     } else {
-        // Default to dashboard
-        setActiveNavigation('dashboard1', true);
+        // Default to dashboard or last active page
+        const lastActivePage = getActivePage();
+        setActiveNavigation(lastActivePage, true);
     }
     
     setTimeout(() => {
@@ -384,6 +404,7 @@ if (logoutBtn) {
     logoutBtn.addEventListener('click', function(e) {
         e.preventDefault();
         if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('activeAdminPage'); // Clear saved page on logout
             window.location.href = '/logout/';
         }
     });
@@ -406,6 +427,13 @@ document.addEventListener('DOMContentLoaded', restoreScrollPosition);
 
 // Action Button Handlers
 function attachActionButtonHandlers() {
+    // Save current active page before navigation
+    document.querySelectorAll('.action-btn1.view, .action-btn1.edit, .action-btn1.delete').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            saveActivePage(currentActivePage);
+        });
+    });
+
     document.querySelectorAll('.action-btn1.view').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
@@ -488,6 +516,7 @@ if (topActionBtn) {
         
         if (action && action.startsWith('/')) {
             saveScrollPosition();
+            saveActivePage(currentActivePage);
             window.location.href = action;
         }
     });
