@@ -7,23 +7,24 @@ const pageContents = document.querySelectorAll('.page-content1');
 const pageTitle = document.getElementById('pageTitle1');
 const topActionBtn = document.getElementById('topActionBtn1');
 const logoutBtn = document.getElementById('logoutBtn1');
+const adminProfileInfo = document.getElementById('adminProfileInfo');
 
 // Current active page tracking
-let currentActivePage = 'null';
+let currentActivePage = 'dashboard1';
 
 // Page Configuration
 const pageConfigs = {
     'dashboard1': {
         title: '📊 Admin Dashboard',
-        button: '<span>➕</span><span>Add New CR</span>',
-        action: '/admin/cr/add/'
-   
+        button: '',
+        action: '',
+        showAdminInfo: true
     },
     'all-crs1': {
         title: '👥 All CRs Management',
         button: '<span>➕</span><span>Add New CR</span>',
-        action: '/admin_dashboard/cr/add/'
-
+        action: '/admin_dashboard/cr/add/',
+        showAdminInfo: false
     },
     'reviews1': {
         title: '📝 Reviews Management',
@@ -50,6 +51,80 @@ const pageConfigs = {
         button: ''
     }
 };
+
+// Detect current page from URL path - IMPROVED VERSION
+function detectCurrentPageFromPath() {
+    const path = window.location.pathname;
+    
+    // Check for specific patterns and return the correct page
+    if (path.includes('/admin_dashboard/university/') || path.includes('/admin/university/')) {
+        return 'universities1';
+    } else if (path.includes('/admin_dashboard/department/') || path.includes('/admin/department/')) {
+        return 'departments1';
+    } else if (path.includes('/admin_dashboard/cr/') || path.includes('/admin/cr/')) {
+        return 'all-crs1';
+    } else if (path.includes('/admin_dashboard/review/') || path.includes('/admin/review/')) {
+        return 'reviews1';
+    } else if (path.includes('/admin_dashboard/user/') || path.includes('/admin/user/')) {
+        return 'users1';
+    } else if (path.includes('/admin_dashboard/notice/')) {
+        return 'dashboard1'; // Notices are part of dashboard
+    } else if (path.includes('/admin_dashboard/message/')) {
+        return 'dashboard1'; // Messages are part of dashboard
+    } else if (path.includes('/admin_dashboard/developer/')) {
+        return 'dashboard1'; // Developer profiles are part of dashboard
+    } else if (path.includes('/admin_dashboard/tech-stack/')) {
+        return 'dashboard1'; // Tech stack is part of dashboard
+    } else if (path === '/admin_dashboard/' || path === '/admin_dashboard') {
+        return 'dashboard1';
+    }
+    
+    return null;
+}
+
+// Set active nav based on current page - IMPROVED VERSION
+function setActiveNavigation(pageName, showPageContent = true) {
+    if (!pageName) return;
+    
+    // Remove all active classes
+    navLinks.forEach(l => l.classList.remove('active'));
+    
+    // Set the correct nav link as active
+    const targetNavLink = document.querySelector(`[data-page="${pageName}"]`);
+    if (targetNavLink) {
+        targetNavLink.classList.add('active');
+    }
+    
+    // Update current active page tracker
+    currentActivePage = pageName;
+    
+    // Show/hide admin profile based on page
+    const adminProfileInfo = document.getElementById('adminProfileInfo');
+    if (adminProfileInfo) {
+        adminProfileInfo.style.display = (pageName === 'dashboard1' && showPageContent) ? 'flex' : 'none';
+    }
+    
+    // Only show page content if on main dashboard page
+    if (showPageContent) {
+        pageContents.forEach(page => page.classList.remove('active'));
+        
+        const targetPage = document.getElementById(pageName + '-page');
+        if (targetPage) {
+            targetPage.classList.add('active');
+            
+            // Update page title and button
+            const config = pageConfigs[pageName];
+            if (config) {
+                if (pageTitle) pageTitle.textContent = config.title;
+                if (topActionBtn) {
+                    topActionBtn.innerHTML = config.button;
+                    topActionBtn.style.display = config.button ? 'inline-flex' : 'none';
+                    topActionBtn.setAttribute('data-action', config.action || '');
+                }
+            }
+        }
+    }
+}
 
 // Toggle Sidebar
 if (toggleBtn) {
@@ -93,6 +168,12 @@ navLinks.forEach(link => {
                     topActionBtn.style.display = config.button ? 'inline-flex' : 'none';
                     topActionBtn.setAttribute('data-action', config.action || '');
                 }
+            }
+            
+            // Show/hide admin profile
+            const adminProfileInfo = document.getElementById('adminProfileInfo');
+            if (adminProfileInfo) {
+                adminProfileInfo.style.display = (pageName === 'dashboard1') ? 'flex' : 'none';
             }
             
             // Initialize pagination for this page
@@ -153,6 +234,31 @@ function handleUrlFragment() {
         history.replaceState(null, null, window.location.pathname);
     }
 }
+
+// Page Load Handler - IMPROVED VERSION
+window.addEventListener('load', () => {
+    // First check if we're on a specific page (edit/view/add)
+    const detectedPage = detectCurrentPageFromPath();
+    
+    if (detectedPage) {
+        // We're on an edit/view/add page or main dashboard
+        setActiveNavigation(detectedPage, detectedPage === 'dashboard1');
+    } else if (window.location.hash) {
+        // If there's a hash, handle it
+        handleUrlFragment();
+    } else {
+        // Default to dashboard
+        setActiveNavigation('dashboard1', true);
+    }
+    
+    setTimeout(() => {
+        animateCounters();
+        initializePaginationForPage(currentActivePage);
+        attachActionButtonHandlers();
+    }, 500);
+});
+
+window.addEventListener('hashchange', handleUrlFragment);
 
 // Dynamic Pagination Handler
 function initializePaginationForPage(pageName) {
@@ -448,90 +554,6 @@ function animateCounters() {
         }, stepTime);
     });
 }
-
-// Detect current page from URL path
-function detectCurrentPageFromPath() {
-    const path = window.location.pathname;
-    
-    // Check if we're in an edit/view/add page
-    if (path.includes('/admin_dashboard/university/') || path.includes('/admin/university/')) {
-        return 'universities1';
-    } else if (path.includes('/admin_dashboard/department/') || path.includes('/admin/department/')) {
-        return 'departments1';
-    } else if (path.includes('/admin_dashboard/cr/') || path.includes('/admin/cr/')) {
-        return 'all-crs1';
-    } else if (path.includes('/admin_dashboard/review/') || path.includes('/admin/review/')) {
-        return 'reviews1';
-    } else if (path.includes('/admin_dashboard/user/') || path.includes('/admin/user/')) {
-        return 'users1';
-    }
-    
-    return null;
-}
-
-// Set active nav based on current page
-function setActiveNavigation(pageName, showPageContent = true) {
-    if (!pageName) return;
-    
-    // Remove all active classes
-    navLinks.forEach(l => l.classList.remove('active'));
-    
-    // Set the correct nav link as active
-    const targetNavLink = document.querySelector(`[data-page="${pageName}"]`);
-    if (targetNavLink) {
-        targetNavLink.classList.add('active');
-    }
-    
-    // Only show page content if on main dashboard page
-    if (showPageContent) {
-        pageContents.forEach(page => page.classList.remove('active'));
-        
-        const targetPage = document.getElementById(pageName + '-page');
-        if (targetPage) {
-            targetPage.classList.add('active');
-            currentActivePage = pageName;
-            
-            // Update page title and button
-            const config = pageConfigs[pageName];
-            if (config) {
-                if (pageTitle) pageTitle.textContent = config.title;
-                if (topActionBtn) {
-                    topActionBtn.innerHTML = config.button;
-                    topActionBtn.style.display = config.button ? 'inline-flex' : 'none';
-                    topActionBtn.setAttribute('data-action', config.action || '');
-                }
-            }
-        }
-    } else {
-        // Just track the current active page
-        currentActivePage = pageName;
-    }
-}
-
-// Page Load Handler
-window.addEventListener('load', () => {
-    
-    // First check if we're on a specific page (edit/view/add)
-    const detectedPage = detectCurrentPageFromPath();
-    
-    if (detectedPage) {
-        // We're on an edit/view/add page, only set nav active (don't show page content)
-        setActiveNavigation(detectedPage, false);
-    } else if (window.location.hash) {
-        // If there's a hash, handle it (show page content)
-        handleUrlFragment();
-    } else {
-        // Only set dashboard as active if we're on the main dashboard page (show page content)
-        setActiveNavigation('dashboard1', true);
-    }
-    
-    setTimeout(() => {
-        animateCounters();
-        initializePaginationForPage(currentActivePage || 'dashboard1');
-        attachActionButtonHandlers();
-    }, 500);
-});
-window.addEventListener('hashchange', handleUrlFragment);
 
 // Mobile Menu
 if (window.innerWidth <= 1024) {
