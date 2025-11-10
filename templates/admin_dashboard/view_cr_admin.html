@@ -212,6 +212,37 @@
             </div>
         </main>
     </div>
+    <script>
+    // Navigation handler for edit/add pages
+    document.addEventListener('DOMContentLoaded', function() {
+        const navLinks = document.querySelectorAll('.nav-link1');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                
+                // If it's a fragment link (contains #), navigate to dashboard with fragment
+                if (href && href.includes('#')) {
+                    e.preventDefault();
+                    localStorage.removeItem('scrollPos');
+                    window.location.href = href;
+                }
+            });
+        });
+        
+        // Toggle sidebar
+        const toggleBtn = document.getElementById('toggleBtn1');
+        const sidebar = document.getElementById('sidebar1');
+        const mainContent = document.getElementById('mainContent1');
+        
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                if (sidebar) sidebar.classList.toggle('collapsed');
+                if (mainContent) mainContent.classList.toggle('expanded');
+            });
+        }
+    });
+    </script>
      <script src="{% static 'admin_dashboard/admin_dashboard.js' %}"></script>
     <script src="{% static 'admin_dashboard/admin_dashboard.js' %}"></script>
 {% endblock content %}
