@@ -20,53 +20,65 @@
         <div class="spinner"></div>
     </div>
 
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="{% url 'home' %}"  style="display: flex; align-items: center; text-decoration: none;">
+   <!-- Enhanced Mobile Menu Structure -->
+<!-- Replace your existing navbar section with this -->
+
+<nav class="navbar">
+    <div class="nav-container">
+        <!-- Logo -->
+        <a href="{% url 'home' %}" style="display: flex; align-items: center; text-decoration: none;">
             <img src="{% static 'logo.svg' %}" alt="CR Reviews" style="height:50px !important; width:auto !important; margin-right:10px;">
+        </a>
 
-            </a>
-            <ul class="nav-links">
-                <li>
+        <!-- Desktop & Mobile Navigation Links -->
+        <ul class="nav-links">
+            <!-- Mobile Menu Header (visible only on mobile) -->
+            {% comment %} <div class="mobile-menu-header">
+                <div class="mobile-menu-logo">CR</div>
+                <div class="mobile-menu-title">Menu</div>
+            </div> {% endcomment %}
+
+            <!-- Navigation Items -->
+            <li>
                 <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
-                    Home
+                    🏠 Home
                 </a>
-                </li>
+            </li>
 
-                <li>
+            <li>
                 <a href="{% url 'all_cr' %}" class="nav-link {% if request.resolver_match.url_name == 'all_cr' %}active{% endif %}">
-               
-                    All CRS
+                    👥 All CRS
                 </a>
-                </li>
+            </li>
 
-                <li>
+            <li>
                 <a href="{% url 'latest_reviews' %}" class="nav-link {% if request.resolver_match.url_name == 'latest_reviews' %}active{% endif %}">
-                Latest Reviews
-                 </a>
-                </li>
+                    ⭐ Latest Reviews
+                </a>
+            </li>
 
-                {% if user.is_authenticated %}
-                <!-- User Profile Dropdown -->
-                <li class="user-dropdown">
-                <a href="{% url 'user_dashboard' user.slug %}" class="nav-link user-profile-btn">
+            {% if user.is_authenticated %}
+            <!-- User Profile Dropdown -->
+            <li class="user-dropdown">
+                <a href="#" class="nav-link user-profile-btn">
                     <span class="user-avatar">
-                    {% if user.profile_picture %}
-                        <img src="{{ user.profile_picture.url }}" alt="{{ user.name }}" />
-                    {% else %}
-                        {{ user.first_name|first|upper }}
-                    {% endif %}
+                        {% if user.profile_picture %}
+                            <img src="{{ user.profile_picture.url }}" alt="{{ user.name }}" />
+                        {% else %}
+                            {{ user.first_name|first|upper }}
+                        {% endif %}
                     </span>
                     <span class="user-name">{{user.first_name}}</span>
                     <span class="dropdown-arrow">▼</span>
                 </a>
+                
                 <div class="dropdown-menu">
                     <div class="dropdown-header">
                         <div class="user-avatar-large">
                             {% if user.profile_picture %}
-                            <img src="{{ user.profile_picture.url }}" alt="{{ user.name }}" />
+                                <img src="{{ user.profile_picture.url }}" alt="{{ user.name }}" />
                             {% else %}
-                            <span>{{ user.first_name|first|upper }}</span>
+                                <span>{{ user.first_name|first|upper }}</span>
                             {% endif %}
                         </div>
                         <div class="user-info">
@@ -76,18 +88,17 @@
                     </div>
                     <div class="dropdown-divider"></div>
 
-                   {% if user.is_staff %}
+                    {% if user.is_staff %}
                     <a href="{% url 'admin_dashboard' %}" class="dropdown-item">
-                    <span class="dropdown-icon">🧭</span>
-                    Admin Dashboard
+                        <span class="dropdown-icon">🧭</span>
+                        Admin Dashboard
                     </a>
                     {% else %}
                     <a href="{% url 'user_dashboard' user.slug %}" class="dropdown-item">
-                    <span class="dropdown-icon">🧭</span>
-                    Dashboard
+                        <span class="dropdown-icon">🧭</span>
+                        Dashboard
                     </a>
                     {% endif %}
-
                     
                     <a href="{% url 'view_profile' user.slug %}" class="dropdown-item">
                         <span class="dropdown-icon">👤</span>
@@ -107,16 +118,52 @@
                         Logout
                     </a>
                 </div>
-                </li>
-                {% else %}
-                <li><a href="{% url 'login'%}" class="nav-link" >Login</a></li>
-                <li><a href="{%url 'registration'%}" class="nav-link">Register</a></li>
-                {% endif %}
-                
-            </ul>
-            <button class="mobile-menu">☰</button>
-        </div>
-    </nav>
+            </li>
+            {% else %}
+            <li>
+                <a href="{% url 'login'%}" class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}">
+                    🔐 Login
+                </a>
+            </li>
+            <li>
+                <a href="{%url 'registration'%}" class="nav-link {% if request.resolver_match.url_name == 'registration' %}active{% endif %}">
+                    📝 Register
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button class="mobile-menu" aria-label="Toggle mobile menu">
+            <span class="mobile-menu-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </span>
+        </button>
+    </div>
+</nav>
+
+<!-- Mobile Overlay (will be created by JavaScript) -->
+
+<style>
+/* Additional inline styles for icons in mobile menu */
+@media (max-width: 768px) {
+    .nav-links a {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    /* Icon styling for mobile */
+    .nav-links a::before {
+        font-size: 1.3rem;
+    }
+}
+</style>
 
     {% block content %}
 
@@ -131,7 +178,7 @@
      <script src="{% static 'add_cr.js' %}"></script>
      <script src="{% static 'edit_user.js' %}"></script>
      <script src="{% static 'user_dashboard.js' %}"></script>
-    <script src="{% static 'footer/footer.js' %}"></script>
+     <script src="{% static 'footer/footer.js' %}"></script>
     
      
 
