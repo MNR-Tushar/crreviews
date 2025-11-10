@@ -50,6 +50,8 @@ def admin_dashboard(request):
     total_reviews = Review.objects.count()
     total_universities = University.objects.count()
     total_departments = Department.objects.count()
+    total_university=CrProfile.objects.values('university').distinct().count()
+    total_department=CrProfile.objects.values('department').distinct().count()
     private_universities = University.objects.filter(type='Private').count()
     public_universities = University.objects.filter(type='Public').count()
 
@@ -222,6 +224,8 @@ def admin_dashboard(request):
         'university_filter':university_filter,
         'department_filter':department_filter,
         'cr':cr,
+        'total_university':total_university,
+        'total_department':total_department,
 
     }
     
