@@ -4,27 +4,46 @@
         <div class="card-header1">
             <h2 class="card-title1">Search & Filter</h2>
         </div>
+         <form method="GET" action="{% url 'admin_dashboard' %}">
         <div class="search-filters1">
-            <input type="text" placeholder="🔍 Search by name..." class="form-input1">
-            <select class="form-input1">
-                <option>All Universities</option>
-                {% for university in univercities %}
-                <option value="{{ university.id }}">{{ university.title }}</option>
+            
+            <input type="text" name="search" placeholder="🔍 Search by name..." class="form-input1" value="{{ search_query }}">
+
+            <select name="university" class="form-input1">
+                <option value="">All Universities</option>
+                {% for uni in univercities %}
+                    <option value="{{ uni.id }}" {% if university_filter == uni.id|stringformat:"s" %}selected{% endif %}>
+                                {{ uni.title }}
+                    </option>
                 {% endfor %}
             </select>
-            <select class="form-input1">
-                <option>All Departments</option>
-                {% for department in departments %}
-                <option value="{{ department.id }}">{{ department.title }}</option>
+            <select name="department" class="form-input1">
+                <option value="">All Departments</option>
+                {% for dept in departments %}
+                    <option value="{{ dept.id }}" {% if department_filter == dept.id|stringformat:"s" %}selected{% endif %}>
+                                {{ dept.title }}
+                            </option>
                 {% endfor %}
             </select>
-            <button class="btn1 btn-primary1">Search</button>
+            <button type="submit" class="btn1 btn-primary1">Search</button>
         </div>
+        </form>
+
+        {% if search_query or university_filter or department_filter %}
+                <div style="text-align: center; margin-top: 1rem;">
+                    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary" style="display: inline-block;">
+                        ✖ Clear Filters
+                    </a>
+                </div>
+        {% endif %}
+
     </div>
+
+    
 
     <div class="dashboard-card1">
         <div class="card-header1">
-            <h2 class="card-title1">All CRs ({{crs.paginator.count}})</h2>
+            <h2 class="card-title1">All CRs ({{cr.count}})</h2>
         </div>
         <table class="data-table1">
             <thead>
@@ -39,6 +58,45 @@
                 </tr>
             </thead>
             <tbody>
+            {% if search_query or university_filter or department_filter %}
+            {% for cr in cr %}
+                <tr data-slug="{{ cr.slug }}">
+                    <td>
+                        <div class="user-cell1">
+                            {% if cr.profile_picture %}
+                            <img src="{{ cr.profile_picture.url }}" alt="{{ cr.name }}" class="user-avatar1" style="border-radius: 50%; object-fit: cover;">
+                            {% else %}
+                            <div class="user-avatar1">{{ cr.name|first|upper }}</div>
+                            {% endif %}
+                            <span>{{cr.name}}</span>
+                        </div>
+                    </td>
+                    <td>{{cr.st_id}}</td>
+                    <td>{{cr.university.title}}</td>
+                    <td>{{cr.department.title}}</td>
+                    <td>⭐ {{cr.average_rating|floatformat:1}}</td>
+                    <td>
+                        {% if cr.cr_status == 'Present' %}
+                        <span class="badge1 approved">Present CR</span>
+                        {% else %}
+                        <span class="badge1 pending">Former CR</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <button class="action-btn1 view">View</button>
+                        <button class="action-btn1 edit">Edit</button>
+                        <button class="action-btn1 delete">Delete</button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.6);">
+                        No CRs found.
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+    
                 {% for cr in crs %}
                 <tr data-slug="{{ cr.slug }}">
                     <td>
@@ -76,6 +134,7 @@
                 </tr>
                 {% endfor %}
             </tbody>
+            {% endif %}
         </table>
 
         <!-- Pagination -->

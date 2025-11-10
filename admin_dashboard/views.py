@@ -13,6 +13,7 @@ from django.contrib.auth import get_user_model
 from django.db.models.functions import TruncMonth
 from django.utils import timezone
 from datetime import timedelta
+from django.db.models import Q
 import json
 
 @staff_member_required
@@ -23,8 +24,25 @@ def admin_dashboard(request):
         return redirect('home')
     
    
-  
-    
+    search_quary = request.GET.get('search')
+    university_filter = request.GET.get('university')
+    department_filter = request.GET.get('department')
+    cr=CrProfile.objects.all()
+   
+
+    if search_quary:
+        cr = cr.filter(
+            Q(name__icontains=search_quary)|
+            Q(st_id__icontains=search_quary)|
+            Q(email__icontains=search_quary)
+            
+        )
+    if university_filter:
+        cr = cr.filter(university__id=university_filter)
+    if department_filter:
+        cr = cr.filter(department__id=department_filter)
+
+
     pending_count = Review.objects.filter(is_anonymous=True, is_approved=False).count()
     anonymous_reviews = Review.objects.filter(is_anonymous=True, is_approved=True).count()
     total_users = User.objects.count()
@@ -201,6 +219,9 @@ def admin_dashboard(request):
         'monthly_stats': monthly_stats,
         'total_developers': total_developers,
         'total_tech_stack': total_tech_stack,
+        'university_filter':university_filter,
+        'department_filter':department_filter,
+        'cr':cr,
 
     }
     
