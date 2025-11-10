@@ -171,38 +171,43 @@
                         </div>
                     </div>
 
-                    <!-- Profile Picture -->
+                   
+
+                     <!-- Profile Picture -->
                     <div class="form-section">
                         <div class="section-header">
                             <div class="section-icon">📷</div>
-                            <h3 style="color: white; font-size: 1.3rem; font-weight: 700;">Profile Picture</h3>
-                        </div>
-                        
-                        {% if cr and cr.profile_picture %}
-                        <div style="text-align: center; margin-bottom: 1.5rem;">
-                            <img src="{{ cr.profile_picture.url }}" alt="{{ cr.name }}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(255,255,255,0.3);">
-                            <p style="color: rgba(255,255,255,0.7); margin-top: 0.5rem; font-size: 0.9rem;">Current Profile Picture</p>
-                        </div>
-                        {% endif %}
-                        
-                        <div class="upload-zone" id="uploadZone">
-                            <div class="upload-icon">📤</div>
-                            <div class="upload-text">Drag & drop or click to upload</div>
-                            <div class="upload-subtext">PNG, JPG (max 5MB)</div>
-                            <input type="file" name="profile_picture" id="profilePicture" class="file-input" accept="image/*">
-                        </div>
-                        
-                        <div class="preview-section" id="previewSection" style="display: none;">
-                            <div class="preview-card">
-                                <img id="previewImage" class="preview-img" src="" alt="Preview">
-                                <div class="preview-info">
-                                    <div class="preview-name" id="fileName"></div>
-                                    <div class="preview-size" id="fileSize"></div>
-                                </div>
-                                <button type="button" class="remove-btn" id="removeBtn">Remove</button>
-                            </div>
+                            <h2 class="section-title">Profile Picture</h2>
                         </div>
 
+                        {% if cr and cr.profile_picture %}
+                                <div style="text-align: center; margin-bottom: 1.5rem;">
+                                    <img src="{{ cr.profile_picture.url }}" alt="{{ cr.name }}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(255,255,255,0.3);">
+                                    <p style="color: rgba(255,255,255,0.7); margin-top: 0.5rem; font-size: 0.9rem;">Current Profile Picture</p>
+                                </div>
+                                {% endif %}
+
+                        <div class="form-row single">
+                            <div class="input-group">
+                                <label for="profilePicture" class="upload-zone" id="uploadZone">
+                                    <input type="file" name="profile_picture" id="profilePicture" class="file-input" accept="image/*">
+                                    <div class="upload-icon">📸</div>
+                                    <div class="upload-text">Click to upload or drag & drop</div>
+                                    <div class="upload-subtext">PNG, JPG, GIF up to 5MB</div>
+                                </label>
+                                
+                                <div class="preview-section" id="previewSection">
+                                    <div class="preview-card">
+                                        <img id="previewImage" class="preview-img" alt="Preview">
+                                        <div class="preview-info">
+                                            <div class="preview-name" id="fileName"></div>
+                                            <div class="preview-size" id="fileSize"></div>
+                                        </div>
+                                        <button type="button" class="remove-btn" id="removeBtn">Remove</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Social Media -->
