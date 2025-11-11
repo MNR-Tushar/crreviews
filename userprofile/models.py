@@ -19,7 +19,7 @@ class User(AbstractBaseUser,PermissionsMixin):
 
     university=models.ForeignKey(University, on_delete=models.SET_NULL,related_name='university_user',null=True,blank=True)
     department=models.ForeignKey(Department, on_delete=models.SET_NULL,related_name='department_user',null=True,blank=True)
-    profile_picture=models.ImageField(upload_to=user_profile_picture_path,null=True,blank=True)
+    profile_picture = models.CharField(max_length=500, null=True, blank=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     gender = models.CharField(choices=[('M', 'Male'), ('F', 'Female')], max_length=1)
@@ -84,9 +84,10 @@ class User(AbstractBaseUser,PermissionsMixin):
         return f"{self.first_name} {self.last_name}"
     
     def get_profile_picture_url(self):
-        if self.profile_picture and hasattr(self.profile_picture, 'url'):
-            return self.profile_picture.url
-        return '/media/users/default_profile.png'
+        """Return profile picture URL or default"""
+        if self.profile_picture:
+            return self.profile_picture
+        return '/static/images/default-avatar.png'
     
     def generate_password_reset_token(self):
         """Generate new password reset token"""

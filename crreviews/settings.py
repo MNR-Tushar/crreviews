@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'userprofile',
     'footer',
     'admin_dashboard',
+    'cloudinary_storage',
     'cloudinary',
 ]
 
@@ -73,15 +74,24 @@ TEMPLATES = [
 WSGI_APPLICATION = 'crreviews.wsgi.application'
 
 
+cloudinary.config(
+    cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME'),
+    api_key = os.getenv('CLOUDINARY_API_KEY'),
+    api_secret = os.getenv('CLOUDINARY_API_SECRET'),
+    secure = True
+)
+
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# Database
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
 
 
 # Password validation
@@ -115,6 +125,10 @@ USE_I18N = True
 USE_TZ = True
 
 
+
+
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
@@ -127,7 +141,6 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
 
 # Static files (for default images)
 STATIC_URL = '/static/'
-#STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [BASE_DIR / 'static']
 # Default primary key field type
@@ -152,17 +165,19 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS')
 DEFAULT_FROM_EMAIL = 'CR Reviews <infocrreviews@gmail.com>'
-
 PASSWORD_RESET_TIMEOUT = 3600
 
-# === Filebase Configuration ===
 
-cloudinary.config(
-    cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME'),
-    api_key = os.getenv('CLOUDINARY_API_KEY'),
-    api_secret = os.getenv('CLOUDINARY_API_SECRET'),
-    secure = True
-)
-
+# Media files (Cloudinary)
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Security Settings (Production)
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
