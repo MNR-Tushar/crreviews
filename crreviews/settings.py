@@ -160,11 +160,19 @@ DEFAULT_FROM_EMAIL = 'CR Reviews <infocrreviews@gmail.com>'
 
 PASSWORD_RESET_TIMEOUT = 3600
 
+# === Filebase Configuration ===
+
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
-AWS_S3_ENDPOINT_URL = 'https://s3.filebase.com' 
+AWS_S3_ENDPOINT_URL = config('AWS_S3_ENDPOINT_URL', default='https://s3.filebase.com')
 
+AWS_DEFAULT_ACL = 'public-read'
+AWS_QUERYSTRING_AUTH = False
+AWS_S3_REGION_NAME = None  
+
+# File storage configuration
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-MEDIA_URL = f'{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/'
+# Media file URL
+MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.filebase.com/"
