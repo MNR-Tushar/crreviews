@@ -69,7 +69,7 @@ class CrProfile(models.Model):
     default='Present'
     )
     
-    profile_picture = models.ImageField(upload_to='cr_profile_pictures/', blank=True, null=True)
+    profile_picture = models.CharField(max_length=500, null=True, blank=True)
     name = models.CharField(max_length=100)
     gender = models.CharField(choices=[('M', 'Male'), ('F', 'Female')], max_length=1)
     email = models.EmailField(blank=True, null=True)
@@ -105,6 +105,11 @@ class CrProfile(models.Model):
         #     self.profile_picture = saved_image
 
         super().save(*args, **kwargs)
+    def get_profile_picture_url(self):
+        """Return profile picture URL or default"""
+        if self.profile_picture:
+            return self.profile_picture
+        return '/static/images/default-avatar.png'
 
 
     @property

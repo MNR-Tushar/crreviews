@@ -1,3 +1,4 @@
+import cloudinary
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.db.models import Count
@@ -344,11 +345,6 @@ def delete_department(request, slug):
     messages.success(request, f'Department "{title}" has been deleted successfully!')
     return HttpResponseRedirect(reverse('admin_dashboard') + '#departments')
 
-
-
-
-
-
 User = get_user_model()
 
 @staff_member_required
@@ -398,12 +394,33 @@ def admin_add_cr(request):
                 phone=phone,
                 bio=bio,
                 cr_status=cr_status,
-                profile_picture=profile_picture,
                 date_of_birth=date_of_birth,
                 facebook_url=facebook_url,
                 instagram_url=instagram_url,
                 linkedin_url=linkedin_url,
             )
+            if profile_picture:
+                try:
+                    upload_result = cloudinary.uploader.upload(profile_picture,
+                            folder=f'crs/cr_{cr.id}/profile_pictures',
+                            public_id=f'profile_{cr.id}',
+                            overwrite=True,
+                            resource_type='image',
+                            transformation=[
+                                {'width': 500, 'height': 500, 'crop': 'fill', 'gravity': 'face'},
+                                {'quality': 'auto:good'},
+                                {'fetch_format': 'auto'}
+                            ]
+                        )
+                        
+                        # Save Cloudinary URL
+                    cr.profile_picture = upload_result['secure_url']
+                    cr.save()
+                        
+                except Exception as e:
+                    messages.warning(request, f'CR created but image upload failed: {str(e)}')
+                    print(f"Cloudinary upload error: {e}")
+
             messages.success(request, f'CR Profile "{cr.name}" has been created successfully!')
             return HttpResponseRedirect(reverse('admin_dashboard') + '#crs')
         except Exception as e:
@@ -467,7 +484,33 @@ def admin_edit_cr(request, slug):
 
         new_picture = request.FILES.get('profile_picture')
         if new_picture:
-            cr.profile_picture = new_picture
+                try:
+                    # Delete old picture from Cloudinary if exists
+                    if cr.profile_picture and 'cloudinary' in cr.profile_picture:
+                        public_id = cr.profile_picture.split('/')[-1].split('.')[0]
+                        try:
+                            cloudinary.uploader.destroy(f'crs/cr_{cr.id}/profile_pictures/{public_id}')
+                        except:
+                            pass
+                    
+                    # Upload new picture
+                    upload_result = cloudinary.uploader.upload(
+                        new_picture,
+                        folder=f'crs/cr_{cr.id}/profile_pictures',
+                        public_id=f'profile_{cr.id}',
+                        overwrite=True,
+                        transformation=[
+                            {'width': 500, 'height': 500, 'crop': 'fill', 'gravity': 'face'},
+                            {'quality': 'auto:good'},
+                            {'fetch_format': 'auto'}
+                        ]
+                    )
+                    
+                    # Save only the secure URL (not as ImageField)
+                    cr.profile_picture = upload_result['secure_url']
+                    
+                except Exception as e:
+                    messages.error(request, f'Failed to upload image: {str(e)}')
 
         cr.save()
         messages.success(request, f'CR Profile "{cr.name}" has been updated successfully!')
@@ -596,7 +639,33 @@ def admin_edit_user(request, slug):
         # Handle profile picture
         new_picture = request.FILES.get('profile_picture')
         if new_picture:
-            user.profile_picture = new_picture
+                try:
+                    # Delete old picture from Cloudinary if exists
+                    if user.profile_picture and 'cloudinary' in user.profile_picture:
+                        public_id = user.profile_picture.split('/')[-1].split('.')[0]
+                        try:
+                            cloudinary.uploader.destroy(f'users/user_{user.id}/profile_pictures/{public_id}')
+                        except:
+                            pass
+                    
+                    # Upload new picture
+                    upload_result = cloudinary.uploader.upload(
+                        new_picture,
+                        folder=f'users/user_{user.id}/profile_pictures',
+                        public_id=f'profile_{user.id}',
+                        overwrite=True,
+                        transformation=[
+                            {'width': 500, 'height': 500, 'crop': 'fill', 'gravity': 'face'},
+                            {'quality': 'auto:good'},
+                            {'fetch_format': 'auto'}
+                        ]
+                    )
+                    
+                    # Save only the secure URL (not as ImageField)
+                    user.profile_picture = upload_result['secure_url']
+                    
+                except Exception as e:
+                    messages.error(request, f'Failed to upload image: {str(e)}')
         
         # Handle university and department
         university_id = request.POST.get('university')
@@ -797,8 +866,29 @@ def add_developer_profile(request):
             linkedin_url=linkedin_url,
             facebook_url=facebook_url,
             twitter_url=twitter_url,
-            profile_picture=profile_picture
+            
         )
+        if profile_picture:
+            try:
+                upload_result = cloudinary.uploader.upload(profile_picture,
+                        folder=f'developers/developer_{developer.id}/profile_pictures',
+                        public_id=f'profile_{developer.id}',
+                        overwrite=True,
+                        resource_type='image',
+                        transformation=[
+                            {'width': 500, 'height': 500, 'crop': 'fill', 'gravity': 'face'},
+                            {'quality': 'auto:good'},
+                            {'fetch_format': 'auto'}
+                        ]
+                    )
+                    
+                    # Save Cloudinary URL
+                developer.profile_picture = upload_result['secure_url']
+                developer.save()
+                    
+            except Exception as e:
+                messages.warning(request, f'CR created but image upload failed: {str(e)}')
+                print(f"Cloudinary upload error: {e}")
         
         if tech_stack_ids:
             developer.tack_stack.set(tech_stack_ids)
@@ -834,7 +924,33 @@ def edit_developer_profile(request, pk):
         
         new_picture = request.FILES.get('profile_picture')
         if new_picture:
-            developer.profile_picture = new_picture
+                try:
+                    # Delete old picture from Cloudinary if exists
+                    if developer.profile_picture and 'cloudinary' in developer.profile_picture:
+                        public_id = developer.profile_picture.split('/')[-1].split('.')[0]
+                        try:
+                            cloudinary.uploader.destroy(f'developers/developer_{developer.id}/profile_pictures/{public_id}')
+                        except:
+                            pass
+                    
+                    # Upload new picture
+                    upload_result = cloudinary.uploader.upload(
+                        new_picture,
+                        folder=f'developers/developer_{developer.id}/profile_pictures',
+                        public_id=f'profile_{developer.id}',
+                        overwrite=True,
+                        transformation=[
+                            {'width': 500, 'height': 500, 'crop': 'fill', 'gravity': 'face'},
+                            {'quality': 'auto:good'},
+                            {'fetch_format': 'auto'}
+                        ]
+                    )
+                    
+                    # Save only the secure URL (not as ImageField)
+                    developer.profile_picture = upload_result['secure_url']
+                    
+                except Exception as e:
+                    messages.error(request, f'Failed to upload image: {str(e)}')
         
         tech_stack_ids = request.POST.getlist('tech_stack')
         if tech_stack_ids:

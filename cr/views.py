@@ -1,3 +1,4 @@
+import cloudinary
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -275,14 +276,32 @@ def add_cr(request):
             email=email,
             phone=phone,
             bio=bio,
-            profile_picture=profile_picture,
             cr_status=cr_status,
         )
-        cr.save()
-        
-        messages.success(request, "CR profile added successfully!")
+        if profile_picture:
+            try:
+                upload_result = cloudinary.uploader.upload(profile_picture,
+                        folder=f'crs/cr_{cr.id}/profile_pictures',
+                        public_id=f'profile_{cr.id}',
+                        overwrite=True,
+                        resource_type='image',
+                        transformation=[
+                            {'width': 500, 'height': 500, 'crop': 'fill', 'gravity': 'face'},
+                            {'quality': 'auto:good'},
+                            {'fetch_format': 'auto'}
+                        ]
+                    )
+                    
+                    # Save Cloudinary URL
+                cr.profile_picture = upload_result['secure_url']
+                cr.save()
+                    
+            except Exception as e:
+                messages.warning(request, f'CR created but image upload failed: {str(e)}')
+                print(f"Cloudinary upload error: {e}")
 
-        return redirect('cr_profile', slug=cr.slug)
+            messages.success(request, "CR profile added successfully!")
+            return redirect('cr_profile', slug=cr.slug)
 
     context={
         'university':university,
@@ -320,7 +339,33 @@ def edit_cr_profile(request,slug):
 
         new_picture = request.FILES.get('profile_picture')
         if new_picture:
-            cr.profile_picture = new_picture
+                try:
+                    # Delete old picture from Cloudinary if exists
+                    if cr.profile_picture and 'cloudinary' in cr.profile_picture:
+                        public_id = cr.profile_picture.split('/')[-1].split('.')[0]
+                        try:
+                            cloudinary.uploader.destroy(f'crs/cr_{cr.id}/profile_pictures/{public_id}')
+                        except:
+                            pass
+                    
+                    # Upload new picture
+                    upload_result = cloudinary.uploader.upload(
+                        new_picture,
+                        folder=f'crs/cr_{cr.id}/profile_pictures',
+                        public_id=f'profile_{cr.id}',
+                        overwrite=True,
+                        transformation=[
+                            {'width': 500, 'height': 500, 'crop': 'fill', 'gravity': 'face'},
+                            {'quality': 'auto:good'},
+                            {'fetch_format': 'auto'}
+                        ]
+                    )
+                    
+                    # Save only the secure URL (not as ImageField)
+                    cr.profile_picture = upload_result['secure_url']
+                    
+                except Exception as e:
+                    messages.error(request, f'Failed to upload image: {str(e)}')
         cr.save()
         messages.success(request, "CR profile updated successfully!")
         return redirect('user_dashboard', slug=cr.user.slug)

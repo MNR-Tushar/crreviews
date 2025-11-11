@@ -51,7 +51,7 @@ class Teck_Stack(models.Model):
 
 class Developer_Profile(models.Model):
     tack_stack = models.ManyToManyField(Teck_Stack, related_name='developer_profiles', blank=True)
-    profile_picture = models.ImageField(upload_to='developer_profile_pictures/', blank=True, null=True)
+    profile_picture = models.CharField(max_length=500, null=True, blank=True)
     name = models.CharField(max_length=100)
     degisnation = models.CharField(max_length=100, blank=True, null=True)
     about = models.TextField(max_length=1000, blank=True, null=True)
@@ -72,3 +72,8 @@ class Developer_Profile(models.Model):
     
     def __str__(self):
         return f"Developer Profile from {self.name} {self.email} at {self.created_at}"
+    def get_profile_picture_url(self):
+        """Return profile picture URL or default"""
+        if self.profile_picture:
+            return self.profile_picture
+        return '/static/images/default-avatar.png'

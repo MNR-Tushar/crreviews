@@ -42,7 +42,7 @@
                 <div class="info-item" style="grid-column: 1 / -1; text-align: center;">
                     <div class="profile-photo" style="width: 120px; height: 120px; margin: 1rem auto;">
                         {% if view_user.profile_picture %}
-                            <img src="{{ view_user.profile_picture.url }}" alt="{{ view_user.get_full_name }}">
+                            <img src="{{ view_user.profile_picture }}" alt="{{ view_user.get_full_name }}">
                         {% else %}
                             {{ view_user.first_name|first|upper }}{{ view_user.last_name|first|upper }}
                         {% endif %}
@@ -235,7 +235,7 @@
                 <div class="card">
                     <div class="profile-photo">
                         {% if saved.cr_profile.profile_picture %}
-                            <img src="{{ saved.cr_profile.profile_picture.url }}" alt="{{ saved.cr_profile.name }}">
+                            <img src="{{ saved.cr_profile.profile_picture }}" alt="{{ saved.cr_profile.name }}">
                         {% else %}
                             {{ saved.cr_profile.name|first|upper }}
                         {% endif %}

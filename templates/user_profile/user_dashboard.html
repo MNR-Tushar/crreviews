@@ -78,7 +78,7 @@
                   <div class="review-cr">
                      <div class="saved-avatar">
                         {% if add.profile_picture %}
-                        <img src={{add.profile_picture.url}} alt={{add.name}} />
+                        <img src={{add.profile_picture}} alt={{add.name}} />
                         {% else %}
                         {{add.name|first|upper}}
                         {% endif %}
@@ -164,7 +164,7 @@
                   <div class="review-cr">
                      <div class="saved-avatar">
                         {% if review.cr_profile.profile_picture %}
-                        <img src={{review.cr_profile.profile_picture.url}} alt={{review.cr_profile.name}} />
+                        <img src={{review.cr_profile.profile_picture}} alt={{review.cr_profile.name}} />
                         {% else %}
                         {{review.cr_profile.name|first|upper}}
                         {% endif %}
@@ -328,7 +328,7 @@
                      <div class="saved-cr-item">
                         <div class="saved-avatar">
                            {% if save_cr.cr_profile.profile_picture %}
-                           <img src={{save_cr.cr_profile.profile_picture.url}} alt={{save_cr.cr_profile.name}} />
+                           <img src={{save_cr.cr_profile.profile_picture}} alt={{save_cr.cr_profile.name}} />
                            {% else %}
                            {{save_cr.cr_profile.name|first|upper}}
                            {% endif %}

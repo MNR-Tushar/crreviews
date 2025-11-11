@@ -13,7 +13,7 @@
 
   <div class="profile-photo">
     {% if cr.profile_picture %}
-    <img src="{{ cr.profile_picture.url }}" alt="{{ cr.name }}" />
+    <img src="{{ cr.profile_picture }}" alt="{{ cr.name }}" />
     {% else %}
     <span>{{ cr.name|first|upper }}</span>
     {% endif %}

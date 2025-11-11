@@ -64,7 +64,7 @@
                     <td>
                         <div class="user-cell1">
                             {% if cr.profile_picture %}
-                            <img src="{{ cr.profile_picture.url }}" alt="{{ cr.name }}" class="user-avatar1" style="border-radius: 50%; object-fit: cover;">
+                            <img src="{{ cr.profile_picture }}" alt="{{ cr.name }}" class="user-avatar1" style="border-radius: 50%; object-fit: cover;">
                             {% else %}
                             <div class="user-avatar1">{{ cr.name|first|upper }}</div>
                             {% endif %}
@@ -102,7 +102,7 @@
                     <td>
                         <div class="user-cell1">
                             {% if cr.profile_picture %}
-                            <img src="{{ cr.profile_picture.url }}" alt="{{ cr.name }}" class="user-avatar1" style="border-radius: 50%; object-fit: cover;">
+                            <img src="{{ cr.profile_picture }}" alt="{{ cr.name }}" class="user-avatar1" style="border-radius: 50%; object-fit: cover;">
                             {% else %}
                             <div class="user-avatar1">{{ cr.name|first|upper }}</div>
                             {% endif %}
