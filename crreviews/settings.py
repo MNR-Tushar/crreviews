@@ -123,8 +123,7 @@ USE_TZ = True
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Media files configuration
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # File upload settings
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
