@@ -580,7 +580,7 @@
             border-radius: 20px;
             background:rgba(255, 255, 255, 0.3);
             font-size: 1rem;
-            font-weight: 200;
+            font-weight: 600;
             transition: all 0.3s ease;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
@@ -1205,7 +1205,7 @@
 
         @media (max-width: 768px) {
             .nav-links {
-                display: none;
+                display: flex;
             }
             
             .title {
@@ -2730,28 +2730,7 @@ body.menu-open {
     }
     
     /* Hide nav links on mobile, show hamburger */
-    .nav-links {
-        display: none;
-        position: fixed;
-        top: 60px;
-        left: 0;
-        right: 0;
-        background: rgba(0, 0, 0, 0.95);
-        backdrop-filter: blur(20px);
-        flex-direction: column;
-        padding: 1rem;
-        z-index: 999;
-    }
     
-    .nav-links.active {
-        display: flex;
-    }
-    
-    .nav-links a {
-        width: 100%;
-        text-align: center;
-        padding: 0.8rem;
-    }
     
     
 }
