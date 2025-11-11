@@ -1,3 +1,4 @@
+import cloudinary
 from django.contrib import messages
 from django.forms import ValidationError
 from django.shortcuts import render,redirect,get_object_or_404
@@ -429,7 +430,8 @@ def edit_user(request,slug):
             user.date_of_birth = request.POST.get('date_of_birth') or None
             new_picture = request.FILES.get('profile_picture')
             if new_picture:
-                user.profile_picture = new_picture
+                upload_result = cloudinary.uploader.upload(new_picture)
+                user.profile_picture = upload_result['secure_url']
 
             user.phone = request.POST.get('phone')
 

@@ -1,7 +1,9 @@
 import os
 from dotenv import load_dotenv
 from decouple import config
-
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 from pathlib import Path
 load_dotenv()
 
@@ -37,7 +39,7 @@ INSTALLED_APPS = [
     'userprofile',
     'footer',
     'admin_dashboard',
-    'storages',
+    'cloudinary',
 ]
 
 MIDDLEWARE = [
@@ -119,12 +121,6 @@ USE_TZ = True
 
 
 
-#BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-# Media files configuration
-
-
 # File upload settings
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
 DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
@@ -161,17 +157,12 @@ PASSWORD_RESET_TIMEOUT = 3600
 
 # === Filebase Configuration ===
 
-AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
-AWS_S3_ENDPOINT_URL = config('AWS_S3_ENDPOINT_URL', default='https://s3.filebase.com')
+cloudinary.config(
+    cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME'),
+    api_key = os.getenv('CLOUDINARY_API_KEY'),
+    api_secret = os.getenv('CLOUDINARY_API_SECRET'),
+    secure = True
+)
 
-AWS_DEFAULT_ACL = 'public-read'
-AWS_QUERYSTRING_AUTH = False
-AWS_S3_REGION_NAME = None  
-
-# File storage configuration
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
-# Media file URL
-MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.filebase.com/"
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
