@@ -8,10 +8,15 @@
       <div class="header-left">
          <div class="profile-avatar-large">
             {% if user.profile_picture %}
-            <img src={{user.profile_picture.url}} alt={{user.first_name}} />
+            <img src="{{ user.profile_picture }}" 
+            alt="{{ user.get_full_name }}" 
+            class="profile-img"
+            onerror="this.onerror=null; this.src='/static/images/default-avatar.png';" />
             {% else %}
-            {{user.first_name|first|upper}}
-            {% endif %}
+            <div class="avatar-placeholder">
+            {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+         </div>
+         {% endif %}
          </div>
          <div class="user-info">
             <h1>{{user.first_name}} {{user.last_name}}</h1>

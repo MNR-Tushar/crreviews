@@ -11,7 +11,7 @@
                 <div class="search-section" style="text-align: center; margin-bottom: 3rem;">
                     <div class="profile-photo" style="width: 150px; height: 150px; font-size: 4rem; margin: 0 auto 2rem; position: relative;" id="profile-photo">
                          {% if user.profile_picture %}
-                        <img src="{{ user.profile_picture.url }}" alt="{{ user.name }}" />
+                        <img src="{{ user.profile_picture }}" alt="{{ user.name }}" />
                         {% else %}
                         <span>{{ user.first_name|first|upper }}</span>
                         {% endif %}

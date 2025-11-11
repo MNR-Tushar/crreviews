@@ -63,7 +63,7 @@
                 <a href="#" class="nav-link user-profile-btn">
                     <span class="user-avatar">
                         {% if user.profile_picture %}
-                            <img src="{{ user.profile_picture.url }}" alt="{{ user.name }}" />
+                            <img src="{{ user.profile_picture }}" alt="{{ user.name }}" />
                         {% else %}
                             {{ user.first_name|first|upper }}
                         {% endif %}
@@ -76,7 +76,7 @@
                     <div class="dropdown-header">
                         <div class="user-avatar-large">
                             {% if user.profile_picture %}
-                                <img src="{{ user.profile_picture.url }}" alt="{{ user.name }}" />
+                                <img src="{{ user.profile_picture }}" alt="{{ user.name }}" />
                             {% else %}
                                 <span>{{ user.first_name|first|upper }}</span>
                             {% endif %}

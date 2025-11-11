@@ -430,8 +430,33 @@ def edit_user(request,slug):
             user.date_of_birth = request.POST.get('date_of_birth') or None
             new_picture = request.FILES.get('profile_picture')
             if new_picture:
-                upload_result = cloudinary.uploader.upload(new_picture)
-                user.profile_picture = upload_result['secure_url']
+                try:
+                    # Delete old picture from Cloudinary if exists
+                    if user.profile_picture and 'cloudinary' in user.profile_picture:
+                        public_id = user.profile_picture.split('/')[-1].split('.')[0]
+                        try:
+                            cloudinary.uploader.destroy(f'users/user_{user.id}/profile_pictures/{public_id}')
+                        except:
+                            pass
+                    
+                    # Upload new picture
+                    upload_result = cloudinary.uploader.upload(
+                        new_picture,
+                        folder=f'users/user_{user.id}/profile_pictures',
+                        public_id=f'profile_{user.id}',
+                        overwrite=True,
+                        transformation=[
+                            {'width': 500, 'height': 500, 'crop': 'fill', 'gravity': 'face'},
+                            {'quality': 'auto:good'},
+                            {'fetch_format': 'auto'}
+                        ]
+                    )
+                    
+                    # Save only the secure URL (not as ImageField)
+                    user.profile_picture = upload_result['secure_url']
+                    
+                except Exception as e:
+                    messages.error(request, f'Failed to upload image: {str(e)}')
 
             user.phone = request.POST.get('phone')
 
