@@ -16,14 +16,14 @@
         // }
 
         // Photo upload preview
-        // document.getElementById('photoInput').addEventListener('change', function(e) {
-        //     const file = e.target.files[0];
-        //     if (file) {
-        //         const reader = new FileReader();
-        //         reader.onload = function(event) {
-        //             const photoDiv = document.querySelector('.profile-photo_edit');
-        //             photoDiv.innerHTML = `<img src="${event.target.result}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
-        //         };
-        //         reader.readAsDataURL(file);
-        //     }
-        // });
+        document.getElementById('photoInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const photoDiv = document.querySelector('.profile-photo_edit');
+                    photoDiv.innerHTML = `<img src="${event.target.result}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
