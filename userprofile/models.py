@@ -22,7 +22,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     profile_picture = models.CharField(max_length=500, null=True, blank=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    gender = models.CharField(choices=[('M', 'Male'), ('F', 'Female')], max_length=10)
+    gender = models.CharField(choices=[('M', 'Male'), ('F', 'Female')], max_length=1,default='M')
     email = models.EmailField(unique=True)
     phone=models.CharField(max_length=20,null=True,blank=True)
     date_of_birth=models.DateField(null=True,blank=True)
