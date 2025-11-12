@@ -170,7 +170,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'CR Reviews <infocrreviews@gmail.com>')
 # Email Configuration
 if DEBUG:
     # Development - Console backend
@@ -183,7 +183,6 @@ else:
     EMAIL_USE_TLS = True
     EMAIL_HOST_USER = 'apikey'  # literally 'apikey' লিখবেন
     EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')
-    DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'CR Reviews <infocrreviews@gmail.com>')
     EMAIL_TIMEOUT = 10  # 10 seconds timeout
     SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
