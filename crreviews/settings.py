@@ -176,11 +176,21 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 EMAIL_HOST_USER = os.getenv('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS')
 DEFAULT_FROM_EMAIL = 'CR Reviews <infocrreviews@gmail.com>'
+EMAIL_TIMEOUT = 60
 PASSWORD_RESET_TIMEOUT = 3600
 
+# Email validation
+if not DEBUG:
+    if not EMAIL_HOST_USER or not EMAIL_HOST_PASSWORD:
+        import warnings
+        warnings.warn(
+            "Email credentials not set. Email functionality will not work!",
+            RuntimeWarning
+        )
 
 # Media files (Cloudinary)
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
