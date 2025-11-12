@@ -9,68 +9,87 @@ from .models import *
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.password_validation import validate_password
-from django.core.mail import send_mail
+from django.core.mail import send_mail,EmailMessage
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 from django.utils import timezone
+import logging
 import uuid
 from django.contrib.admin.views.decorators import staff_member_required
 
 
+logger = logging.getLogger(__name__)
+
 def send_verification_email(user, request):
-    
+    """Send email verification link to user"""
     try:
         verification_url = request.build_absolute_uri(
             f'/verify-email/{user.email_verification_token}/'
         )
         
         subject = 'Verify Your Email - CR Review'
+        
+        # HTML email template
         html_message = render_to_string('user_profile/emails/verification_email.html', {
             'user': user,
             'verification_url': verification_url,
         })
         plain_message = strip_tags(html_message)
         
-        send_mail(
-            subject,
-            plain_message,
-            settings.DEFAULT_FROM_EMAIL,
-            [user.email],
-            html_message=html_message,
-            fail_silently=False,
+        # Send email with timeout handling
+        from django.core.mail import EmailMultiAlternatives
+        
+        email = EmailMultiAlternatives(
+            subject=subject,
+            body=plain_message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[user.email]
         )
+        email.attach_alternative(html_message, "text/html")
+        email.send(fail_silently=False)
+        
+        logger.info(f"Verification email sent successfully to {user.email}")
         return True
+        
     except Exception as e:
-        print(f"Error sending email: {e}")
+        logger.error(f"Error sending verification email to {user.email}: {str(e)}")
         return False
 
 
 def send_password_reset_email(user, request):
-    
+    """Send password reset link to user"""
     try:
         reset_url = request.build_absolute_uri(
             f'/reset-password/{user.password_reset_token}/'
         )
         
         subject = 'Reset Your Password - CR Review'
+        
+        # HTML email template
         html_message = render_to_string('user_profile/emails/password_reset_email.html', {
             'user': user,
             'reset_url': reset_url,
         })
         plain_message = strip_tags(html_message)
         
-        send_mail(
-            subject,
-            plain_message,
-            settings.DEFAULT_FROM_EMAIL,
-            [user.email],
-            html_message=html_message,
-            fail_silently=False,
+        # Send email
+        from django.core.mail import EmailMultiAlternatives
+        
+        email = EmailMultiAlternatives(
+            subject=subject,
+            body=plain_message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[user.email]
         )
+        email.attach_alternative(html_message, "text/html")
+        email.send(fail_silently=False)
+        
+        logger.info(f"Password reset email sent successfully to {user.email}")
         return True
+        
     except Exception as e:
-        print(f"Error sending email: {e}")
+        logger.error(f"Error sending password reset email to {user.email}: {str(e)}")
         return False
 
 def registration(request):
@@ -125,14 +144,20 @@ def registration(request):
                 department=department
             )
 
-            if send_verification_email(user, request):
-                messages.success(request, 'Registration successful! Please check your email to verify your account.')
-                return redirect('verification_pending')
-            else:
-                messages.warning(request, 'Account created but failed to send verification email. Please contact support.')
-                return redirect('login')
+            try:
+                email_sent = send_verification_email(user, request)
+                if email_sent:
+                    messages.success(request, 'Registration successful! Please check your email to verify your account.')
+                else:
+                    messages.warning(request, 'Account created but verification email failed. Please use "Resend Verification" option.')
+            except Exception as e:
+                logger.error(f"Email sending failed during registration: {str(e)}")
+                messages.warning(request, 'Account created but email could not be sent. Please use "Resend Verification" option.')
+            
+            return redirect('verification_pending')
             
         except Exception as e:
+            logger.error(f"Registration error: {str(e)}")
             messages.error(request, f'Registration failed: {str(e)}')
             return redirect('registration')
     
