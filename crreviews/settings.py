@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'django_extensions',
     'cr',
     'userprofile',
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'admin_dashboard',
     'cloudinary_storage',
     'cloudinary',
+    'anymail',
 ]
 
 MIDDLEWARE = [
@@ -171,22 +173,23 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'CR Reviews <infocrreviews@gmail.com>')
-# Email Configuration
-if DEBUG:
-    # Development - Console backend
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-else:
-    # Production - SendGrid
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_HOST = 'smtp.sendgrid.net'
-    EMAIL_PORT = 587
-    EMAIL_USE_TLS = True
-    EMAIL_HOST_USER = 'apikey'  # literally 'apikey' লিখবেন
-    EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')
-    EMAIL_TIMEOUT = 10  # 10 seconds timeout
-    SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
-PASSWORD_RESET_TIMEOUT = 3600
+# Email Configuration
+# if DEBUG:
+#     # Development - Console backend
+#     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# else:
+    # Production - Gmail SMTP
+EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='infocrreviews@gmail.com')
+SERVER_EMAIL = config('SERVER_EMAIL', default='infocrreviews@gmail.com')
+
+
+ANYMAIL = {
+    "SENDGRID_API_KEY": config("SENDGRID_API_KEY"),
+}
+
+SITE_ID = 1
 
 # Logging Configuration
 LOGGING = {
