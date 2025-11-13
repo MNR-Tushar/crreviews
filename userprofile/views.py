@@ -39,11 +39,12 @@ def send_verification_email(user, request):
         
         # Send email with timeout handling
         from django.core.mail import EmailMultiAlternatives
+        custom_from_email = "CR Reviews <" + settings.DEFAULT_FROM_EMAIL.split('<')[-1].replace('>', '') + ">"
         
         email = EmailMultiAlternatives(
             subject=subject,
             body=plain_message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
+            from_email=custom_from_email,
             to=[user.email]
         )
         email.attach_alternative(html_message, "text/html")
