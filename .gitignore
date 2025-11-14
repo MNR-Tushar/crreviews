@@ -7,3 +7,6 @@ __pycache__/
 *.pyc
 db.sqlite3
 staticfiles/
+cr_department_data.csv
+cr_university_data.csv
+import_universities.py

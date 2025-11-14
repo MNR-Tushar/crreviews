@@ -19,10 +19,10 @@ class University(models.Model):
     title =models.CharField(max_length=100,unique=True,blank=False,null=False)
     type =models.CharField(max_length=100,choices=university_type)
     address=models.CharField(max_length=150, blank=True, null=True)
-    slug=models.SlugField(blank=True,unique=True)
+    slug=models.SlugField(max_length=254,blank=True,unique=True)
 
-    created_at=models.DateTimeField(auto_now_add=True)
-    updated_at=models.DateTimeField(auto_now=True)
+    created_at=models.DateTimeField(auto_now_add=True,blank=True,null=True)
+    updated_at=models.DateTimeField(auto_now=True,blank=True,null=True)
     daleted_at=models.DateTimeField(auto_now=True,blank=True,null=True)
 
     def __str__(self):
@@ -34,12 +34,12 @@ class University(models.Model):
     
 class Department(models.Model):
 
-    title=models.CharField(max_length=50,unique=True,blank=False,null=False)
-    code=models.CharField(max_length=50,unique=True,blank=True,null=True)
-    slug=models.SlugField(blank=True,unique=True)
+    title=models.CharField(max_length=100,unique=True,blank=False,null=False)
+    code=models.CharField(max_length=20,unique=True,blank=True,null=True)
+    slug=models.SlugField(max_length=254,blank=True,unique=True)
 
-    created_at=models.DateTimeField(auto_now_add=True)
-    updated_at=models.DateTimeField(auto_now=True)
+    created_at=models.DateTimeField(auto_now_add=True,blank=True,null=True)
+    updated_at=models.DateTimeField(auto_now=True,blank=True,null=True)
     daleted_at=models.DateTimeField(auto_now=True,blank=True,null=True)
 
     def __str__(self):
