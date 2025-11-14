@@ -1087,14 +1087,9 @@
             }
         }
 
-        /* .page {
-            display: none;
-        }
+        
 
-        .page.active {
-            display: block;
-            animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        } */
+       
 
         .filter-section {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
@@ -1140,8 +1135,17 @@
        
  @media (max-width: 768px) {
     .search-bar {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: 1fr !important;
         gap: 1rem;
+        justify-items: stretch !important;   /* full width */
+        width: 100% !important;
+    }
+
+    .search-bar input,
+    .search-bar select,
+    .search-bar button {
+        width: 100% !important;  /* elements full width */
     }
     
     .filter-section {
@@ -1206,9 +1210,6 @@
                 font-size: 2.5rem;
             }
             
-            .search-bar {
-                grid-template-columns: 1fr;
-            }
             
             .stats {
                 grid-template-columns: 1fr;
@@ -2227,48 +2228,7 @@ body.menu-open {
     }
 }
 
-@media (max-width: 480px) {
-    .pagination {
-        padding: 0.85rem 0.75rem;
-        gap: 0.4rem;
-    }
-    
-    .pagination-btn {
-        min-width: 36px;
-        height: 36px;
-        font-size: 0.8rem;
-        padding: 0 0.35rem;
-    }
-    
-    .pagination-first,
-    .pagination-last,
-    .pagination-prev,
-    .pagination-next {
-        padding: 0 0.6rem;
-        font-size: 0.8rem;
-    }
-    
-    /* Hide some page numbers on very small screens */
-    .pagination-numbers .pagination-btn:not(.pagination-active) {
-        display: none;
-    }
-    
-    /* Show only current and adjacent pages */
-    .pagination-numbers .pagination-btn:nth-child(-n+3),
-    .pagination-numbers .pagination-active,
-    .pagination-numbers .pagination-btn:nth-last-child(-n+3) {
-        display: flex;
-    }
-    
-    .pagination-info {
-        padding: 0.6rem 1rem;
-    }
-    
-    .pagination-info p {
-        font-size: 0.775rem;
-    }
 
-}
 
 /* Notice Banner Styles */
 .notice-banner {
@@ -2748,10 +2708,6 @@ body.menu-open {
         margin: 2rem 0;
     }
     
-    .search-bar {
-        grid-template-columns: 1fr !important;
-        gap: 1rem;
-    }
     
     .search-input {
         font-size: 0.9rem;
@@ -2942,48 +2898,6 @@ body.menu-open {
     }
 }
 
-/* ==================== 
-   PAGINATION FIX 
-   ==================== */
-
-@media (max-width: 768px) {
-    .pagination {
-        padding: 1rem 0.75rem;
-        gap: 0.4rem;
-    }
-    
-    .pagination-btn {
-        min-width: 36px;
-        height: 36px;
-        font-size: 0.85rem;
-        padding: 0 0.4rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .pagination {
-        flex-wrap: wrap;
-        padding: 0.8rem 0.5rem;
-    }
-    
-    .pagination-btn {
-        min-width: 32px;
-        height: 32px;
-        font-size: 0.8rem;
-    }
-    
-    /* Hide some page numbers on very small screens */
-    .pagination-numbers .pagination-btn:not(.pagination-active):not(:first-child):not(:last-child) {
-        display: none;
-    }
-    
-    /* Show only first, last, and active */
-    .pagination-numbers .pagination-btn:first-child,
-    .pagination-numbers .pagination-btn:last-child,
-    .pagination-numbers .pagination-active {
-        display: flex !important;
-    }
-}
 
 /* ==================== 
    USER DROPDOWN FIX 
@@ -3196,6 +3110,10 @@ body.menu-open {
 @media (max-width: 768px) {
     .review-card {
         padding: 1.2rem;
+    }
+    .section{
+        padding-top: 0 !important;
+        margin-top: 0 !important;
     }
     
     .review-header {
