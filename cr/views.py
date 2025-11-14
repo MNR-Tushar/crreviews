@@ -53,8 +53,8 @@ def home(request):
     reverse=True
     )
 
-    universities = University.objects.all().order_by('title')
-    departments = Department.objects.all().order_by('title')
+    universities = University.objects.filter(university_crs__isnull=False).distinct().order_by('title')
+    departments = Department.objects.filter(department_crs__isnull=False).distinct().order_by('title')
     active_notices = Notice.objects.filter(is_active=True)
 
     rating_distribution = {
@@ -168,8 +168,8 @@ def all_cr(request):
     except EmptyPage:
         crs = paginator.page(1)
 
-    universities = University.objects.all().order_by('title')
-    departments = Department.objects.all().order_by('title')
+    universities = University.objects.filter(university_crs__isnull=False).distinct().order_by('title')
+    departments = Department.objects.filter(department_crs__isnull=False).distinct().order_by('title')
 
     context={
         'cr':crs,
