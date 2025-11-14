@@ -9,14 +9,14 @@
             </a>
             <a href="?page={{ cr.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.university %}&university={{ request.GET.university }}{% endif %}{% if request.GET.department %}&department={{ request.GET.department }}{% endif %}{% if request.GET.rating %}&rating={{ request.GET.rating }}{% endif %}" 
                class="pagination-btn pagination-prev">
-                <span class='center'>Previous</span>
+                <span class='center'>Prev</span>
             </a>
         {% else %}
             <span class="pagination-btn pagination-disabled">
                 <span class='center'>First</span>
             </span>
             <span class="pagination-btn pagination-disabled">
-                <span class='center'>Previous</span>
+                <span class='center'>Prev</span>
             </span>
         {% endif %}
 

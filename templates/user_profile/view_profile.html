@@ -155,17 +155,17 @@
                     <div class="pagination">
                     {% if review.has_previous %}
                         <a href="?page=1" class="pagination-btn pagination-first">
-                            <span>⏮️</span>
+                            <span>First</span>
                         </a>
                         <a href="?page={{ review.previous_page_number }}" class="pagination-btn pagination-prev">
-                            <span>◀️</span>
+                            <span>Prev</span>
                         </a>
                     {% else %}
                         <span class="pagination-btn pagination-disabled">
-                            <span>⏮️</span>
+                            <span>First</span>
                         </span>
                         <span class="pagination-btn pagination-disabled">
-                            <span>◀️</span>
+                            <span>Prev</span>
                         </span>
                     {% endif %}
 
@@ -181,17 +181,17 @@
 
                     {% if review.has_next %}
                         <a href="?page={{ review.next_page_number }}" class="pagination-btn pagination-next">
-                            <span>▶️</span>
+                            <span>Next</span>
                         </a>
                         <a href="?page={{ review.paginator.num_pages }}" class="pagination-btn pagination-last">
-                            <span>⏭️</span>
+                            <span>Last</span>
                         </a>
                     {% else %}
                         <span class="pagination-btn pagination-disabled">
-                            <span>▶️</span>
+                            <span>Next</span>
                         </span>
                         <span class="pagination-btn pagination-disabled">
-                            <span>⏭️</span>
+                            <span>Last</span>
                         </span>
                     {% endif %}
                 </div>
