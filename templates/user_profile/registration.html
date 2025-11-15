@@ -17,38 +17,133 @@
 
                     <!-- Name Fields -->
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                        <input type="text" name="first_name" class="form-input" placeholder="First Name" required>
-                        <input type="text" name="last_name" class="form-input" placeholder="Last Name" required>
+                        <input 
+                            type="text" 
+                            name="first_name" 
+                            class="form-input search-input" 
+                            placeholder="First Name" 
+                            value="{{ form_data.first_name }}"
+                            required>
+                        <input 
+                            type="text" 
+                            name="last_name" 
+                            class="form-input search-input" 
+                            placeholder="Last Name" 
+                            value="{{ form_data.last_name }}"
+                            required>
                     </div>
 
-                    <input type="email" name="email" class="form-input" placeholder="Email" style="width: 100%; margin-bottom: 1.5rem;" required>
-                    <input type="text" name="student_id" class="form-input" placeholder="Student ID" style="width: 100%; margin-bottom: 1.5rem;" required>
+                    <input 
+                        type="email" 
+                        name="email" 
+                        class="form-input search-input" 
+                        placeholder="Email" 
+                        style="width: 100%; margin-bottom: 1.5rem;" 
+                        value="{{ form_data.email }}"
+                        required>
+                    
+                    <input 
+                        type="text" 
+                        name="student_id" 
+                        class="form-input search-input" 
+                        placeholder="Student ID" 
+                        style="width: 100%; margin-bottom: 1.5rem;" 
+                        value="{{ form_data.student_id }}"
+                        required>
 
                     <!-- University -->
-                    <select name="university" class="form-input" style="width: 100%; margin-bottom: 1.5rem;" required>
-                        <option selected disabled>Select University</option>
+                    <select 
+                        name="university" 
+                        class="form-input search-input" 
+                        style="width: 100%; margin-bottom: 1.5rem;" 
+                        required>
+                        <option value="" {% if not form_data.university %}selected{% endif %} disabled>Select University</option>
                         {% for uni in universitys %}
-                            <option value="{{ uni.id }}">{{ uni.title }}</option>
+                            <option 
+                                value="{{ uni.id }}" 
+                                {% if form_data.university|stringformat:"s" == uni.id|stringformat:"s" %}selected{% endif %}>
+                                {{ uni.title }}
+                            </option>
                         {% empty %}
                             <option disabled>No University Found</option>
                         {% endfor %}
                     </select>
 
                     <!-- Department -->
-                    <select name="department" class="form-input" style="width: 100%; margin-bottom: 1.5rem;" required>
-                        <option selected disabled>Select Department</option>
+                    <select 
+                        name="department" 
+                        class="form-input search-input" 
+                        style="width: 100%; margin-bottom: 1.5rem;" 
+                        required>
+                        <option value="" {% if not form_data.department %}selected{% endif %} disabled>Select Department</option>
                         {% for dept in departments %}
-                            <option value="{{ dept.id }}">{{ dept.title }}</option>
+                            <option 
+                                value="{{ dept.id }}" 
+                                {% if form_data.department|stringformat:"s" == dept.id|stringformat:"s" %}selected{% endif %}>
+                                {{ dept.title }}
+                            </option>
                         {% empty %}
                             <option disabled>No Department Found</option>
                         {% endfor %}
                     </select>
 
                     <!-- Password -->
-                    <input type="password" name="password" class="form-input" placeholder="Password" style="width: 100%; margin-bottom: 1.5rem;" required>
+                    <div style="position: relative; margin-bottom: 1.5rem;">
+                        <input 
+                            type="password" 
+                            name="password" 
+                            id="password"
+                            class="form-input search-input" 
+                            placeholder="Password" 
+                            style="width: 100%;" 
+                            required>
+                        <button 
+                            type="button" 
+                            id="togglePassword"
+                            style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: none; border: none; color: rgba(255,255,255,0.7); cursor: pointer; font-size: 1.2rem; padding: 0.5rem;">
+                            👁️
+                        </button>
+                    </div>
+                    
+                    <!-- Password Requirements -->
+                    <div class="password-requirements" style="margin-bottom: 1.5rem;">
+                        <p style="color: rgba(255,255,255,0.9); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem;">
+                            🔒 Password Requirements:
+                        </p>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li id="req-length" class="requirement">
+                                <span class="req-icon">⭕</span>
+                                <span class="req-text">At least 8 characters</span>
+                            </li>
+                            <li id="req-letter" class="requirement">
+                                <span class="req-icon">⭕</span>
+                                <span class="req-text">Contains letters (A-Z, a-z)</span>
+                            </li>
+                            <li id="req-number" class="requirement">
+                                <span class="req-icon">⭕</span>
+                                <span class="req-text">Contains at least one number (0-9)</span>
+                            </li>
+                        </ul>
+                    </div>
 
                     <!-- Confirm Password -->
-                    <input type="password" name="confirm_password" class="form-input" placeholder="Confirm Password" style="width: 100%; margin-bottom: 1.5rem;" required>
+                    <div style="position: relative; margin-bottom: 1.5rem;">
+                        <input 
+                            type="password" 
+                            name="confirm_password" 
+                            id="confirm_password"
+                            class="form-input search-input" 
+                            placeholder="Confirm Password" 
+                            style="width: 100%;" 
+                            required>
+                        <button 
+                            type="button" 
+                            id="toggleConfirmPassword"
+                            style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: none; border: none; color: rgba(255,255,255,0.7); cursor: pointer; font-size: 1.2rem; padding: 0.5rem;">
+                            👁️
+                        </button>
+                        <div id="password-match-message" style="margin-top: 0.5rem; font-size: 0.85rem; font-weight: 600;"></div>
+                    </div>
 
                     <!-- Submit Button -->
                     <button type="submit" class="btn" style="width: 100%; margin-bottom: 1.5rem; font-size: 1.2rem;">
@@ -57,15 +152,349 @@
 
                     <p style="color: white; text-align: center; font-size: 1.1rem;">
                         ✅ Already have an account?
-                        <a href="{% url 'login' %}" style="color: #ffeb3b; font-weight: 700; text-decoration: none;" >
+                        <a href="{% url 'login' %}" style="color: #ffeb3b; font-weight: 700; text-decoration: none;">
                             Login
                         </a>
                     </p>
                 </form>
-
-               
             </div>
         </div>
     </div>
 </div>
+
+<style>
+/* Error highlight for invalid fields */
+.form-input.error {
+    border: 2px solid rgba(255, 107, 107, 0.6) !important;
+    box-shadow: 0 0 20px rgba(255, 107, 107, 0.4) !important;
+}
+
+/* Success highlight for valid fields */
+.form-input.success {
+    border: 2px solid rgba(78, 205, 196, 0.6) !important;
+}
+
+/* Password Requirements Styling */
+.password-requirements {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 1rem 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.requirement {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.4rem 0;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.req-icon {
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.requirement.valid {
+    color: #4ecdc4;
+}
+
+.requirement.valid .req-icon {
+    content: '✅';
+}
+
+.requirement.valid .req-icon::before {
+    content: '✅';
+}
+
+.requirement.invalid {
+    color: #ff6b6b;
+}
+
+.requirement.invalid .req-icon::before {
+    content: '❌';
+}
+
+/* Password Match Message */
+#password-match-message {
+    display: none;
+    padding: 0.5rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    animation: slideDown 0.3s ease;
+}
+
+#password-match-message.match {
+    display: block;
+    color: #4ecdc4;
+    background: rgba(78, 205, 196, 0.15);
+    border: 1px solid rgba(78, 205, 196, 0.3);
+}
+
+#password-match-message.no-match {
+    display: block;
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.15);
+    border: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Password Strength Indicator */
+.password-strength {
+    margin-top: 0.5rem;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.password-strength-bar {
+    height: 100%;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+.strength-weak {
+    width: 33%;
+    background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+}
+
+.strength-medium {
+    width: 66%;
+    background: linear-gradient(90deg, #ffa502, #ff9800);
+}
+
+.strength-strong {
+    width: 100%;
+    background: linear-gradient(90deg, #4ecdc4, #11998e);
+}
+
+/* Toggle password button hover */
+#togglePassword:hover,
+#toggleConfirmPassword:hover {
+    color: rgba(255, 255, 255, 1) !important;
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Form validation feedback */
+.validation-message {
+    margin-top: -1rem;
+    margin-bottom: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.validation-message.error {
+    background: rgba(255, 107, 107, 0.2);
+    color: #ff6b6b;
+    border: 1px solid rgba(255, 107, 107, 0.4);
+}
+
+.validation-message.success {
+    background: rgba(78, 205, 196, 0.2);
+    color: #4ecdc4;
+    border: 1px solid rgba(78, 205, 196, 0.4);
+}
+</style>
+
+<script>
+// Add visual feedback for form validation
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const inputs = form.querySelectorAll('input[required], select[required]');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirm_password');
+    const matchMessage = document.getElementById('password-match-message');
+    
+    // Password requirements elements
+    const reqLength = document.getElementById('req-length');
+    const reqLetter = document.getElementById('req-letter');
+    const reqNumber = document.getElementById('req-number');
+    
+    // Toggle password visibility
+    const togglePassword = document.getElementById('togglePassword');
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+    
+    if (togglePassword) {
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
+            this.textContent = type === 'password' ? '👁️' : '🙈';
+        });
+    }
+    
+    if (toggleConfirmPassword) {
+        toggleConfirmPassword.addEventListener('click', function() {
+            const type = confirmPasswordInput.type === 'password' ? 'text' : 'password';
+            confirmPasswordInput.type = type;
+            this.textContent = type === 'password' ? '👁️' : '🙈';
+        });
+    }
+    
+    // Real-time password validation
+    if (passwordInput) {
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            
+            // Check length (at least 8 characters)
+            if (password.length >= 8) {
+                reqLength.classList.add('valid');
+                reqLength.classList.remove('invalid');
+                reqLength.querySelector('.req-icon').textContent = '✅';
+            } else {
+                reqLength.classList.add('invalid');
+                reqLength.classList.remove('valid');
+                reqLength.querySelector('.req-icon').textContent = '❌';
+            }
+            
+            // Check for letters
+            if (/[a-zA-Z]/.test(password)) {
+                reqLetter.classList.add('valid');
+                reqLetter.classList.remove('invalid');
+                reqLetter.querySelector('.req-icon').textContent = '✅';
+            } else {
+                reqLetter.classList.add('invalid');
+                reqLetter.classList.remove('valid');
+                reqLetter.querySelector('.req-icon').textContent = '❌';
+            }
+            
+            // Check for numbers
+            if (/\d/.test(password)) {
+                reqNumber.classList.add('valid');
+                reqNumber.classList.remove('invalid');
+                reqNumber.querySelector('.req-icon').textContent = '✅';
+            } else {
+                reqNumber.classList.add('invalid');
+                reqNumber.classList.remove('valid');
+                reqNumber.querySelector('.req-icon').textContent = '❌';
+            }
+            
+            // Check password strength (without special characters)
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (/[a-zA-Z]/.test(password)) strength++;
+            if (/\d/.test(password)) strength++;
+            
+            // Update border color based on strength
+            if (strength === 3) {
+                this.style.borderColor = 'rgba(78, 205, 196, 0.6)';
+                this.style.boxShadow = '0 0 20px rgba(78, 205, 196, 0.3)';
+            } else if (strength >= 2) {
+                this.style.borderColor = 'rgba(255, 165, 2, 0.6)';
+                this.style.boxShadow = '0 0 20px rgba(255, 165, 2, 0.3)';
+            } else {
+                this.style.borderColor = 'rgba(255, 107, 107, 0.6)';
+                this.style.boxShadow = '0 0 20px rgba(255, 107, 107, 0.3)';
+            }
+            
+            // Check password match
+            checkPasswordMatch();
+        });
+    }
+    
+    // Password match validation
+    function checkPasswordMatch() {
+        if (confirmPasswordInput.value) {
+            if (passwordInput.value === confirmPasswordInput.value) {
+                matchMessage.textContent = '✅ Passwords match!';
+                matchMessage.className = 'match';
+                confirmPasswordInput.style.borderColor = 'rgba(78, 205, 196, 0.6)';
+                confirmPasswordInput.style.boxShadow = '0 0 20px rgba(78, 205, 196, 0.3)';
+            } else {
+                matchMessage.textContent = '❌ Passwords do not match';
+                matchMessage.className = 'no-match';
+                confirmPasswordInput.style.borderColor = 'rgba(255, 107, 107, 0.6)';
+                confirmPasswordInput.style.boxShadow = '0 0 20px rgba(255, 107, 107, 0.3)';
+            }
+        } else {
+            matchMessage.style.display = 'none';
+        }
+    }
+    
+    if (confirmPasswordInput) {
+        confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+    }
+    
+    // Add real-time validation for other fields
+    inputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            if (this.value.trim()) {
+                this.classList.add('success');
+                this.classList.remove('error');
+            } else {
+                this.classList.add('error');
+                this.classList.remove('success');
+            }
+        });
+        
+        input.addEventListener('input', function() {
+            if (this.classList.contains('error')) {
+                this.classList.remove('error');
+            }
+        });
+    });
+    
+    // Form submission validation
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+        
+        // Check if all password requirements are met
+        if (passwordInput) {
+            const password = passwordInput.value;
+            const requirements = [
+                password.length >= 8,
+                /[a-zA-Z]/.test(password),
+                /\d/.test(password)
+            ];
+            
+            if (!requirements.every(req => req === true)) {
+                e.preventDefault();
+                alert('⚠️ Please meet all password requirements!');
+                passwordInput.focus();
+                isValid = false;
+                return;
+            }
+        }
+        
+        // Check password match
+        if (passwordInput && confirmPasswordInput) {
+            if (passwordInput.value !== confirmPasswordInput.value) {
+                e.preventDefault();
+                alert('⚠️ Passwords do not match!');
+                confirmPasswordInput.focus();
+                isValid = false;
+                return;
+            }
+        }
+        
+        // Show loading state
+        if (isValid) {
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.innerHTML = '⏳ Creating Account...';
+            submitBtn.disabled = true;
+        }
+    });
+    
+    // Smooth scroll to first error
+    const errorMessages = document.querySelector('.messages');
+    if (errorMessages) {
+        errorMessages.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+});
+</script>
 {% endblock content %}
