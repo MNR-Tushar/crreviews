@@ -94,46 +94,113 @@ def send_password_reset_email(user, request):
         return False
 
 def registration(request):
+    
+    form_data = {
+        'first_name': '',
+        'last_name': '',
+        'email': '',
+        'student_id': '',
+        'university': '',
+        'department': '',
+    }
 
     if request.method == 'POST':
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        email = request.POST.get('email')
-        student_id = request.POST.get('student_id')
-        university_id = request.POST.get('university')
-        department_id = request.POST.get('department')
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
+  
+        first_name = request.POST.get('first_name', '').strip()
+        last_name = request.POST.get('last_name', '').strip()
+        email = request.POST.get('email', '').strip()
+        student_id = request.POST.get('student_id', '').strip()
+        university_id = request.POST.get('university', '')
+        department_id = request.POST.get('department', '')
+        password = request.POST.get('password', '')
+        confirm_password = request.POST.get('confirm_password', '')
         
+    
+        form_data = {
+            'first_name': first_name,
+            'last_name': last_name,
+            'email': email,
+            'student_id': student_id,
+            'university': university_id,
+            'department': department_id,
+        }
+        
+        
+        if not all([first_name, last_name, email, student_id, university_id, department_id, password, confirm_password]):
+            messages.error(request, 'All fields are required!')
+            universitys = University.objects.all().order_by('title')
+            departments = Department.objects.all().order_by('title')
+            return render(request, 'user_profile/registration.html', {
+                'universitys': universitys,
+                'departments': departments,
+                'form_data': form_data
+            })
         
         if password != confirm_password:
             messages.error(request, 'Passwords do not match!')
-            return redirect('registration')
+            universitys = University.objects.all().order_by('title')
+            departments = Department.objects.all().order_by('title')
+            return render(request, 'user_profile/registration.html', {
+                'universitys': universitys,
+                'departments': departments,
+                'form_data': form_data
+            })
         
         if User.objects.filter(email=email).exists():
             messages.error(request, 'Email already exists!')
-            return redirect('registration')
+            universitys = University.objects.all().order_by('title')
+            departments = Department.objects.all().order_by('title')
+            return render(request, 'user_profile/registration.html', {
+                'universitys': universitys,
+                'departments': departments,
+                'form_data': form_data
+            })
+        
+        if User.objects.filter(student_id=student_id).exists():
+            messages.error(request, 'Student ID already exists!')
+            universitys = University.objects.all().order_by('title')
+            departments = Department.objects.all().order_by('title')
+            return render(request, 'user_profile/registration.html', {
+                'universitys': universitys,
+                'departments': departments,
+                'form_data': form_data
+            })
         
         if len(password) < 8:
             messages.error(request, 'Password must be at least 8 characters long!')
-            return redirect('registration')
+            universitys = University.objects.all().order_by('title')
+            departments = Department.objects.all().order_by('title')
+            return render(request, 'user_profile/registration.html', {
+                'universitys': universitys,
+                'departments': departments,
+                'form_data': form_data
+            })
         
         if password.isdigit():
             messages.error(request, 'Password must contain at least one letter!')
-            return redirect('registration')
+            universitys = University.objects.all().order_by('title')
+            departments = Department.objects.all().order_by('title')
+            return render(request, 'user_profile/registration.html', {
+                'universitys': universitys,
+                'departments': departments,
+                'form_data': form_data
+            })
         
         try:
             validate_password(password)
         except ValidationError as e:
-            messages.error(request, str(e))
-            return redirect('registration')
-        
+            messages.error(request, ' '.join(e.messages))
+            universitys = University.objects.all().order_by('title')
+            departments = Department.objects.all().order_by('title')
+            return render(request, 'user_profile/registration.html', {
+                'universitys': universitys,
+                'departments': departments,
+                'form_data': form_data
+            })
         
         try:
-            
             university = University.objects.get(id=university_id) if university_id else None
             department = Department.objects.get(id=department_id) if department_id else None
-            
             
             user = User.objects.create_user(
                 first_name=first_name,
@@ -160,15 +227,22 @@ def registration(request):
         except Exception as e:
             logger.error(f"Registration error: {str(e)}")
             messages.error(request, f'Registration failed: {str(e)}')
-            return redirect('registration')
+            universitys = University.objects.all().order_by('title')
+            departments = Department.objects.all().order_by('title')
+            return render(request, 'user_profile/registration.html', {
+                'universitys': universitys,
+                'departments': departments,
+                'form_data': form_data
+            })
     
-    
+   
     universitys = University.objects.all().order_by('title')
     departments = Department.objects.all().order_by('title')
     
     context = {
         'universitys': universitys,
         'departments': departments,
+        'form_data': form_data
     }
     
     return render(request, 'user_profile/registration.html', context)
@@ -234,32 +308,44 @@ def resend_verification_email(request):
     return render(request, 'user_profile/resend_verification.html')
 
 def login(request):
+   
+    form_data = {'email': ''}
+    
     if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+        email = request.POST.get('email', '').strip()
+        password = request.POST.get('password', '')
+        
+        
+        form_data = {'email': email}
+        
+        if not email or not password:
+            messages.error(request, 'Please enter both email and password!')
+            return render(request, 'user_profile/login.html', {'form_data': form_data})
         
         try:
             user = User.objects.get(email=email)
             
             if not user.is_email_verified:
                 messages.warning(request, 'Please verify your email first. Check your inbox.')
-                return redirect('verification_pending')
+                return render(request, 'user_profile/login.html', {'form_data': form_data})
             
         except User.DoesNotExist:
             messages.error(request, 'Invalid email or password!')
-            return redirect('login')
+            return render(request, 'user_profile/login.html', {'form_data': form_data})
         
         user = authenticate(request, email=email, password=password)
         
         if user is not None:
             auth_login(request, user)
             messages.success(request, 'Successfully logged in!')
-            return redirect('home')
+           
+            next_page = request.GET.get('next', 'home')
+            return redirect(next_page)
         else:
             messages.error(request, 'Invalid email or password!')
-            return redirect('login')
+            return render(request, 'user_profile/login.html', {'form_data': form_data})
     
-    return render(request, 'user_profile/login.html')
+    return render(request, 'user_profile/login.html', {'form_data': form_data})
 
 
 
