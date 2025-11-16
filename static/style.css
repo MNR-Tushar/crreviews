@@ -531,8 +531,7 @@
 
         .search-section {
             display: grid;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
@@ -1139,16 +1138,16 @@
  @media (max-width: 768px) {
     .search-bar {
         display: grid;
-        grid-template-columns: 1fr !important;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 1rem;
-        justify-items: stretch !important;   /* full width */
-        width: 100% !important;
+        justify-items: stretch ;   /* full width */
+        width: 100% ;
     }
 
     .search-bar input,
     .search-bar select,
     .search-bar button {
-        width: 100% !important;  /* elements full width */
+        width: 100% ;  /* elements full width */
     }
     
     .filter-section {
@@ -2700,6 +2699,7 @@ body.menu-open {
     .search-input {
         font-size: 0.9rem;
         padding: 0.8rem;
+        
     }
     
     .search-btn {
