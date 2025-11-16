@@ -530,6 +530,9 @@
         }
 
         .search-section {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
@@ -628,7 +631,7 @@
 
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
             margin: 2rem 0;
         }
@@ -1211,9 +1214,7 @@
             }
             
             
-            .stats {
-                grid-template-columns: 1fr;
-            }
+            
 
             .grid {
                 grid-template-columns: 1fr;
@@ -2684,19 +2685,6 @@ body.menu-open {
     }
 }
 
-/* Stats grid */
-@media (max-width: 768px) {
-    .stats {
-        grid-template-columns: 1fr !important;
-        gap: 1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .stats {
-        grid-template-columns: 1fr;
-    }
-}
 
 /* ==================== 
    SEARCH SECTION FIX 
@@ -2979,10 +2967,7 @@ body.menu-open {
         gap: 0.5rem;
     }
     
-    .stats-row {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-    }
+    
     
     .content-grid {
         grid-template-columns: 1fr;
@@ -2990,19 +2975,7 @@ body.menu-open {
     }
 }
 
-@media (max-width: 480px) {
-    .stats-row {
-        grid-template-columns: 1fr;
-    }
-    
-    .stat-box {
-        padding: 1.2rem;
-    }
-    
-    .stat-box-value {
-        font-size: 1.8rem;
-    }
-}
+
 
 /* ==================== 
    ADMIN DASHBOARD FIX 
