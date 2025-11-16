@@ -11,15 +11,15 @@
 
                 <!-- Profile Header -->
                 <div class="search-section" style="text-align: center; margin-bottom: 3rem;">
-                    <div class="profile-photo" style="width: 150px; height: 150px; font-size: 4rem; margin: 0 auto 2rem; position: relative;" id="profile-photo">
+                    <div class="profile-photo" style="width: 120px; height: 120px; font-size: 2rem; margin: 0 auto 2rem; position: relative;" id="profile-photo">
                          {% if cr_profile.profile_picture %}
                         <img src="{{ cr_profile.profile_picture }}" alt="{{ cr_profile.name }}" />
                         {% else %}
                         <span>{{ cr_profile.name|first|upper }}</span>
                         {% endif %}
                     </div>
-                    <h1 style="color: white; font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem;" id="profile-name">{{cr_profile.name}}</h1>
-                    <p style="color: rgba(255,255,255,0.9); font-size: 1.3rem; margin-bottom: 1.5rem;" id="profile-info">
+                    <h1 style="color: white; font-size: 2rem; font-weight: 600; margin-bottom: 1rem;" id="profile-name">{{cr_profile.name}}</h1>
+                    <p style="color: rgba(255,255,255,0.9); font-size: 1.2rem; margin-bottom: 1.5rem;" id="profile-info">
                         {{cr_profile.st_id}} | {{cr_profile.university}}
                     </p>
 
@@ -36,7 +36,7 @@
                     
                     <!-- Rating Display -->
                     <div style="margin: 2rem 0;">
-                        <div style="font-size: 3rem; color: #ffeb3b; text-shadow: 0 0 20px rgba(255,235,59,0.5);">
+                        <div style="font-size: 2.5rem; color: #ffeb3b; text-shadow: 0 0 20px rgba(255,235,59,0.5);">
                             ⭐ {{cr_profile.average_rating}}
                         </div>
                         <div style="color: rgba(255,255,255,0.8); margin-top: 0.5rem;" id="review-count">
@@ -52,7 +52,7 @@
                         </div>
                     </div>
                     
-                    <button class="btn" onclick="openRatingModal('{{ cr_profile.slug }}', '{{ cr_profile.name }}')" style="font-size: 1.2rem; padding: 1rem 2rem;">
+                    <button class="btn" onclick="openRatingModal('{{ cr_profile.slug }}', '{{ cr_profile.name }}')" style="font-size: 0.9rem; padding: 0.8rem 1.5rem;">
                         ⭐ Give Rating
                     </button>
 
@@ -60,14 +60,10 @@
                  {% if user.is_authenticated %}
 
                     {% if is_saved %}
-                    <a href="{% url 'remove_saved_cr' cr_profile.slug %}" class="button_remove">
-                    Remove from Saved
-                    </a>
+                    <button class="btn btn-secondary" style="background:rgba(146, 23, 12, 0.74);font-size: 0.9rem; padding: 0.8rem 1.5rem; color:white;font-weight: 600;" onclick="window.location.href='{% url 'remove_saved_cr' cr_profile.slug %}'">Remove from Saved</button>
+                    
                     {% else %}
-                    <a href="{% url 'save_cr' cr_profile.slug %}" class="button_save">
-                        
-                    💾 Save CR
-                    </a>
+                    <button class="btn btn-secondary" style="background:rgba(11, 205, 82, 0.74);font-size: 0.9rem; padding: 0.8rem 1.5rem; color:white;font-weight: 600;" onclick="window.location.href='{% url 'save_cr' cr_profile.slug %}'">💾 Add Save</button>    
                     {% endif %}
                 {% endif %} 
 
@@ -170,7 +166,7 @@
 
                <!-- Recent Reviews -->
 <div class="section">
-    <h2 style="color: white; font-size: 1.8rem; font-weight: 700; margin-bottom: 2rem;">
+    <h2 style="color: white; font-size: 1.5rem; font-weight: 600; margin-bottom: 2rem;">
         💬 Recent Reviews
     </h2>
 

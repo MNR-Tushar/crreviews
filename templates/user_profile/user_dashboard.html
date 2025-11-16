@@ -129,7 +129,7 @@
             {% else %}
             <div class="empty-state">
                {% if user.is_authenticated %}
-                    <button class="btn" onclick="window.location.href='{% url 'add_cr'%}'" style="font-size: 1.2rem; padding: 1rem 2rem;">
+                    <button class="btn" onclick="window.location.href='{% url 'add_cr'%}'" style="font-size: 1rem; padding: 1rem 2rem;">
                         ➕ Add New CR
                     </button>
                     {% endif %}
@@ -247,7 +247,7 @@
                      
                      <div class="form-group">
                         <label class="form-label">Your Comment</label>
-                        <textarea class="form-input" id="editReviewComment" name="description" placeholder="Share your experience..." required></textarea>
+                        <textarea class="form-input" id="editReviewComment" name="description" placeholder="Share your experience..." style="color:white;"  required></textarea>
                      </div>
                      
                      <div class="form-actions">
