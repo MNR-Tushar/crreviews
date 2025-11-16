@@ -7,7 +7,7 @@
             
             <!-- Search Section -->
             <div class="search-section">
-                <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 700;">🔍 Find Your CR</h3>
+                <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 600;">🔍 Find Your CR</h3>
                 <form method="GET" action="{% url 'all_cr' %}" class="search-bar">
                     <input 
                         type="text" 
@@ -28,7 +28,7 @@
             
             <!-- Filter Section -->
             <div class="filter-section">
-                <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 700;">🎯 Filters</h3>
+                <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 600;">🎯 Filters</h3>
                 <form method="GET" action="{% url 'all_cr' %}" id="filterForm">
                     <!-- Preserve search query when filtering -->
                     {% if request.GET.search %}
