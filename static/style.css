@@ -530,8 +530,6 @@
         }
 
         .search-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
@@ -566,7 +564,7 @@
         .search-bar {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
+            gap: 1.1rem;
             margin-bottom: 0rem;
         }
 
@@ -2691,6 +2689,7 @@ body.menu-open {
 
 @media (max-width: 768px) {
     .search-section {
+        grid-template-columns: repeat(1, 1fr);
         padding: 1.5rem 1rem;
         margin: 2rem 0;
     }
@@ -2851,38 +2850,6 @@ body.menu-open {
     }
 }
 
-/* ==================== 
-   FOOTER FIX 
-   ==================== */
-
-@media (max-width: 768px) {
-    .footer {
-        padding: 3rem 0;
-    }
-    
-    .footer-content {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-        padding: 0 1rem;
-    }
-    
-    .footer-section h3 {
-        font-size: 1rem;
-        text-align: center;
-    }
-    
-    .footer-section a {
-        text-align: center;
-    }
-    
-    .footer-brand {
-        text-align: center;
-    }
-    
-    .footer-contact-form {
-        max-width: 100%;
-    }
-}
 
 
 /* ==================== 
