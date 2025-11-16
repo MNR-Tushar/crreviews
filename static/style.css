@@ -530,6 +530,8 @@
         }
 
         .search-section {
+            display: flex;
+            flex-direction: column;
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
@@ -2689,7 +2691,7 @@ body.menu-open {
 
 @media (max-width: 768px) {
     .search-section {
-        grid-template-columns: repeat(1, 1fr);
+        flex-direction: column;
         padding: 1.5rem 1rem;
         margin: 2rem 0;
     }
