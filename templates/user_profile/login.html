@@ -7,6 +7,17 @@
             <div style="max-width: 450px; margin: 5rem auto;">
                 <div class="search-section">
                     <h2 style="color: white; text-align: center; margin-bottom: 2rem; font-size: 1.6rem; font-weight: 600;">Login</h2>
+                    
+                    <!-- Google Sign-In Button -->
+                    <a href="{% url 'social:begin' 'google-oauth2' %}" class="google-signin-btn">
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style="width: 24px; height: 24px;">
+                        <span>Continue with Google</span>
+                    </a>
+                    
+                    <div class="divider">
+                        <span>OR</span>
+                    </div>
+                    
                     <form method='POST' action="{% url 'login' %}">
                         {% csrf_token %}
                         <input 
@@ -48,6 +59,62 @@
             </div>
         </div>
     </div>
+
+<style>
+/* Google Sign-In Button Styles */
+.google-signin-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    padding: 1rem;
+    background: white;
+    color: #333;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.google-signin-btn:hover {
+    background: #f8f9fa;
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.google-signin-btn img {
+    width: 24px;
+    height: 24px;
+}
+
+/* Divider Style */
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.divider span {
+    padding: 0 1rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+</style>
 
 <script>
 // Add visual feedback for form validation

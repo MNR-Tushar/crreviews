@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'cloudinary',
     'anymail',
+    'social_django',
     
 ]
 
@@ -57,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'crreviews.urls'
@@ -71,6 +73,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -171,6 +175,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'userprofile.User'
 AUTHENTICATION_BACKENDS = [
+    'social_core.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 ]
 
@@ -236,3 +241,73 @@ CACHES = {
         'LOCATION': 'unique-snowflake',
     }
 }
+
+# Google OAuth2 Settings
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('GOOGLE_OAUTH2_CLIENT_ID', default='')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('GOOGLE_OAUTH2_CLIENT_SECRET', default='')
+
+# Extra scopes to request
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile',
+]
+
+# User model fields mapping
+SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
+    'access_type': 'offline',
+}
+
+# Custom pipeline for user creation
+SOCIAL_AUTH_PIPELINE = (
+    # Get the information we can about the user and return it in a simple
+    # format to create the user instance later.
+    'social_core.pipeline.social_auth.social_details',
+    
+    # Get the social uid from whichever service we're authing thru.
+    'social_core.pipeline.social_auth.social_uid',
+    
+    # Verifies that the current auth process is valid within the current
+    # project.
+    'social_core.pipeline.social_auth.auth_allowed',
+    
+    # Checks if the current social-account is already associated in the site.
+    'social_core.pipeline.social_auth.social_user',
+    
+    # Make up a username for this person, appends a random string at the end if
+    # there's any collision.
+    'social_core.pipeline.user.get_username',
+    
+    # Send a validation email to the user to verify its email address.
+    # 'social_core.pipeline.mail.mail_validation',
+    
+    # Associates the current social details with another user account with
+    # a similar email address.
+    'social_core.pipeline.social_auth.associate_by_email',
+    
+    # Create a user account if we haven't found one yet.
+    'userprofile.pipeline.create_user',  # Custom pipeline
+    
+    # Create the record that associates the social account with the user.
+    'social_core.pipeline.social_auth.associate_user',
+    
+    # Populate the extra_data field in the social record with the values
+    # specified by settings (and the default ones like access_token, etc).
+    'social_core.pipeline.social_auth.load_extra_data',
+    
+    # Update the user record with any changed info from the auth service.
+    'social_core.pipeline.user.user_details',
+)
+
+# Login redirect URLs
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/login/'
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = 'userprofile.pipeline.get_dashboard_url'
+
+# Session security
+SOCIAL_AUTH_POSTGRES_JSONFIELD = True
+SOCIAL_AUTH_CLEAN_USERNAMES = True
+SOCIAL_AUTH_SANITIZE_REDIRECTS = True
+
+# Email verification settings for social auth
+SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = 'userprofile.pipeline.send_validation_email'
+SOCIAL_AUTH_EMAIL_VALIDATION_URL = '/email-sent/'

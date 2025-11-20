@@ -12,6 +12,16 @@
                     Registration
                 </h2>
 
+                <!-- Google Sign-In Button -->
+                <a href="{% url 'social:begin' 'google-oauth2' %}" class="google-signin-btn">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style="width: 24px; height: 24px;">
+                    <span>Sign up with Google</span>
+                </a>
+                
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+
                 <form method='POST' action="{% url 'registration' %}">
                     {% csrf_token %}
 
@@ -163,18 +173,65 @@
 </div>
 
 <style>
-/* Error highlight for invalid fields */
+/* Google Sign-In Button */
+.google-signin-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    padding: 1rem;
+    background: white;
+    color: #333;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.google-signin-btn:hover {
+    background: #f8f9fa;
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Divider */
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.divider span {
+    padding: 0 1rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Existing styles... */
 .form-input.error {
     border: 2px solid rgba(255, 107, 107, 0.6) !important;
     box-shadow: 0 0 20px rgba(255, 107, 107, 0.4) !important;
 }
 
-/* Success highlight for valid fields */
 .form-input.success {
     border: 2px solid rgba(78, 205, 196, 0.6) !important;
 }
 
-/* Password Requirements Styling */
 .password-requirements {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 15px;
@@ -201,10 +258,6 @@
     color: #4ecdc4;
 }
 
-.requirement.valid .req-icon {
-    content: '✅';
-}
-
 .requirement.valid .req-icon::before {
     content: '✅';
 }
@@ -217,7 +270,6 @@
     content: '❌';
 }
 
-/* Password Match Message */
 #password-match-message {
     display: none;
     padding: 0.5rem 0.8rem;
@@ -252,68 +304,15 @@
     }
 }
 
-/* Password Strength Indicator */
-.password-strength {
-    margin-top: 0.5rem;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 2px;
-    overflow: hidden;
-}
-
-.password-strength-bar {
-    height: 100%;
-    transition: all 0.3s ease;
-    border-radius: 2px;
-}
-
-.strength-weak {
-    width: 33%;
-    background: linear-gradient(90deg, #ff6b6b, #ee5a24);
-}
-
-.strength-medium {
-    width: 66%;
-    background: linear-gradient(90deg, #ffa502, #ff9800);
-}
-
-.strength-strong {
-    width: 100%;
-    background: linear-gradient(90deg, #4ecdc4, #11998e);
-}
-
-/* Toggle password button hover */
 #togglePassword:hover,
 #toggleConfirmPassword:hover {
     color: rgba(255, 255, 255, 1) !important;
     transform: translateY(-50%) scale(1.1);
 }
-
-/* Form validation feedback */
-.validation-message {
-    margin-top: -1rem;
-    margin-bottom: 1rem;
-    padding: 0.5rem 1rem;
-    border-radius: 10px;
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
-.validation-message.error {
-    background: rgba(255, 107, 107, 0.2);
-    color: #ff6b6b;
-    border: 1px solid rgba(255, 107, 107, 0.4);
-}
-
-.validation-message.success {
-    background: rgba(78, 205, 196, 0.2);
-    color: #4ecdc4;
-    border: 1px solid rgba(78, 205, 196, 0.4);
-}
 </style>
 
 <script>
-// Add visual feedback for form validation
+// Same JavaScript as before for password validation...
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.querySelector('form');
     const inputs = form.querySelectorAll('input[required], select[required]');
@@ -321,12 +320,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const confirmPasswordInput = document.getElementById('confirm_password');
     const matchMessage = document.getElementById('password-match-message');
     
-    // Password requirements elements
     const reqLength = document.getElementById('req-length');
     const reqLetter = document.getElementById('req-letter');
     const reqNumber = document.getElementById('req-number');
     
-    // Toggle password visibility
     const togglePassword = document.getElementById('togglePassword');
     const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
     
@@ -346,12 +343,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Real-time password validation
     if (passwordInput) {
         passwordInput.addEventListener('input', function() {
             const password = this.value;
             
-            // Check length (at least 8 characters)
             if (password.length >= 8) {
                 reqLength.classList.add('valid');
                 reqLength.classList.remove('invalid');
@@ -362,7 +357,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 reqLength.querySelector('.req-icon').textContent = '❌';
             }
             
-            // Check for letters
             if (/[a-zA-Z]/.test(password)) {
                 reqLetter.classList.add('valid');
                 reqLetter.classList.remove('invalid');
@@ -373,7 +367,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 reqLetter.querySelector('.req-icon').textContent = '❌';
             }
             
-            // Check for numbers
             if (/\d/.test(password)) {
                 reqNumber.classList.add('valid');
                 reqNumber.classList.remove('invalid');
@@ -384,13 +377,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 reqNumber.querySelector('.req-icon').textContent = '❌';
             }
             
-            // Check password strength (without special characters)
             let strength = 0;
             if (password.length >= 8) strength++;
             if (/[a-zA-Z]/.test(password)) strength++;
             if (/\d/.test(password)) strength++;
             
-            // Update border color based on strength
             if (strength === 3) {
                 this.style.borderColor = 'rgba(78, 205, 196, 0.6)';
                 this.style.boxShadow = '0 0 20px rgba(78, 205, 196, 0.3)';
@@ -402,12 +393,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.style.boxShadow = '0 0 20px rgba(255, 107, 107, 0.3)';
             }
             
-            // Check password match
             checkPasswordMatch();
         });
     }
     
-    // Password match validation
     function checkPasswordMatch() {
         if (confirmPasswordInput.value) {
             if (passwordInput.value === confirmPasswordInput.value) {
@@ -430,7 +419,6 @@ document.addEventListener('DOMContentLoaded', function() {
         confirmPasswordInput.addEventListener('input', checkPasswordMatch);
     }
     
-    // Add real-time validation for other fields
     inputs.forEach(input => {
         input.addEventListener('blur', function() {
             if (this.value.trim()) {
@@ -449,11 +437,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Form submission validation
     form.addEventListener('submit', function(e) {
         let isValid = true;
         
-        // Check if all password requirements are met
         if (passwordInput) {
             const password = passwordInput.value;
             const requirements = [
@@ -471,7 +457,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        // Check password match
         if (passwordInput && confirmPasswordInput) {
             if (passwordInput.value !== confirmPasswordInput.value) {
                 e.preventDefault();
@@ -482,7 +467,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        // Show loading state
         if (isValid) {
             const submitBtn = form.querySelector('button[type="submit"]');
             submitBtn.innerHTML = '⏳ Creating Account...';
@@ -490,7 +474,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Smooth scroll to first error
     const errorMessages = document.querySelector('.messages');
     if (errorMessages) {
         errorMessages.scrollIntoView({ behavior: 'smooth', block: 'center' });

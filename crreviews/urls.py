@@ -45,6 +45,7 @@ urlpatterns = [
     path('',include('userprofile.urls')),
     path('',include('footer.urls')),
     path('',include('admin_dashboard.urls')),
+    path('auth/', include('social_django.urls', namespace='social')),
 
     # Sitemap
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, 
