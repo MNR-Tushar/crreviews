@@ -215,5 +215,19 @@
         {% endif %}
     </div>
 </div>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "CR Reviews",
+  "url": "https://crreviews.onrender.com",
+  "description": "Find and review Class Representatives from universities",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://crreviews.onrender.com/?search={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
 {% include 'rating.html' %}
 {% endblock content %}

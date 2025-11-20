@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import *
 
+
 urlpatterns = [
     path('',home,name='home'),
     path('all_cr/',all_cr,name='all_cr'),
@@ -17,4 +18,6 @@ urlpatterns = [
     # path('review_status/pending-reviews/', pending_reviews, name='pending_reviews'),
     path('review_status/approve-review/<str:slug>/', approve_review, name='approve_review'),
     path('review_status/reject-review/<str:slug>/', reject_review, name='reject_review'),
+
+    
 ]

@@ -4,6 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="GxDa10wcBn6IR2OOAescL99zuCcKPeFSOjUADdLHLfU" />
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{% block meta_description %}CR Reviews - Find and review Class Representatives from universities across Bangladesh{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}CR reviews, class representative, university, Bangladesh, student reviews{% endblock %}">
+    <meta name="author" content="CR Reviews">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="{% block og_title %}CR Reviews{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Find and review Class Representatives{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{% static 'logo.svg' %}">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR-GA-ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'YOUR-GA-ID');
+    </script>
+
     <title>{% block title %} {% endblock title %}</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <link rel="stylesheet" href="{% static 'add_cr.css' %}">
