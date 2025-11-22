@@ -64,32 +64,30 @@ def home(request):
         2: 0,
         1: 0
     }
-    
-    all_crs = CrProfile.objects.all()
-    total_crs_with_ratings = 0
-    
-    for cr_item in all_crs:
-        avg_rating = cr_item.average_rating
-        if avg_rating > 0:
-            total_crs_with_ratings += 1
-            if avg_rating >= 4.5:
-                rating_distribution[5] += 1
-            elif avg_rating >= 3.5:
+    all_reviews=Review.objects.all()
+    for review in all_reviews:
+        if review.rating:
+            if review.rating == 5:
+               rating_distribution[5] += 1
+            elif review.rating == 4:
                 rating_distribution[4] += 1
-            elif avg_rating >= 2.5:
+            elif review.rating == 3:
                 rating_distribution[3] += 1
-            elif avg_rating >= 1.5:
+            elif review.rating == 2:
                 rating_distribution[2] += 1
             else:
                 rating_distribution[1] += 1
-    
-    
-    rating_percentages = {}
-    if total_crs_with_ratings > 0:
-        for star, count in rating_distribution.items():
-            rating_percentages[star] = round((count / total_crs_with_ratings) * 100, 1)
-    else:
-        rating_percentages = {5: 0, 4: 0, 3: 0, 2: 0, 1: 0}
+   
+    rating_percentages = {
+        5: 0,
+        4: 0,
+        3: 0,
+        2: 0,
+        1: 0
+        }
+   
+    for star, count in rating_distribution.items():
+        rating_percentages[star] = round((count / total_review) * 100, 1)
 
     context={
         'cr':cr,
