@@ -8,7 +8,7 @@ const pageTitle = document.getElementById('pageTitle1');
 const topActionBtn = document.getElementById('topActionBtn1');
 const logoutBtn = document.getElementById('logoutBtn1');
 const adminProfileInfo = document.getElementById('adminProfileInfo');
-const visitorAnalyticsPage = document.getElementById('visitor-analytics-page');
+const visitorAnalyticsPage = document.getElementById('visitor-analytics');
 // Current active page tracking
 let currentActivePage = 'dashboard1';
 
@@ -45,6 +45,11 @@ const pageConfigs = {
         title: '📚 Departments Management',
         button: '<span>➕</span><span>Add Department</span>',
         action: '/admin_dashboard/department/add/'
+    },
+    'visitors1': {
+        title: '👤 Visitor Analytics',
+        button: '',
+        action: 'admin_dashboard/',
     },
     'settings1': {
         title: '⚙️ Settings',
@@ -85,7 +90,10 @@ function detectCurrentPageFromPath() {
         return 'dashboard1';
     } else if (path.includes('/admin_dashboard/tech-stack/')) {
         return 'dashboard1';
-    } else if (path === '/admin_dashboard/' || path === '/admin_dashboard') {
+    } else if (path.includes('/admin_dashboard/')) {
+        return 'visitors1';
+    } 
+    else if (path === '/admin_dashboard/' || path === '/admin_dashboard') {
         return getActivePage(); // Get from localStorage when on main dashboard
     }
     
@@ -211,7 +219,8 @@ function handleUrlFragment() {
             'users': 'users1',
             'reviews': 'reviews1',
             'crs': 'all-crs1',
-            'dashboard': 'dashboard1'
+            'dashboard': 'dashboard1',
+            'visitors': 'visitors1'
         };
         
         const pageName = fragmentToPage[hash];

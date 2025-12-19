@@ -1043,9 +1043,7 @@ def delete_tech_stack(request, pk):
     return redirect('admin_dashboard') 
 
 
-from django.db.models import Count, Q
-from datetime import datetime, timedelta
-from collections import Counter
+
 
 @staff_member_required
 def visitor_analytics(request):

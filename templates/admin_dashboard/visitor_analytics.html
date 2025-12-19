@@ -1,8 +1,13 @@
-{% extends 'admin_dashboard/admin_dashboard.html' %}
+
 {% load static %}
 
-{% block extra_content %}
-<div class="page-content1 active" id="visitor-analytics-page">
+{% block content %}
+<link rel="stylesheet" href="{% static 'style.css' %}">
+<link rel="stylesheet" href="{% static 'admin_dashboard/admin_dashboard.css' %}">
+<div class="page-content1 active" id="visitors1-analytics-page">
+    {% include 'admin_dashboard/sidebar.html' %}
+    
+    <main class="main-content1" id="mainContent1">
     <div class="top-bar1">
         <h1 class="page-title1">📊 Visitor Analytics & IP Tracking</h1>
         
@@ -217,6 +222,7 @@
         </div>
         {% endif %}
     </div>
+    </main>
 </div>
 
 <script>
@@ -261,7 +267,7 @@ function viewIPDetails(ip) {
 
 function blockIP(ip) {
     if (confirm(`Are you sure you want to block IP: ${ip}?`)) {
-        window.location.href = `/admin_dashboard/analytics/block-ip/${ip}/`;
+        window.location.href = `/admin_dashboard/block-ip/${ip}/`;
     }
 }
 </script>
