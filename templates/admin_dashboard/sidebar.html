@@ -1,10 +1,10 @@
-{%load static%}
+{% load static %}
 <aside class="sidebar1" id="sidebar1">
     <div class="sidebar-header1">
         <button class="toggle-btn1" id="toggleBtn1">☰</button>
-         <a href="{% url 'home' %}"  style="display: flex; align-items: center; text-decoration: none;">
-        <img src="{% static 'logo.svg' %}" alt="CR Reviews" style="height:55px !important; width:auto !important; margin-right:10px;">
-         </a>
+        <a href="{% url 'home' %}" style="display: flex; align-items: center; text-decoration: none;">
+            <img src="{% static 'logo.svg' %}" alt="CR Reviews" style="height:55px !important; width:auto !important; margin-right:10px;">
+        </a>
     </div>
     <ul class="nav-menu1">
         <li class="nav-item1">
@@ -43,8 +43,8 @@
                 <span>Departments</span>
             </a>
         </li>
-         <li class="nav-item1">
-             <a href="{% url 'visitor_analytics' %}#visitors" class="nav-link1" data-page="visitors1">
+        <li class="nav-item1">
+            <a href="#visitors" class="nav-link1" data-page="visitors1">
                 <span class="nav-icon1">📊</span>
                 <span>Visitor Analytics</span>
             </a>
@@ -55,14 +55,11 @@
                 <span>Settings</span>
             </a>
         </li>
-       
         <li class="nav-item1">
             <a class="nav-link1" id="logoutBtn1">
                 <span class="nav-icon1">🚪</span>
                 <span>Logout</span>
             </a>
         </li>
-        
-
     </ul>
 </aside>
