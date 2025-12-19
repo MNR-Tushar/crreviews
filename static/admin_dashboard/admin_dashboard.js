@@ -47,9 +47,10 @@ const pageConfigs = {
         action: '/admin_dashboard/department/add/'
     },
     'visitors1': {
-        title: '👤 Visitor Analytics',
+        title: '📊 Visitor Analytics',
         button: '',
-        action: 'admin_dashboard/',
+        action: '',
+        url: '/admin_dashboard/visitors/'
     },
     'settings1': {
         title: '⚙️ Settings',
@@ -90,7 +91,7 @@ function detectCurrentPageFromPath() {
         return 'dashboard1';
     } else if (path.includes('/admin_dashboard/tech-stack/')) {
         return 'dashboard1';
-    } else if (path.includes('/admin_dashboard/')) {
+    } else if (path.includes('/admin_dashboard/visitors')) {
         return 'visitors1';
     } 
     else if (path === '/admin_dashboard/' || path === '/admin_dashboard') {
