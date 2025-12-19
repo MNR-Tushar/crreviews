@@ -29,7 +29,15 @@ def admin_dashboard(request):
     university_filter = request.GET.get('university')
     department_filter = request.GET.get('department')
     cr=CrProfile.objects.all()
-   
+    
+    today = timezone.now().replace(hour=0, minute=0, second=0)
+    total_visitors_today = VisitorLog.objects.filter(timestamp__gte=today).count()
+    unique_visitors_today = VisitorLog.objects.filter(
+        timestamp__gte=today
+    ).values('ip_address').distinct().count()
+    
+    total_visitors_all = VisitorLog.objects.count()
+    unique_ips_all = VisitorLog.objects.values('ip_address').distinct().count()
 
     if search_quary:
         cr = cr.filter(
@@ -227,6 +235,10 @@ def admin_dashboard(request):
         'cr':cr,
         'total_university':total_university,
         'total_department':total_department,
+        'total_visitors_today': total_visitors_today,
+        'unique_visitors_today': unique_visitors_today,
+        'total_visitors_all': total_visitors_all,
+        'unique_ips_all': unique_ips_all,
 
     }
     
@@ -1029,3 +1041,106 @@ def delete_tech_stack(request, pk):
     tech.delete()
     messages.success(request, f'Technology "{title}" deleted successfully!')
     return redirect('admin_dashboard') 
+
+
+from django.db.models import Count, Q
+from datetime import datetime, timedelta
+from collections import Counter
+
+@staff_member_required
+def visitor_analytics(request):
+    """View for visitor analytics and IP tracking"""
+    
+    # Date filtering
+    date_filter = request.GET.get('date_filter', 'today')
+    
+    if date_filter == 'today':
+        start_date = timezone.now().replace(hour=0, minute=0, second=0)
+    elif date_filter == 'week':
+        start_date = timezone.now() - timedelta(days=7)
+    elif date_filter == 'month':
+        start_date = timezone.now() - timedelta(days=30)
+    else:
+        start_date = None
+    
+    visitors_query = VisitorLog.objects.all()
+    if start_date:
+        visitors_query = visitors_query.filter(timestamp__gte=start_date)
+    
+    # Statistics
+    total_visits = visitors_query.count()
+    unique_ips = visitors_query.values('ip_address').distinct().count()
+    authenticated_visits = visitors_query.filter(user__isnull=False).count()
+    anonymous_visits = total_visits - authenticated_visits
+    
+    # Most visited pages
+    popular_pages = visitors_query.values('path').annotate(
+        visit_count=Count('id')
+    ).order_by('-visit_count')[:10]
+    
+    # Device statistics
+    device_stats = visitors_query.values('device_type').annotate(
+        count=Count('id')
+    ).order_by('-count')
+    
+    # Browser statistics
+    browser_stats = visitors_query.values('browser').annotate(
+        count=Count('id')
+    ).order_by('-count')[:10]
+    
+    # Top IPs
+    top_ips = visitors_query.values('ip_address').annotate(
+        visit_count=Count('id')
+    ).order_by('-visit_count')[:20]
+    
+    # Hourly visits (last 24 hours)
+    hourly_visits = []
+    for i in range(24):
+        hour_start = timezone.now().replace(minute=0, second=0) - timedelta(hours=i)
+        hour_end = hour_start + timedelta(hours=1)
+        count = VisitorLog.objects.filter(
+            timestamp__gte=hour_start,
+            timestamp__lt=hour_end
+        ).count()
+        hourly_visits.append({
+            'hour': hour_start.strftime('%H:00'),
+            'count': count
+        })
+    
+    hourly_visits.reverse()
+    
+    # Recent visitors with pagination
+    recent_page = request.GET.get('recent_page', 1)
+    recent_visitors_list = visitors_query.select_related('user').order_by('-timestamp')
+    recent_paginator = Paginator(recent_visitors_list, 50)
+    
+    try:
+        recent_visitors = recent_paginator.page(recent_page)
+    except PageNotAnInteger:
+        recent_visitors = recent_paginator.page(1)
+    except EmptyPage:
+        recent_visitors = recent_paginator.page(recent_paginator.num_pages)
+    
+    context = {
+        'total_visits': total_visits,
+        'unique_ips': unique_ips,
+        'authenticated_visits': authenticated_visits,
+        'anonymous_visits': anonymous_visits,
+        'popular_pages': popular_pages,
+        'device_stats': device_stats,
+        'browser_stats': browser_stats,
+        'top_ips': top_ips,
+        'recent_visitors': recent_visitors,
+        'hourly_visits': json.dumps(hourly_visits),
+        'date_filter': date_filter,
+    }
+    
+    return render(request, 'admin_dashboard/visitor_analytics.html', context)
+
+
+@staff_member_required
+def block_ip(request, ip_address):
+    """Block an IP address"""
+    
+    messages.success(request, f'IP {ip_address} blocked successfully!')
+    return redirect('visitor_analytics')

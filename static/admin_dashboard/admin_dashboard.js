@@ -8,7 +8,7 @@ const pageTitle = document.getElementById('pageTitle1');
 const topActionBtn = document.getElementById('topActionBtn1');
 const logoutBtn = document.getElementById('logoutBtn1');
 const adminProfileInfo = document.getElementById('adminProfileInfo');
-
+const visitorAnalyticsPage = document.getElementById('visitor-analytics-page');
 // Current active page tracking
 let currentActivePage = 'dashboard1';
 
