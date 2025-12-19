@@ -1,0 +1,295 @@
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'style.css' %}">
+<link rel="stylesheet" href="{% static 'admin_dashboard/admin_dashboard.css' %}">
+<div class="page-content1 active" id="visitors1-analytics-page">
+    {% include 'admin_dashboard/sidebar.html' %}
+    
+    <main class="main-content1" id="mainContent1">
+    <div class="top-bar1">
+        <h1 class="page-title1">📊 Visitor Analytics & IP Tracking</h1>
+        
+        <div class="filter-group">
+            <select id="dateFilter" class="form-input1" onchange="filterByDate(this.value)">
+                <option value="today" {% if date_filter == 'today' %}selected{% endif %}>Today</option>
+                <option value="week" {% if date_filter == 'week' %}selected{% endif %}>Last 7 Days</option>
+                <option value="month" {% if date_filter == 'month' %}selected{% endif %}>Last 30 Days</option>
+                <option value="all" {% if date_filter == 'all' %}selected{% endif %}>All Time</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="stats-grid1">
+        <div class="stat-card1">
+            <div class="stat-header1">
+                <div class="stat-icon1 blue">👥</div>
+            </div>
+            <p class="stat-label1">Total Visits</p>
+            <h2 class="stat-value1">{{ total_visits }}</h2>
+        </div>
+
+        <div class="stat-card1">
+            <div class="stat-header1">
+                <div class="stat-icon1 green">🌐</div>
+            </div>
+            <p class="stat-label1">Unique IPs</p>
+            <h2 class="stat-value1">{{ unique_ips }}</h2>
+        </div>
+
+        <div class="stat-card1">
+            <div class="stat-header1">
+                <div class="stat-icon1 purple">🔐</div>
+            </div>
+            <p class="stat-label1">Authenticated</p>
+            <h2 class="stat-value1">{{ authenticated_visits }}</h2>
+        </div>
+
+        <div class="stat-card1">
+            <div class="stat-header1">
+                <div class="stat-icon1 orange">👤</div>
+            </div>
+            <p class="stat-label1">Anonymous</p>
+            <h2 class="stat-value1">{{ anonymous_visits }}</h2>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="dashboard-card1">
+        <div class="card-header1">
+            <h2 class="card-title1">📈 Hourly Traffic (Last 24 Hours)</h2>
+        </div>
+        <div class="chart-container1" id="hourlyChart"></div>
+    </div>
+
+    <!-- Two Column Layout -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+        
+        <!-- Device Statistics -->
+        <div class="dashboard-card1">
+            <div class="card-header1">
+                <h2 class="card-title1">📱 Device Types</h2>
+            </div>
+            <div style="padding: 1rem 0;">
+                {% for device in device_stats %}
+                <div style="margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span style="color: white;">{{ device.device_type }}</span>
+                        <span style="color: rgba(255,255,255,0.7);">{{ device.count }}</span>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; overflow: hidden;">
+                        <div style="background: linear-gradient(135deg, #4facfe, #00f2fe); height: 100%; width: {% widthratio device.count total_visits 100 %}%;"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Browser Statistics -->
+        <div class="dashboard-card1">
+            <div class="card-header1">
+                <h2 class="card-title1">🌐 Top Browsers</h2>
+            </div>
+            <div style="padding: 1rem 0;">
+                {% for browser in browser_stats %}
+                <div style="margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span style="color: white;">{{ browser.browser }}</span>
+                        <span style="color: rgba(255,255,255,0.7);">{{ browser.count }}</span>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; overflow: hidden;">
+                        <div style="background: linear-gradient(135deg, #11998e, #38ef7d); height: 100%; width: {% widthratio browser.count total_visits 100 %}%;"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Popular Pages -->
+    <div class="dashboard-card1">
+        <div class="card-header1">
+            <h2 class="card-title1">🔥 Most Visited Pages</h2>
+        </div>
+        <div class="data-table1">
+            <table style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Page URL</th>
+                        <th>Visit Count</th>
+                        <th>Percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for page in popular_pages %}
+                    <tr>
+                        <td>{{ page.path }}</td>
+                        <td>{{ page.visit_count }}</td>
+                        <td>
+                            <span class="badge1 approved">{% widthratio page.visit_count total_visits 100 %}%</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Top IP Addresses -->
+    <div class="dashboard-card1">
+        <div class="card-header1">
+            <h2 class="card-title1">🌍 Top IP Addresses</h2>
+        </div>
+        <div class="data-table1">
+            <table style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>IP Address</th>
+                        <th>Visit Count</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ip in top_ips %}
+                    <tr>
+                        <td><code style="background: rgba(255,255,255,0.1); padding: 0.3rem 0.6rem; border-radius: 4px;">{{ ip.ip_address }}</code></td>
+                        <td>{{ ip.visit_count }}</td>
+                        <td>
+                            <button class="action-btn1 view" onclick="viewIPDetails('{{ ip.ip_address }}')">View Details</button>
+                            <button class="action-btn1 delete" onclick="blockIP('{{ ip.ip_address }}')">Block</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Recent Visitors -->
+    <div class="dashboard-card1">
+        <div class="card-header1">
+            <h2 class="card-title1">🕐 Recent Visitors</h2>
+        </div>
+        <div class="data-table1">
+            <table style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>IP Address</th>
+                        <th>User</th>
+                        <th>Page</th>
+                        <th>Device</th>
+                        <th>Browser</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for visitor in recent_visitors %}
+                    <tr>
+                        <td><code style="background: rgba(255,255,255,0.1); padding: 0.3rem 0.6rem; border-radius: 4px;">{{ visitor.ip_address }}</code></td>
+                        <td>
+                            {% if visitor.user %}
+                                {{ visitor.user.get_full_name }}
+                            {% else %}
+                                <span style="color: rgba(255,255,255,0.5);">Anonymous</span>
+                            {% endif %}
+                        </td>
+                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">{{ visitor.path }}</td>
+                        <td>{{ visitor.device_type }}</td>
+                        <td>{{ visitor.browser|truncatechars:20 }}</td>
+                        <td>{{ visitor.timestamp|timesince }} ago</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if recent_visitors.has_other_pages %}
+        <div class="pagination1" style="margin-top: 2rem; text-align: center;">
+            {% if recent_visitors.has_previous %}
+                <a href="?recent_page={{ recent_visitors.previous_page_number }}&date_filter={{ date_filter }}" class="pagination-btn">Previous</a>
+            {% endif %}
+
+            <span style="color: white; margin: 0 1rem;">
+                Page {{ recent_visitors.number }} of {{ recent_visitors.paginator.num_pages }}
+            </span>
+
+            {% if recent_visitors.has_next %}
+                <a href="?recent_page={{ recent_visitors.next_page_number }}&date_filter={{ date_filter }}" class="pagination-btn">Next</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+    </main>
+</div>
+
+<script>
+// Hourly chart
+const hourlyData = {{ hourly_visits|safe }};
+
+function renderHourlyChart() {
+    const container = document.getElementById('hourlyChart');
+    container.innerHTML = '';
+    
+    const maxCount = Math.max(...hourlyData.map(d => d.count), 1);
+    
+    hourlyData.forEach(data => {
+        const bar = document.createElement('div');
+        bar.className = 'chart-bar1';
+        bar.style.height = `${(data.count / maxCount) * 100}%`;
+        
+        const label = document.createElement('div');
+        label.className = 'chart-label1';
+        label.textContent = data.hour;
+        
+        const value = document.createElement('div');
+        value.className = 'chart-value1';
+        value.textContent = data.count;
+        
+        bar.appendChild(label);
+        bar.appendChild(value);
+        container.appendChild(bar);
+    });
+}
+
+renderHourlyChart();
+
+function filterByDate(value) {
+    window.location.href = `?date_filter=${value}`;
+}
+
+function viewIPDetails(ip) {
+    alert(`Viewing details for IP: ${ip}`);
+  
+}
+
+function blockIP(ip) {
+    if (confirm(`Are you sure you want to block IP: ${ip}?`)) {
+        window.location.href = `/admin_dashboard/block-ip/${ip}/`;
+    }
+}
+</script>
+
+<style>
+.pagination-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    margin: 0 0.25rem;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.pagination-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+code {
+    font-family: 'Courier New', monospace;
+}
+</style>
+{% endblock %}

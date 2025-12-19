@@ -52,6 +52,9 @@ urlpatterns = [
     path('admin_dashboard/tech-stack/add/', add_tech_stack, name='add_tech_stack'),
     path('admin_dashboard/tech-stack/edit/<int:pk>/', edit_tech_stack, name='edit_tech_stack'),
     path('admin_dashboard/tech-stack/delete/<int:pk>/', delete_tech_stack, name='delete_tech_stack'),
+    
+    path('admin_dashboard/visitors/', visitor_analytics, name='visitor_analytics'),
+    path('admin_dashboard/block-ip/<str:ip_address>/', block_ip, name='block_ip'),
 
 
 

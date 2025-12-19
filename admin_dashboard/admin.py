@@ -37,3 +37,11 @@ class Developer_ProfileAdmin(admin.ModelAdmin):
     search_fields = ('name', 'email')
     list_filter = ('created_at',)
     ordering = ('-created_at',)
+
+@admin.register(VisitorLog)
+class VisitorLogAdmin(admin.ModelAdmin):
+    list_display = ('ip_address', 'path', 'user', 'device_type', 'browser', 'timestamp')
+    list_filter = ('timestamp', 'device_type', 'browser')
+    search_fields = ('ip_address', 'path', 'user__email')
+    readonly_fields = ('ip_address', 'user_agent', 'path', 'method', 'user', 'country', 'city', 'device_type', 'browser', 'timestamp')
+    ordering = ('-timestamp',)
