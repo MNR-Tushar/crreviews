@@ -58,7 +58,8 @@ def cr_profile_picture_path(instance, filename):
 
 
 class CrProfile(models.Model):
-    user=models.OneToOneField('userprofile.User', on_delete=models.CASCADE,related_name='user_profile')
+    
+    user=models.ForeignKey('userprofile.User', on_delete=models.CASCADE,related_name='user_profile')
     university=models.ForeignKey(University, on_delete=models.CASCADE,related_name='university_crs')
     department=models.ForeignKey(Department, on_delete=models.CASCADE,related_name='department_crs')
 
