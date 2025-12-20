@@ -86,8 +86,16 @@ def home(request):
         1: 0
         }
    
-    for star, count in rating_distribution.items():
-        rating_percentages[star] = round((count / total_review) * 100, 1)
+    rating_percentages = {}
+
+    if total_review > 0:
+        for star, count in rating_distribution.items():
+            rating_percentages[star] = round((count / total_review) * 100, 1)
+    else:
+    
+        for star in rating_distribution.keys():
+            rating_percentages[star] = 0
+
 
     context={
         'cr':cr,
@@ -241,9 +249,10 @@ def add_cr(request):
     if request.method == 'POST':
 
        
-        if hasattr(request.user, 'user_profile'):
-            messages.error(request, "You already have a CR profile!")
-            return redirect('add_cr')
+        if not (request.user.is_staff or request.user.is_superuser):
+            if CrProfile.objects.filter(user=request.user).exists():
+                messages.error(request, "You already have a CR profile!")
+                return redirect('user_dashboard',slug=request.user.slug)
 
             
 
@@ -260,6 +269,11 @@ def add_cr(request):
         bio = request.POST.get('bio')
         profile_picture = request.FILES.get('profile_picture')
         cr_status = request.POST.get('cr_status')
+        
+        if CrProfile.objects.filter(st_id=st_id).exists():
+            messages.error(request, "This Student ID already exists!")
+            return redirect('add_cr')
+
 
         cr = CrProfile.objects.create(
             user=request.user,
@@ -276,6 +290,7 @@ def add_cr(request):
             bio=bio,
             cr_status=cr_status,
         )
+        profile_picture = request.FILES.get('profile_picture')
         if profile_picture:
             try:
                 upload_result = cloudinary.uploader.upload(profile_picture,
@@ -293,13 +308,14 @@ def add_cr(request):
                     # Save Cloudinary URL
                 cr.profile_picture = upload_result['secure_url']
                 cr.save()
-                    
+                
             except Exception as e:
                 messages.warning(request, f'CR created but image upload failed: {str(e)}')
                 print(f"Cloudinary upload error: {e}")
 
-            messages.success(request, "CR profile added successfully!")
-            return redirect('cr_profile', slug=cr.slug)
+        messages.success(request, "CR profile added successfully!")
+        return redirect('cr_profile', slug=cr.slug)
+                        
 
     context={
         'university':university,
