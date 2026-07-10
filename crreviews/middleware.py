@@ -2,15 +2,22 @@ from admin_dashboard.models import VisitorLog
 from user_agents import parse
 
 class VisitorTrackingMiddleware:
+    IGNORED_USER_AGENTS = (
+        'uptimerobot',
+    )
+
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
-        # Get IP address
-        ip_address = self.get_client_ip(request)
-        
         # Get user agent
         user_agent = request.META.get('HTTP_USER_AGENT', '')
+
+        if self.should_ignore_user_agent(user_agent):
+            return self.get_response(request)
+
+        # Get IP address
+        ip_address = self.get_client_ip(request)
         
         # Parse user agent for device info
         user_agent_parsed = parse(user_agent)
@@ -36,6 +43,11 @@ class VisitorTrackingMiddleware:
         
         response = self.get_response(request)
         return response
+
+    def should_ignore_user_agent(self, user_agent):
+        """Skip uptime checks and other configured synthetic traffic."""
+        normalized_user_agent = user_agent.lower()
+        return any(agent in normalized_user_agent for agent in self.IGNORED_USER_AGENTS)
     
     def get_client_ip(self, request):
         """Get the client's IP address from the request"""
