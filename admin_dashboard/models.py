@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 class Notice(models.Model):
@@ -72,10 +73,14 @@ class Developer_Profile(models.Model):
     
     def __str__(self):
         return f"Developer Profile from {self.name} {self.email} at {self.created_at}"
+
     def get_profile_picture_url(self):
-        """Return profile picture URL or default"""
+        """Return profile picture URL for Cloudinary, media files, or a default."""
         if self.profile_picture:
-            return self.profile_picture
+            picture_url = str(self.profile_picture).strip()
+            if picture_url.startswith(('http://', 'https://', '/')):
+                return picture_url
+            return f"{settings.MEDIA_URL}{picture_url.lstrip('/')}"
         return '/static/images/default-avatar.png'
 
 class VisitorLog(models.Model):

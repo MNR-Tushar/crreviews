@@ -6,306 +6,444 @@
 <link rel="stylesheet" href="{% static 'admin_dashboard/admin_dashboard.css' %}">
 
 <div class="dashboard-container1">
-    <!-- Sidebar -->
     {% include 'admin_dashboard/sidebar.html' %}
 
-    <main class="main-content1">
+    <main class="main-content1" id="mainContent1">
         <div class="top-bar1">
-            <h1 class="page-title1">👨‍💻 Developer Profile</h1>
-            <button class="btn1 btn-primary1" onclick="window.location.href='{% url 'admin_dashboard' %}'">
-                <span>← Back to Dashboard</span>
-            </button>
+            <h1 class="page-title1">Developer Profile</h1>
+            <div class="developer-top-actions">
+                <a class="btn1 btn-secondary1" href="{% url 'admin_dashboard' %}">Back</a>
+                <a class="btn1 btn-primary1" href="{% url 'edit_developer_profile' developer.pk %}">Edit Profile</a>
+            </div>
         </div>
 
-        <div class="dashboard-card1" style="max-width: 1000px; margin: 2rem auto;">
-            <!-- Header Section with Profile Picture -->
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                        padding: 3rem 2rem; border-radius: 12px 12px 0 0; text-align: center; position: relative;">
-                <div style="position: absolute; top: 1rem; right: 1rem; display: flex; gap: 0.5rem;">
+        <section class="developer-profile-shell">
+            <div class="developer-hero-card">
+                <div class="developer-status-row">
                     {% if developer.is_read %}
                         <span class="badge1 approved">Active</span>
                     {% else %}
                         <span class="badge1 rejected">Inactive</span>
                     {% endif %}
+                    <span class="developer-id">#{{ developer.pk }}</span>
                 </div>
 
-                {% if developer.profile_picture %}
-                    <img src="{{ developer.profile_picture }}" alt="{{ developer.name }}" 
-                         style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; 
-                                border: 5px solid rgba(255,255,255,0.3); margin-bottom: 1.5rem;">
-                {% else %}
-                    <div style="width: 150px; height: 150px; border-radius: 50%; 
-                                background: rgba(255,255,255,0.2); display: flex; align-items: center; 
-                                justify-content: center; margin: 0 auto 1.5rem; border: 5px solid rgba(255,255,255,0.3);
-                                color: white; font-size: 4rem; font-weight: 700;">
-                        {{ developer.name|first|upper }}
-                    </div>
-                {% endif %}
-
-                <h2 style="color: white; font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">
-                    {{ developer.name }}
-                </h2>
-                <p style="color: rgba(255,255,255,0.9); font-size: 1.2rem; margin-bottom: 1rem;">
-                    {{ developer.degisnation|default:"Developer" }}
-                </p>
-
-                <!-- Quick Stats -->
-                <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 2rem; flex-wrap: wrap;">
-                    {% if developer.years_of_experience %}
-                    <div style="text-align: center;">
-                        <div style="font-size: 2rem; font-weight: 700; color: white;">
-                            {{ developer.years_of_experience }}
-                        </div>
-                        <div style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">
-                            Years Experience
-                        </div>
-                    </div>
+                <div class="developer-portrait-wrap">
+                    {% if developer.profile_picture %}
+                        <img class="developer-portrait"
+                             src="{{ developer.get_profile_picture_url }}"
+                             alt="{{ developer.name }}"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+                        <div class="developer-portrait-fallback">{{ developer.name|first|upper }}</div>
+                    {% else %}
+                        <div class="developer-portrait-fallback is-visible">{{ developer.name|first|upper }}</div>
                     {% endif %}
-                    
-                    {% if developer.projects_built %}
-                    <div style="text-align: center;">
-                        <div style="font-size: 2rem; font-weight: 700; color: white;">
-                            {{ developer.projects_built }}
-                        </div>
-                        <div style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">
-                            Projects Built
-                        </div>
-                    </div>
-                    {% endif %}
+                </div>
 
-                    <div style="text-align: center;">
-                        <div style="font-size: 2rem; font-weight: 700; color: white;">
-                            {{ developer.tack_stack.count }}
-                        </div>
-                        <div style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">
-                            Technologies
-                        </div>
+                <h2>{{ developer.name }}</h2>
+                <p class="developer-role">{{ developer.degisnation|default:"Developer" }}</p>
+
+                <div class="developer-quick-stats">
+                    <div>
+                        <strong>{{ developer.years_of_experience|default:"0" }}</strong>
+                        <span>Years</span>
+                    </div>
+                    <div>
+                        <strong>{{ developer.projects_built|default:"0" }}</strong>
+                        <span>Projects</span>
+                    </div>
+                    <div>
+                        <strong>{{ developer.tack_stack.count }}</strong>
+                        <span>Tech</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Content Section -->
-            <div style="padding: 2rem;">
-                <!-- About Section -->
-                {% if developer.about %}
-                <div style="margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                    <h3 style="color: white; font-size: 1.3rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                        <span>📝</span> About
-                    </h3>
-                    <p style="color: rgba(255,255,255,0.8); line-height: 1.8; white-space: pre-wrap;">
-                        {{ developer.about }}
-                    </p>
-                </div>
-                {% endif %}
+            <div class="developer-content-grid">
+                <article class="developer-panel developer-about-panel">
+                    <div class="developer-panel-header">
+                        <span class="developer-panel-icon">A</span>
+                        <h3>About</h3>
+                    </div>
+                    {% if developer.about %}
+                        <p>{{ developer.about }}</p>
+                    {% else %}
+                        <p class="developer-muted">No about details added yet.</p>
+                    {% endif %}
+                </article>
 
-                <!-- Tech Stack Section -->
-                <div style="margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                    <h3 style="color: white; font-size: 1.3rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                        <span>⚡</span> Tech Stack
-                    </h3>
+                <article class="developer-panel">
+                    <div class="developer-panel-header">
+                        <span class="developer-panel-icon">T</span>
+                        <h3>Tech Stack</h3>
+                    </div>
                     {% if developer.tack_stack.all %}
-                        <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+                        <div class="developer-tech-list">
                             {% for tech in developer.tack_stack.all %}
-                            <span style="padding: 0.6rem 1.2rem; background: linear-gradient(135deg, rgba(79, 172, 254, 0.2), rgba(0, 242, 254, 0.2)); 
-                                         border: 1px solid rgba(79, 172, 254, 0.4); border-radius: 8px; 
-                                         color: #4FACFE; font-weight: 600; font-size: 0.95rem;">
-                                {{ tech.title }}
-                            </span>
+                                <span>{{ tech.title }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        <p style="color: rgba(255,255,255,0.6);">No technologies listed</p>
+                        <p class="developer-muted">No technologies listed.</p>
                     {% endif %}
-                </div>
+                </article>
 
-                <!-- Contact Information Section -->
-                <div style="margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                    <h3 style="color: white; font-size: 1.3rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                        <span>📞</span> Contact Information
-                    </h3>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                <article class="developer-panel">
+                    <div class="developer-panel-header">
+                        <span class="developer-panel-icon">C</span>
+                        <h3>Contact</h3>
+                    </div>
+                    <div class="developer-info-list">
                         {% if developer.email %}
-                        <div style="padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                            <div style="color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-bottom: 0.3rem;">
-                                Email
-                            </div>
-                            <a href="mailto:{{ developer.email }}" style="color: #4FACFE; text-decoration: none; word-break: break-all;">
-                                {{ developer.email }}
+                            <a href="mailto:{{ developer.email }}">
+                                <span>Email</span>
+                                <strong>{{ developer.email }}</strong>
                             </a>
-                        </div>
                         {% endif %}
-
                         {% if developer.phone %}
-                        <div style="padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                            <div style="color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-bottom: 0.3rem;">
-                                Phone
-                            </div>
-                            <a href="tel:{{ developer.phone }}" style="color: #4FACFE; text-decoration: none;">
-                                {{ developer.phone }}
+                            <a href="tel:{{ developer.phone }}">
+                                <span>Phone</span>
+                                <strong>{{ developer.phone }}</strong>
                             </a>
-                        </div>
                         {% endif %}
-
                         {% if developer.location %}
-                        <div style="padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                            <div style="color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-bottom: 0.3rem;">
-                                Location
+                            <div>
+                                <span>Location</span>
+                                <strong>{{ developer.location }}</strong>
                             </div>
-                            <div style="color: white;">{{ developer.location }}</div>
-                        </div>
+                        {% endif %}
+                        {% if not developer.email and not developer.phone and not developer.location %}
+                            <p class="developer-muted">No contact details added.</p>
                         {% endif %}
                     </div>
-                </div>
+                </article>
 
-                <!-- Social Media Links Section -->
                 {% if developer.github_url or developer.linkedin_url or developer.facebook_url or developer.twitter_url %}
-                <div style="margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                    <h3 style="color: white; font-size: 1.3rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                        <span>🔗</span> Social Media
-                    </h3>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <article class="developer-panel">
+                    <div class="developer-panel-header">
+                        <span class="developer-panel-icon">L</span>
+                        <h3>Links</h3>
+                    </div>
+                    <div class="developer-link-grid">
                         {% if developer.github_url %}
-                        <a href="{{ developer.github_url }}" target="_blank" 
-                           style="padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; 
-                                  text-decoration: none; display: flex; align-items: center; gap: 0.75rem;
-                                  border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s;">
-                            <span style="font-size: 1.5rem;">🔗</span>
-                            <div>
-                                <div style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">GitHub</div>
-                                <div style="color: #4FACFE; font-size: 0.9rem;">View Profile</div>
-                            </div>
-                        </a>
+                            <a href="{{ developer.github_url }}" target="_blank" rel="noopener">GitHub</a>
                         {% endif %}
-
                         {% if developer.linkedin_url %}
-                        <a href="{{ developer.linkedin_url }}" target="_blank" 
-                           style="padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; 
-                                  text-decoration: none; display: flex; align-items: center; gap: 0.75rem;
-                                  border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s;">
-                            <span style="font-size: 1.5rem;">💼</span>
-                            <div>
-                                <div style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">LinkedIn</div>
-                                <div style="color: #4FACFE; font-size: 0.9rem;">View Profile</div>
-                            </div>
-                        </a>
+                            <a href="{{ developer.linkedin_url }}" target="_blank" rel="noopener">LinkedIn</a>
                         {% endif %}
-
                         {% if developer.facebook_url %}
-                        <a href="{{ developer.facebook_url }}" target="_blank" 
-                           style="padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; 
-                                  text-decoration: none; display: flex; align-items: center; gap: 0.75rem;
-                                  border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s;">
-                            <span style="font-size: 1.5rem;">📘</span>
-                            <div>
-                                <div style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">Facebook</div>
-                                <div style="color: #4FACFE; font-size: 0.9rem;">View Profile</div>
-                            </div>
-                        </a>
+                            <a href="{{ developer.facebook_url }}" target="_blank" rel="noopener">Facebook</a>
                         {% endif %}
-
                         {% if developer.twitter_url %}
-                        <a href="{{ developer.twitter_url }}" target="_blank" 
-                           style="padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; 
-                                  text-decoration: none; display: flex; align-items: center; gap: 0.75rem;
-                                  border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s;">
-                            <span style="font-size: 1.5rem;">🐦</span>
-                            <div>
-                                <div style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">Twitter</div>
-                                <div style="color: #4FACFE; font-size: 0.9rem;">View Profile</div>
-                            </div>
-                        </a>
+                            <a href="{{ developer.twitter_url }}" target="_blank" rel="noopener">Twitter</a>
                         {% endif %}
                     </div>
-                </div>
+                </article>
                 {% endif %}
 
-                <!-- Metadata Section -->
-                <div style="margin-bottom: 2rem;">
-                    <h3 style="color: white; font-size: 1.3rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                        <span>📊</span> Profile Information
-                    </h3>
-                    <div style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 8px;">
-                        <div style="display: grid; gap: 0.75rem;">
-                            <div style="display: flex; justify-content: space-between;">
-                                <span style="color: rgba(255,255,255,0.6);">Profile Created:</span>
-                                <span style="color: white;">{{ developer.created_at|date:"F d, Y" }} at {{ developer.created_at|time:"g:i A" }}</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between;">
-                                <span style="color: rgba(255,255,255,0.6);">Profile ID:</span>
-                                <span style="color: white;">#{{ developer.pk }}</span>
-                            </div>
+                <article class="developer-panel">
+                    <div class="developer-panel-header">
+                        <span class="developer-panel-icon">I</span>
+                        <h3>Profile Info</h3>
+                    </div>
+                    <div class="developer-meta-list">
+                        <div>
+                            <span>Created</span>
+                            <strong>{{ developer.created_at|date:"F d, Y" }}</strong>
+                        </div>
+                        <div>
+                            <span>Time</span>
+                            <strong>{{ developer.created_at|time:"g:i A" }}</strong>
                         </div>
                     </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div style="display: flex; gap: 1rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); flex-wrap: wrap;">
-                    <button class="btn1 btn-primary1" onclick="window.location.href='{% url 'edit_developer_profile' developer.pk %}'">
-                        <span>✏️</span><span>Edit Profile</span>
-                    </button>
-                    <button class="btn1" onclick="window.location.href='{% url 'admin_dashboard' %}'"
-                            style="background: rgba(255,255,255,0.1);">
-                        <span>←</span><span>Back to Dashboard</span>
-                    </button>
-                    <button class="btn1" 
-                            onclick="if(confirm('Are you sure you want to delete this developer profile?')) window.location.href='{% url 'delete_developer_profile' developer.pk %}'"
-                            style="background: linear-gradient(135deg, #FF6B6B, #FF4757); margin-left: auto;">
-                        <span>🗑️</span><span>Delete Profile</span>
-                    </button>
-                </div>
+                </article>
             </div>
+        </section>
+
+        <div class="developer-danger-zone">
+            <button class="btn1 developer-delete-btn"
+                    onclick="if(confirm('Are you sure you want to delete this developer profile?')) window.location.href='{% url 'delete_developer_profile' developer.pk %}'">
+                Delete Profile
+            </button>
         </div>
     </main>
 </div>
 
 {% if messages %}
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function() {
     {% for message in messages %}
-     showNotification("{{ message|escapejs }}", "{{ message.tags }}");
+    showNotification("{{ message|escapejs }}", "{{ message.tags }}");
     {% endfor %}
-    });
+});
 </script>
 {% endif %}
-<script>
-    // Navigation handler for edit/add pages
-    document.addEventListener('DOMContentLoaded', function() {
-        const navLinks = document.querySelectorAll('.nav-link1');
-        
-        navLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                const href = this.getAttribute('href');
-                
-                // If it's a fragment link (contains #), navigate to dashboard with fragment
-                if (href && href.includes('#')) {
-                    e.preventDefault();
-                    localStorage.removeItem('scrollPos');
-                    window.location.href = href;
-                }
-            });
-        });
-        
-        // Toggle sidebar
-        const toggleBtn = document.getElementById('toggleBtn1');
-        const sidebar = document.getElementById('sidebar1');
-        const mainContent = document.getElementById('mainContent1');
-        
-        if (toggleBtn) {
-            toggleBtn.addEventListener('click', () => {
-                if (sidebar) sidebar.classList.toggle('collapsed');
-                if (mainContent) mainContent.classList.toggle('expanded');
-            });
-        }
-    });
-    </script>
+
 <script src="{% static 'admin_dashboard/admin_dashboard.js' %}"></script>
 <script src="{% static 'script.js' %}"></script>
 
 <style>
-a[href*="http"]:hover {
+.developer-top-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.developer-profile-shell {
+    display: grid;
+    grid-template-columns: minmax(280px, 360px) 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.developer-hero-card,
+.developer-panel,
+.developer-danger-zone {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 18px;
+    backdrop-filter: blur(24px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+}
+
+.developer-hero-card {
+    position: sticky;
+    top: 2rem;
+    overflow: hidden;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.developer-hero-card::before {
+    content: "";
+    display: block;
+    height: 120px;
+    margin: -1.5rem -1.5rem 1.5rem;
+    background:
+        linear-gradient(135deg, rgba(79, 172, 254, 0.85), rgba(17, 153, 142, 0.7)),
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.45), transparent 28%);
+}
+
+.developer-status-row {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    right: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1;
+}
+
+.developer-id {
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 700;
+}
+
+.developer-portrait-wrap {
+    width: 164px;
+    height: 164px;
+    margin: -88px auto 1rem;
+    position: relative;
+    border-radius: 50%;
+    padding: 6px;
+    background: rgba(255, 255, 255, 0.24);
+}
+
+.developer-portrait,
+.developer-portrait-fallback {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.developer-portrait {
+    display: block;
+    object-fit: cover;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.developer-portrait-fallback {
+    display: none;
+    place-items: center;
+    background: linear-gradient(135deg, #4facfe, #38ef7d);
+    color: white;
+    font-size: 4rem;
+    font-weight: 800;
+}
+
+.developer-portrait-fallback.is-visible {
+    display: grid;
+}
+
+.developer-hero-card h2 {
+    color: white;
+    font-size: 2rem;
+    line-height: 1.15;
+    margin: 0;
+}
+
+.developer-role {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 1.05rem;
+    margin: 0.5rem 0 1.5rem;
+}
+
+.developer-quick-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+}
+
+.developer-quick-stats div {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    padding: 1rem 0.5rem;
+}
+
+.developer-quick-stats strong {
+    display: block;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.developer-quick-stats span,
+.developer-muted,
+.developer-info-list span,
+.developer-meta-list span {
+    color: rgba(255, 255, 255, 0.62);
+}
+
+.developer-content-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+}
+
+.developer-about-panel {
+    grid-column: 1 / -1;
+}
+
+.developer-panel {
+    padding: 1.5rem;
+}
+
+.developer-panel-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.developer-panel-icon {
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: rgba(79, 172, 254, 0.18);
+    color: #7ed5ff;
+    font-weight: 800;
+}
+
+.developer-panel h3 {
+    color: white;
+    font-size: 1.15rem;
+    margin: 0;
+}
+
+.developer-panel p {
+    color: rgba(255, 255, 255, 0.78);
+    line-height: 1.75;
+    white-space: pre-wrap;
+    margin: 0;
+}
+
+.developer-tech-list,
+.developer-link-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+}
+
+.developer-tech-list span,
+.developer-link-grid a {
+    padding: 0.6rem 0.9rem;
+    border-radius: 12px;
+    border: 1px solid rgba(79, 172, 254, 0.35);
+    background: rgba(79, 172, 254, 0.12);
+    color: #8edaff;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.developer-link-grid a:hover {
     transform: translateY(-2px);
-    background: rgba(255,255,255,0.08) !important;
-    border-color: rgba(79, 172, 254, 0.5) !important;
+    background: rgba(79, 172, 254, 0.2);
+}
+
+.developer-info-list,
+.developer-meta-list {
+    display: grid;
+    gap: 0.85rem;
+}
+
+.developer-info-list a,
+.developer-info-list div,
+.developer-meta-list div {
+    display: grid;
+    gap: 0.3rem;
+    padding: 1rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.055);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    text-decoration: none;
+}
+
+.developer-info-list strong,
+.developer-meta-list strong {
+    color: white;
+    word-break: break-word;
+}
+
+.developer-danger-zone {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+    padding: 1rem;
+}
+
+.developer-delete-btn {
+    background: linear-gradient(135deg, #ff6b6b, #ff4757);
+    color: white;
+}
+
+@media (max-width: 980px) {
+    .developer-profile-shell {
+        grid-template-columns: 1fr;
+    }
+
+    .developer-hero-card {
+        position: static;
+    }
+}
+
+@media (max-width: 680px) {
+    .developer-content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .developer-top-actions,
+    .developer-danger-zone {
+        justify-content: stretch;
+    }
+
+    .developer-top-actions .btn1,
+    .developer-danger-zone .btn1 {
+        width: 100%;
+        justify-content: center;
+    }
 }
 </style>
 
