@@ -17,6 +17,87 @@ from datetime import timedelta
 from django.db.models import Q
 import json
 
+
+def get_visitor_analytics_context(request=None):
+    """Build visitor analytics data for the dashboard tab and standalone page."""
+    date_filter = 'today'
+    if request:
+        date_filter = request.GET.get('date_filter', date_filter)
+
+    now = timezone.now()
+    if date_filter == 'today':
+        start_date = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    elif date_filter == 'week':
+        start_date = now - timedelta(days=7)
+    elif date_filter == 'month':
+        start_date = now - timedelta(days=30)
+    else:
+        start_date = None
+
+    visitors_query = VisitorLog.objects.all()
+    if start_date:
+        visitors_query = visitors_query.filter(timestamp__gte=start_date)
+
+    total_visits = visitors_query.count()
+    authenticated_visits = visitors_query.filter(user__isnull=False).count()
+
+    popular_pages = visitors_query.values('path').annotate(
+        visit_count=Count('id')
+    ).order_by('-visit_count')[:10]
+
+    device_stats = visitors_query.values('device_type').annotate(
+        count=Count('id')
+    ).order_by('-count')
+
+    browser_stats = visitors_query.values('browser').annotate(
+        count=Count('id')
+    ).order_by('-count')[:10]
+
+    top_ips = visitors_query.values('ip_address').annotate(
+        visit_count=Count('id')
+    ).order_by('-visit_count')[:20]
+
+    hourly_visits = []
+    current_hour = now.replace(minute=0, second=0, microsecond=0)
+    for i in range(24):
+        hour_start = current_hour - timedelta(hours=i)
+        hour_end = hour_start + timedelta(hours=1)
+        count = VisitorLog.objects.filter(
+            timestamp__gte=hour_start,
+            timestamp__lt=hour_end
+        ).count()
+        hourly_visits.append({
+            'hour': hour_start.strftime('%H:00'),
+            'count': count
+        })
+
+    hourly_visits.reverse()
+
+    recent_page = request.GET.get('recent_page', 1) if request else 1
+    recent_visitors_list = visitors_query.select_related('user').order_by('-timestamp')
+    recent_paginator = Paginator(recent_visitors_list, 50)
+
+    try:
+        recent_visitors = recent_paginator.page(recent_page)
+    except PageNotAnInteger:
+        recent_visitors = recent_paginator.page(1)
+    except EmptyPage:
+        recent_visitors = recent_paginator.page(recent_paginator.num_pages)
+
+    return {
+        'total_visits': total_visits,
+        'unique_ips': visitors_query.values('ip_address').distinct().count(),
+        'authenticated_visits': authenticated_visits,
+        'anonymous_visits': total_visits - authenticated_visits,
+        'popular_pages': popular_pages,
+        'device_stats': device_stats,
+        'browser_stats': browser_stats,
+        'top_ips': top_ips,
+        'recent_visitors': recent_visitors,
+        'hourly_visits': json.dumps(hourly_visits),
+        'date_filter': date_filter,
+    }
+
 @staff_member_required
 def admin_dashboard(request):
 
@@ -241,6 +322,7 @@ def admin_dashboard(request):
         'unique_ips_all': unique_ips_all,
 
     }
+    context.update(get_visitor_analytics_context(request))
     
     return render(request, 'admin_dashboard/admin_dashboard.html', context)
 
@@ -1048,90 +1130,8 @@ def delete_tech_stack(request, pk):
 @staff_member_required
 def visitor_analytics(request):
     """View for visitor analytics and IP tracking"""
-    
-    # Date filtering
-    date_filter = request.GET.get('date_filter', 'today')
-    
-    if date_filter == 'today':
-        start_date = timezone.now().replace(hour=0, minute=0, second=0)
-    elif date_filter == 'week':
-        start_date = timezone.now() - timedelta(days=7)
-    elif date_filter == 'month':
-        start_date = timezone.now() - timedelta(days=30)
-    else:
-        start_date = None
-    
-    visitors_query = VisitorLog.objects.all()
-    if start_date:
-        visitors_query = visitors_query.filter(timestamp__gte=start_date)
-    
-    # Statistics
-    total_visits = visitors_query.count()
-    unique_ips = visitors_query.values('ip_address').distinct().count()
-    authenticated_visits = visitors_query.filter(user__isnull=False).count()
-    anonymous_visits = total_visits - authenticated_visits
-    
-    # Most visited pages
-    popular_pages = visitors_query.values('path').annotate(
-        visit_count=Count('id')
-    ).order_by('-visit_count')[:10]
-    
-    # Device statistics
-    device_stats = visitors_query.values('device_type').annotate(
-        count=Count('id')
-    ).order_by('-count')
-    
-    # Browser statistics
-    browser_stats = visitors_query.values('browser').annotate(
-        count=Count('id')
-    ).order_by('-count')[:10]
-    
-    # Top IPs
-    top_ips = visitors_query.values('ip_address').annotate(
-        visit_count=Count('id')
-    ).order_by('-visit_count')[:20]
-    
-    # Hourly visits (last 24 hours)
-    hourly_visits = []
-    for i in range(24):
-        hour_start = timezone.now().replace(minute=0, second=0) - timedelta(hours=i)
-        hour_end = hour_start + timedelta(hours=1)
-        count = VisitorLog.objects.filter(
-            timestamp__gte=hour_start,
-            timestamp__lt=hour_end
-        ).count()
-        hourly_visits.append({
-            'hour': hour_start.strftime('%H:00'),
-            'count': count
-        })
-    
-    hourly_visits.reverse()
-    
-    # Recent visitors with pagination
-    recent_page = request.GET.get('recent_page', 1)
-    recent_visitors_list = visitors_query.select_related('user').order_by('-timestamp')
-    recent_paginator = Paginator(recent_visitors_list, 50)
-    
-    try:
-        recent_visitors = recent_paginator.page(recent_page)
-    except PageNotAnInteger:
-        recent_visitors = recent_paginator.page(1)
-    except EmptyPage:
-        recent_visitors = recent_paginator.page(recent_paginator.num_pages)
-    
-    context = {
-        'total_visits': total_visits,
-        'unique_ips': unique_ips,
-        'authenticated_visits': authenticated_visits,
-        'anonymous_visits': anonymous_visits,
-        'popular_pages': popular_pages,
-        'device_stats': device_stats,
-        'browser_stats': browser_stats,
-        'top_ips': top_ips,
-        'recent_visitors': recent_visitors,
-        'hourly_visits': json.dumps(hourly_visits),
-        'date_filter': date_filter,
-    }
+    context = get_visitor_analytics_context(request)
+    context['standalone'] = True
     
     return render(request, 'admin_dashboard/visitor_analytics.html', context)
 

@@ -163,6 +163,11 @@ navLinks.forEach(link => {
         const pageName = this.getAttribute('data-page');
         
         if (!pageName) return;
+        const targetPage = document.getElementById(pageName + '-page');
+        if (!targetPage) {
+            window.location.href = this.href;
+            return;
+        }
         
         // Save active page
         saveActivePage(pageName);
@@ -180,7 +185,6 @@ navLinks.forEach(link => {
         pageContents.forEach(page => page.classList.remove('active'));
         
         // Show target page
-        const targetPage = document.getElementById(pageName + '-page');
         if (targetPage) {
             targetPage.classList.add('active');
             

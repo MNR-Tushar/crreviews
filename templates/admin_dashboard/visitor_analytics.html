@@ -1,16 +1,17 @@
-
 {% load static %}
 
-{% block content %}
+{% if standalone %}
 <link rel="stylesheet" href="{% static 'style.css' %}">
 <link rel="stylesheet" href="{% static 'admin_dashboard/admin_dashboard.css' %}">
-<div class="page-content1 active" id="visitors1-analytics-page">
+<div class="dashboard-container1">
     {% include 'admin_dashboard/sidebar.html' %}
-    
     <main class="main-content1" id="mainContent1">
+{% endif %}
+
+<div class="page-content1 {% if standalone %}active{% endif %}" id="visitors1-page">
     <div class="top-bar1">
-        <h1 class="page-title1">📊 Visitor Analytics & IP Tracking</h1>
-        
+        <h1 class="page-title1">Visitor Analytics & IP Tracking</h1>
+
         <div class="filter-group">
             <select id="dateFilter" class="form-input1" onchange="filterByDate(this.value)">
                 <option value="today" {% if date_filter == 'today' %}selected{% endif %}>Today</option>
@@ -21,100 +22,97 @@
         </div>
     </div>
 
-    <!-- Stats Overview -->
     <div class="stats-grid1">
         <div class="stat-card1">
             <div class="stat-header1">
-                <div class="stat-icon1 blue">👥</div>
+                <div class="stat-icon1 blue">V</div>
             </div>
             <p class="stat-label1">Total Visits</p>
-            <h2 class="stat-value1">{{ total_visits }}</h2>
+            <h2 class="stat-value1">{{ total_visits|default:0 }}</h2>
         </div>
 
         <div class="stat-card1">
             <div class="stat-header1">
-                <div class="stat-icon1 green">🌐</div>
+                <div class="stat-icon1 green">IP</div>
             </div>
             <p class="stat-label1">Unique IPs</p>
-            <h2 class="stat-value1">{{ unique_ips }}</h2>
+            <h2 class="stat-value1">{{ unique_ips|default:0 }}</h2>
         </div>
 
         <div class="stat-card1">
             <div class="stat-header1">
-                <div class="stat-icon1 purple">🔐</div>
+                <div class="stat-icon1 purple">A</div>
             </div>
             <p class="stat-label1">Authenticated</p>
-            <h2 class="stat-value1">{{ authenticated_visits }}</h2>
+            <h2 class="stat-value1">{{ authenticated_visits|default:0 }}</h2>
         </div>
 
         <div class="stat-card1">
             <div class="stat-header1">
-                <div class="stat-icon1 orange">👤</div>
+                <div class="stat-icon1 orange">G</div>
             </div>
             <p class="stat-label1">Anonymous</p>
-            <h2 class="stat-value1">{{ anonymous_visits }}</h2>
+            <h2 class="stat-value1">{{ anonymous_visits|default:0 }}</h2>
         </div>
     </div>
 
-    <!-- Charts Section -->
     <div class="dashboard-card1">
         <div class="card-header1">
-            <h2 class="card-title1">📈 Hourly Traffic (Last 24 Hours)</h2>
+            <h2 class="card-title1">Hourly Traffic (Last 24 Hours)</h2>
         </div>
         <div class="chart-container1" id="hourlyChart"></div>
     </div>
 
-    <!-- Two Column Layout -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
-        
-        <!-- Device Statistics -->
+    <div class="visitor-grid">
         <div class="dashboard-card1">
             <div class="card-header1">
-                <h2 class="card-title1">📱 Device Types</h2>
+                <h2 class="card-title1">Device Types</h2>
             </div>
-            <div style="padding: 1rem 0;">
+            <div class="visitor-list">
                 {% for device in device_stats %}
-                <div style="margin-bottom: 1rem;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: white;">{{ device.device_type }}</span>
-                        <span style="color: rgba(255,255,255,0.7);">{{ device.count }}</span>
+                <div class="visitor-progress-row">
+                    <div class="visitor-progress-label">
+                        <span>{{ device.device_type|default:"Unknown" }}</span>
+                        <span>{{ device.count }}</span>
                     </div>
-                    <div style="background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; overflow: hidden;">
-                        <div style="background: linear-gradient(135deg, #4facfe, #00f2fe); height: 100%; width: {% widthratio device.count total_visits 100 %}%;"></div>
+                    <div class="visitor-progress-track">
+                        <div class="visitor-progress-fill blue" style="width: {% if total_visits %}{% widthratio device.count total_visits 100 %}{% else %}0{% endif %}%;"></div>
                     </div>
                 </div>
+                {% empty %}
+                <p class="visitor-empty">No device data found.</p>
                 {% endfor %}
             </div>
         </div>
 
-        <!-- Browser Statistics -->
         <div class="dashboard-card1">
             <div class="card-header1">
-                <h2 class="card-title1">🌐 Top Browsers</h2>
+                <h2 class="card-title1">Top Browsers</h2>
             </div>
-            <div style="padding: 1rem 0;">
+            <div class="visitor-list">
                 {% for browser in browser_stats %}
-                <div style="margin-bottom: 1rem;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: white;">{{ browser.browser }}</span>
-                        <span style="color: rgba(255,255,255,0.7);">{{ browser.count }}</span>
+                <div class="visitor-progress-row">
+                    <div class="visitor-progress-label">
+                        <span>{{ browser.browser|default:"Unknown" }}</span>
+                        <span>{{ browser.count }}</span>
                     </div>
-                    <div style="background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; overflow: hidden;">
-                        <div style="background: linear-gradient(135deg, #11998e, #38ef7d); height: 100%; width: {% widthratio browser.count total_visits 100 %}%;"></div>
+                    <div class="visitor-progress-track">
+                        <div class="visitor-progress-fill green" style="width: {% if total_visits %}{% widthratio browser.count total_visits 100 %}{% else %}0{% endif %}%;"></div>
                     </div>
                 </div>
+                {% empty %}
+                <p class="visitor-empty">No browser data found.</p>
                 {% endfor %}
             </div>
         </div>
     </div>
 
-    <!-- Popular Pages -->
     <div class="dashboard-card1">
         <div class="card-header1">
-            <h2 class="card-title1">🔥 Most Visited Pages</h2>
+            <h2 class="card-title1">Most Visited Pages</h2>
         </div>
         <div class="data-table1">
-            <table style="width: 100%;">
+            <table>
                 <thead>
                     <tr>
                         <th>Page URL</th>
@@ -125,11 +123,15 @@
                 <tbody>
                     {% for page in popular_pages %}
                     <tr>
-                        <td>{{ page.path }}</td>
+                        <td class="visitor-path">{{ page.path }}</td>
                         <td>{{ page.visit_count }}</td>
                         <td>
-                            <span class="badge1 approved">{% widthratio page.visit_count total_visits 100 %}%</span>
+                            <span class="badge1 approved">{% if total_visits %}{% widthratio page.visit_count total_visits 100 %}{% else %}0{% endif %}%</span>
                         </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="visitor-empty-cell">No page visits found.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -137,13 +139,12 @@
         </div>
     </div>
 
-    <!-- Top IP Addresses -->
     <div class="dashboard-card1">
         <div class="card-header1">
-            <h2 class="card-title1">🌍 Top IP Addresses</h2>
+            <h2 class="card-title1">Top IP Addresses</h2>
         </div>
         <div class="data-table1">
-            <table style="width: 100%;">
+            <table>
                 <thead>
                     <tr>
                         <th>IP Address</th>
@@ -154,12 +155,16 @@
                 <tbody>
                     {% for ip in top_ips %}
                     <tr>
-                        <td><code style="background: rgba(255,255,255,0.1); padding: 0.3rem 0.6rem; border-radius: 4px;">{{ ip.ip_address }}</code></td>
+                        <td><code>{{ ip.ip_address }}</code></td>
                         <td>{{ ip.visit_count }}</td>
                         <td>
-                            <button class="action-btn1 view" onclick="viewIPDetails('{{ ip.ip_address }}')">View Details</button>
-                            <button class="action-btn1 delete" onclick="blockIP('{{ ip.ip_address }}')">Block</button>
+                            <button class="action-btn1 view" type="button" onclick="viewIPDetails('{{ ip.ip_address|escapejs }}')">View Details</button>
+                            <button class="action-btn1 delete" type="button" onclick="blockIP('{{ ip.ip_address|escapejs }}')">Block</button>
                         </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="visitor-empty-cell">No IP data found.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -167,13 +172,12 @@
         </div>
     </div>
 
-    <!-- Recent Visitors -->
     <div class="dashboard-card1">
         <div class="card-header1">
-            <h2 class="card-title1">🕐 Recent Visitors</h2>
+            <h2 class="card-title1">Recent Visitors</h2>
         </div>
         <div class="data-table1">
-            <table style="width: 100%;">
+            <table>
                 <thead>
                     <tr>
                         <th>IP Address</th>
@@ -187,32 +191,35 @@
                 <tbody>
                     {% for visitor in recent_visitors %}
                     <tr>
-                        <td><code style="background: rgba(255,255,255,0.1); padding: 0.3rem 0.6rem; border-radius: 4px;">{{ visitor.ip_address }}</code></td>
+                        <td><code>{{ visitor.ip_address }}</code></td>
                         <td>
                             {% if visitor.user %}
-                                {{ visitor.user.get_full_name }}
+                                {{ visitor.user.get_full_name|default:visitor.user.email }}
                             {% else %}
-                                <span style="color: rgba(255,255,255,0.5);">Anonymous</span>
+                                <span class="visitor-muted">Anonymous</span>
                             {% endif %}
                         </td>
-                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">{{ visitor.path }}</td>
-                        <td>{{ visitor.device_type }}</td>
-                        <td>{{ visitor.browser|truncatechars:20 }}</td>
+                        <td class="visitor-path">{{ visitor.path }}</td>
+                        <td>{{ visitor.device_type|default:"Unknown" }}</td>
+                        <td>{{ visitor.browser|default:"Unknown"|truncatechars:20 }}</td>
                         <td>{{ visitor.timestamp|timesince }} ago</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="visitor-empty-cell">No visitors found for this filter.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
 
-        <!-- Pagination -->
         {% if recent_visitors.has_other_pages %}
-        <div class="pagination1" style="margin-top: 2rem; text-align: center;">
+        <div class="pagination1 visitor-pagination">
             {% if recent_visitors.has_previous %}
                 <a href="?recent_page={{ recent_visitors.previous_page_number }}&date_filter={{ date_filter }}" class="pagination-btn">Previous</a>
             {% endif %}
 
-            <span style="color: white; margin: 0 1rem;">
+            <span class="visitor-page-count">
                 Page {{ recent_visitors.number }} of {{ recent_visitors.paginator.num_pages }}
             </span>
 
@@ -222,32 +229,31 @@
         </div>
         {% endif %}
     </div>
-    </main>
 </div>
 
 <script>
-// Hourly chart
-const hourlyData = {{ hourly_visits|safe }};
+const hourlyData = {{ hourly_visits|default:"[]"|safe }};
 
 function renderHourlyChart() {
     const container = document.getElementById('hourlyChart');
+    if (!container || !Array.isArray(hourlyData)) return;
+
     container.innerHTML = '';
-    
-    const maxCount = Math.max(...hourlyData.map(d => d.count), 1);
-    
-    hourlyData.forEach(data => {
+    const maxCount = Math.max(...hourlyData.map(item => item.count), 1);
+
+    hourlyData.forEach(item => {
         const bar = document.createElement('div');
         bar.className = 'chart-bar1';
-        bar.style.height = `${(data.count / maxCount) * 100}%`;
-        
+        bar.style.height = `${(item.count / maxCount) * 100}%`;
+
         const label = document.createElement('div');
         label.className = 'chart-label1';
-        label.textContent = data.hour;
-        
+        label.textContent = item.hour;
+
         const value = document.createElement('div');
         value.className = 'chart-value1';
-        value.textContent = data.count;
-        
+        value.textContent = item.count;
+
         bar.appendChild(label);
         bar.appendChild(value);
         container.appendChild(bar);
@@ -257,23 +263,96 @@ function renderHourlyChart() {
 renderHourlyChart();
 
 function filterByDate(value) {
-    window.location.href = `?date_filter=${value}`;
+    window.location.href = `{% url 'visitor_analytics' %}?date_filter=${encodeURIComponent(value)}`;
 }
 
 function viewIPDetails(ip) {
-    alert(`Viewing details for IP: ${ip}`);
-  
+    alert(`IP address: ${ip}`);
 }
 
 function blockIP(ip) {
     if (confirm(`Are you sure you want to block IP: ${ip}?`)) {
-        window.location.href = `/admin_dashboard/block-ip/${ip}/`;
+        window.location.href = `/admin_dashboard/block-ip/${encodeURIComponent(ip)}/`;
     }
 }
 </script>
-<script src="{% static 'admin_dashboard/admin_dashboard.js' %}"></script>
-<script src="{% static 'script.js' %}"></script>
+
 <style>
+.visitor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.visitor-list {
+    padding: 1rem 0;
+}
+
+.visitor-progress-row {
+    margin-bottom: 1rem;
+}
+
+.visitor-progress-label {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.visitor-progress-label span:last-child {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.visitor-progress-track {
+    background: rgba(255, 255, 255, 0.1);
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.visitor-progress-fill {
+    height: 100%;
+    min-width: 0;
+}
+
+.visitor-progress-fill.blue {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+}
+
+.visitor-progress-fill.green {
+    background: linear-gradient(135deg, #11998e, #38ef7d);
+}
+
+.visitor-path {
+    max-width: 240px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.visitor-muted,
+.visitor-empty,
+.visitor-empty-cell {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.visitor-empty-cell {
+    text-align: center;
+    padding: 2rem;
+}
+
+.visitor-pagination {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.visitor-page-count {
+    color: white;
+    margin: 0 1rem;
+}
+
 .pagination-btn {
     background: rgba(255, 255, 255, 0.1);
     color: white;
@@ -290,7 +369,30 @@ function blockIP(ip) {
 }
 
 code {
-    font-family: 'Courier New', monospace;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-family: "Courier New", monospace;
+}
+
+.data-table1 table {
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .visitor-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .visitor-path {
+        max-width: 160px;
+    }
 }
 </style>
-{% endblock %}
+
+{% if standalone %}
+    </main>
+</div>
+<script src="{% static 'admin_dashboard/admin_dashboard.js' %}"></script>
+<script src="{% static 'script.js' %}"></script>
+{% endif %}
