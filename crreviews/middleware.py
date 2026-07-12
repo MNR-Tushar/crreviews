@@ -5,11 +5,18 @@ class VisitorTrackingMiddleware:
     IGNORED_USER_AGENTS = (
         'uptimerobot',
     )
+    IGNORED_PATHS = (
+        '/robots.txt',
+        '/sitemap.xml',
+    )
 
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
+        if self.should_ignore_path(request.path):
+            return self.get_response(request)
+
         # Get user agent
         user_agent = request.META.get('HTTP_USER_AGENT', '')
 
@@ -48,6 +55,11 @@ class VisitorTrackingMiddleware:
         """Skip uptime checks and other configured synthetic traffic."""
         normalized_user_agent = user_agent.lower()
         return any(agent in normalized_user_agent for agent in self.IGNORED_USER_AGENTS)
+
+    def should_ignore_path(self, path):
+        """Skip site metadata endpoints from visitor analytics."""
+        normalized_path = path.rstrip('/') or '/'
+        return normalized_path in self.IGNORED_PATHS
     
     def get_client_ip(self, request):
         """Get the client's IP address from the request"""
